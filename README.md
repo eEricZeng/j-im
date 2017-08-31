@@ -2,7 +2,7 @@
 
  tio-im是基于[t-io](http://git.oschina.net/tywo45/t-io)写的**IM**，主要目标降低即时通讯门槛，实现多端不同协议间的消息发送如http、websocket、tcp自定义协议等！并可以通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
 
-##消息格式
+## 消息格式
 ```
 {
     "from": "来源ID",
