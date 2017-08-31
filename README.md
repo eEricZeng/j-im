@@ -7,7 +7,7 @@
 {
     "from": "来源ID",
     "to": "目标ID",
-    "createTime": "消息创建时间",
+    "createTime": 消息创建时间Long类型,
     "msgType": "消息类型",
     "content": "内容"
 }
