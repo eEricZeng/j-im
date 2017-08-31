@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<title>t-io: 不仅仅是百万级TCP长连接框架</title>
+	<style type="text/css" media="screen">
+			#wrap{margin:10px auto; width:80%; height:99%;}
+			.unit{padding:5px; border:solid 1px #000; height:auto; margin-top:3px; clear:both;}	
+			.unit label{text-align:right;width:100px; line-height: 30px; display:inline-block;}
+			.unit input{line-height: 30px; width:100px; height:30px;}
+			.log {font-size:11px; font-family:Courier; height:65%; overflow: auto; background:black;}
+			.log p{padding:2px;margin:0;}
+	</style>
+</head>
+<script>
+var socket ;
+var logDiv;
+function connect(){
+	var ip = document.getElementById("serverIp").value;
+	var port = document.getElementById("port").value;
+	logDiv = document.getElementById('logs');
+	socket = new WebSocket("ws:"+ip+":"+port);
+	socket.onopen = function(e){
+		logDiv.innerHTML+="<font color='green' size='3'>连接成功...</font><br>";
+		scrollToBottom();
+	};
+	socket.onerror = function(e){
+		logDiv.innerHTML+="<font color='red' size='3'>异常:"+e+"</font><br>";
+		scrollToBottom();
+	};
+	socket.onclose = function(e){
+		logDiv.innerHTML+="<font color='green' size='3'>断开连接...</font><br>";
+		 scrollToBottom();
+	};
+	socket.onmessage = function(e){
+	    var data = e.data;
+	    //处理数据
+	    logDiv.innerHTML+="<font color='green' size='3'>"+data+"</font><br>";
+	    scrollToBottom();
+	};
+}
+function disConnect(){
+	socket.close(); 
+}
+function send(){
+	var content = document.getElementById('content').value;
+	socket.send(content);
+}
+function scrollToBottom(){
+	var logDiv = document.getElementById('logs');
+	logDiv.scrollTop = logDiv.scrollHeight;
+}
+function clearLogs(){
+	var logDiv = document.getElementById('logs');
+	logDiv.innerHTML="";
+}
+</script>
+<body>
+   <div id="wrap" style="height:600px;">
+		<div class="unit">
+			<label>服务器IP:</label>
+			<input  id="serverIp" value="localhost"/>
+			<label>端口号:</label>
+			<input  id="port" value ="8888"/>
+			<input onclick="javascript:connect();"  type="button" value="连接" />
+			<input onclick="javascript:disConnect();" type="button" value="断开连接" />
+		</div>
+		<div class="unit">
+			<label>聊天记录:</label>
+			<input type="button" value="清空记录" onclick="clearLogs();"/>
+		</div>
+		<div id="logs" class="unit log">
+		</div>
+		<div class="unit">
+			<label>输入内容:</label>
+			<input id="content" style="width:500px;"/>
+			<input onclick="javascript:send()"  type="button" value="发送" />
+		</div>
+   </div>
+</body>
+</html>
