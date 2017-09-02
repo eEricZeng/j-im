@@ -1,6 +1,6 @@
 ## tio-im简介
 
- tio-im是基于[t-io](http://git.oschina.net/tywo45/t-io)写的**IM**，主要目标降低即时通讯门槛，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如(ｈttp、websocket、tcp自定义IM协议)等，并可以通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
+ tio-im是基于[t-io](http://git.oschina.net/tywo45/t-io)写的**IM**，主要目标降低即时通讯门槛，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如(http、websocket、tcp自定义im协议)等，并可以通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
 
 ## 消息格式
 ```
