@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
+import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -67,9 +68,13 @@ public class ServerHandlerManager{
 		return (T)serverHandler;
 	}
 	
-	public ServerHandlerManager init(){
+	public ServerHandlerManager init(ServerGroupContext serverGroupContext){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
-			entry.getValue().init();
+			try {
+				entry.getValue().init(serverGroupContext);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return this;
 	}

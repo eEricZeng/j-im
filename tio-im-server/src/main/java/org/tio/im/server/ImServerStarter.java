@@ -57,9 +57,9 @@ public class ImServerStarter {
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
 		aioHandler = new ImServerAioHandler();
-		aioHandler.init();
 		aioListener = new ImServerAioListener();
 		serverGroupContext = new ServerGroupContext(aioHandler, aioListener);
+		aioHandler.init(serverGroupContext);
 		aioServer = new AioServer(serverGroupContext);
 		
 		serverGroupContext.setGroupListener(imGroupListener);

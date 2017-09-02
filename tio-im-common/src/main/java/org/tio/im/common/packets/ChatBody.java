@@ -13,6 +13,7 @@ public class ChatBody extends Message {
 	private String from;//来自channel id;
 	private String to;//目标channel id;
 	private String msgType;//消息类型;(如：text、image、vedio、news)
+	private Integer cmd;//消息命令;
 	private Integer chatType;//聊天类型;(如公聊、私聊)
 	private String content;//消息内容;
 	private String group;//消息发到哪个群组;
@@ -52,5 +53,11 @@ public class ChatBody extends Message {
 	}
 	public void setChatType(Integer chatType) {
 		this.chatType = chatType;
+	}
+	public Integer getCmd() {
+		return cmd;
+	}
+	public void setCmd(Integer cmd) {
+		this.cmd = cmd;
 	}
 }

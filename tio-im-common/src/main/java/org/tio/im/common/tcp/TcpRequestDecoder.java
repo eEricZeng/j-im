@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImPacketType;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
 
@@ -42,7 +41,7 @@ public class TcpRequestDecoder {
 		logger.info("TCP解码成功...");
 		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte消息的长度+消息体的长度
 		@SuppressWarnings("deprecation")
-		TcpPacket tcpPacket = new TcpPacket(Command.valueOf(command), body,ImPacketType.TCP);
+		TcpPacket tcpPacket = new TcpPacket(Command.valueOf(command), body);
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
 		return tcpPacket;

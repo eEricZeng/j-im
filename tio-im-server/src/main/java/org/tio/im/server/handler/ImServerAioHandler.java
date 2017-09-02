@@ -14,7 +14,7 @@ import org.tio.im.server.command.handler.HeartbeatReqHandler;
 import org.tio.im.server.http.HttpServerHandler;
 import org.tio.im.server.tcp.TcpServerHandler;
 import org.tio.im.server.websocket.WebSocketServerHandler;
-import org.tio.im.server.websocket.WsMsgHandler;
+import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
@@ -26,14 +26,14 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 	private  CommandManager commandManager = CommandManager.getInstance();
 	private  ServerHandlerManager serverHandlerManager = ServerHandlerManager.getInstance();
 	@Override
-	public void init() {
+	public void init(ServerGroupContext serverGroupContext) {
 		commandManager.registerCommand(new HandshakeReqHandler())
 		//.registerCommand(new AuthReqHandler())
 		.registerCommand(new ChatReqHandler())
 		//.registerCommand(new JoinReqHandler())
 		.registerCommand(new HeartbeatReqHandler())
-		.registerCommand(new CloseReqHandler())
-		.registerCommand(new WsMsgHandler());
+		.registerCommand(new CloseReqHandler());
+		//.registerCommand(new WsMsgHandler());
 		//.registerCommand(new LoginReqHandler())
 		//.registerCommand(new ClientPageReqHandler());
 		
@@ -41,7 +41,7 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 		.addServerHandler(new HttpServerHandler())
 		.addServerHandler(new TcpServerHandler())
 		.addServerHandler(new WebSocketServerHandler())
-		.init();
+		.init(serverGroupContext);
 	}
 	/** 
 	 * @see org.tio.core.intf.AioHandler#handler(org.tio.core.intf.Packet)

@@ -14,7 +14,6 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImPacketType;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
@@ -23,6 +22,7 @@ import org.tio.im.common.tcp.TcpRequestDecoder;
 import org.tio.im.common.tcp.TcpResponseEncoder;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.im.server.util.Resps;
+import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -33,21 +33,22 @@ public class TcpServerHandler extends AbServerHandler{
 	Logger logger = Logger.getLogger(TcpServerHandler.class);
 	
 	@Override
-	public void init() {
+	public void init(ServerGroupContext serverGroupContext) {
 	}
 
 	@Override
 	public boolean isProtocol(ByteBuffer buffer , Packet packet,ChannelContext channelContext){
-		ImSessionContext sessionContext = (ImSessionContext)channelContext.getAttribute();
-		if(ImPacketType.TCP == sessionContext.getPacketType())
-			return true;
-		if(buffer != null){
-			//获取第一个字节协议版本号;
-			byte version = buffer.get();
-			if(version == Protocol.VERSION ){//TCP协议;
-				return true;
+		Object sessionContext = channelContext.getAttribute();
+		if(sessionContext == null){
+			if(buffer != null){
+				//获取第一个字节协议版本号;
+				byte version = buffer.get();
+				if(version == Protocol.VERSION){//TCP协议;
+					channelContext.setAttribute(new ImSessionContext());
+					return true;
+				}
 			}
-		}else if(packet instanceof TcpPacket){
+		}else if(sessionContext instanceof ImSessionContext){
 			return true;
 		}
 		return false;
@@ -73,18 +74,16 @@ public class TcpServerHandler extends AbServerHandler{
 		String message = new String(tcpPacket.getBody(),Const.CHARSET);
 		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
 		System.out.println(onText);
-		Map<String,Object> resultMap = Resps.convertResPacket(tcpPacket, channelContext);
+		Map<String,Object> resultMap = Resps.convertResPacket(tcpPacket.getBody(), channelContext);
 		if(resultMap != null){
 			ChannelContext toChnnelContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-			ImPacket imPacket = (ImPacket)resultMap.get(Const.PACKET);
+			Packet imPacket = (Packet)resultMap.get(Const.PACKET);
 			Aio.send(toChnnelContext, imPacket);
 		}
 	}
 
 	@Override
 	public ImPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
-		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		imSessionContext.setPacketType(ImPacketType.TCP);
 		return TcpRequestDecoder.decode(buffer, channelContext);
 	}
 

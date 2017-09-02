@@ -16,13 +16,16 @@
   </parent>
   <dependencies>
 	  <dependency>
-		    <groupId>org.apache.httpcomponents</groupId>
-		    <artifactId>httpclient</artifactId>
-		    <version>4.0</version>
-	  </dependency>
-  	  <dependency>
 			<groupId>org.t-io</groupId>
 			<artifactId>tio-im-common</artifactId>
+	  </dependency>
+	  <dependency>
+			<groupId>org.t-io</groupId>
+			<artifactId>tio-websocket-server</artifactId>
+	  </dependency>
+	  <dependency>
+			<groupId>org.t-io</groupId>
+			<artifactId>tio-http-server</artifactId>
 	  </dependency>
 	  <dependency>
 			<groupId>io.github.lukehutch</groupId>
@@ -34,6 +37,11 @@
 			<artifactId>paranamer</artifactId>
 			<version>2.5.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.0</version>
+	   </dependency>
 		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>

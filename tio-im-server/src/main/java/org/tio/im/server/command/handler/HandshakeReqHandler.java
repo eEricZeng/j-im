@@ -1,33 +1,23 @@
 package org.tio.im.server.command.handler;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.tio.core.intf.Packet;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImSessionContext;
-import org.tio.im.common.http.HttpRequestPacket;
-import org.tio.im.common.http.websocket.WebSocketRequestDecoder;
-import org.tio.im.common.http.websocket.WebSocketRequestPacket;
-import org.tio.im.common.http.websocket.WebSocketResponsePacket;
-import org.tio.im.common.packets.Client;
 import org.tio.im.common.packets.Command;
-import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.ImBsHandlerIntf;
-
-import nl.basjes.parse.useragent.UserAgent;
 
 public class HandshakeReqHandler implements ImBsHandlerIntf {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(HandshakeReqHandler.class);
-	private static Logger userAgentLog = LoggerFactory.getLogger("tio-userAgentxxxx-trace-log");
 
 	private ImPacket handshakeRespPacket = new ImPacket(Command.COMMAND_HANDSHAKE_RESP);
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+	public Object handler(Packet packet, ChannelContext channelContext) throws Exception {
+		System.out.println(handshakeRespPacket);
+		/*ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		imSessionContext.setHandshaked(true);
 
 		boolean isWebsocket = imSessionContext.isWebsocket();
@@ -55,7 +45,7 @@ public class HandshakeReqHandler implements ImBsHandlerIntf {
 			}
 		} else {
 			Aio.send(channelContext, handshakeRespPacket);
-		}
+		}*/
 
 		return null;
 	}

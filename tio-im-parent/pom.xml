@@ -13,6 +13,8 @@
 	</modules>
 	<properties>
 		<tio-core.version>2.0.0.v20170824-RELEASE</tio-core.version>
+		<tio-http.version>0.0.2-tio-http</tio-http.version>
+		<tio-websocket.version>0.0.2-tio-websocket</tio-websocket.version>
 		<tio-im.version>0.0.2-tio-im</tio-im.version>
 		<tio-utils.version>2.0.0.v20170824-RELEASE</tio-utils.version>
 
@@ -73,6 +75,27 @@
 				<groupId>org.t-io</groupId>
 				<artifactId>tio-core</artifactId>
 				<version>${tio-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.t-io</groupId>
+				<artifactId>tio-websocket-common</artifactId>
+				<version>${tio-websocket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.t-io</groupId>
+				<artifactId>tio-websocket-server</artifactId>
+				<version>${tio-websocket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.t-io</groupId>
+				<artifactId>tio-http-common</artifactId>
+				<version>${tio-http.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.t-io</groupId>
+				<artifactId>tio-http-server</artifactId>
+				<version>${tio-http.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.t-io</groupId>

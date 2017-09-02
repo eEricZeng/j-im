@@ -3,10 +3,6 @@ package org.tio.im.server.listener;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
-import org.tio.im.common.ImSessionContext;
-import org.tio.im.common.utils.ImUtils;
-import org.tio.im.server.ImServerStarter;
-import org.tio.monitor.RateLimiterWrap;
 import org.tio.server.intf.ServerAioListener;
 
 /**
@@ -38,7 +34,7 @@ public class ImServerAioListener implements ServerAioListener {
 
 	@Override
 	public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) {
-		ImSessionContext imSessionContext = new ImSessionContext();
+		/*ImSessionContext imSessionContext = new ImSessionContext();
 		channelContext.setAttribute(imSessionContext);
 		//GroupContext groupContext = channelContext.getGroupContext();
 		int permitsPerSecond = ImServerStarter.conf.getInt("request.permitsPerSecond");
@@ -48,9 +44,9 @@ public class ImServerAioListener implements ServerAioListener {
 		RateLimiterWrap rateLimiterWrap = new RateLimiterWrap(permitsPerSecond, warnClearInterval, maxWarnCount, maxAllWarnCount);
 
 		imSessionContext.setRequestRateLimiter(rateLimiterWrap);
-
+*/
 		if (isConnected) {
-			ImUtils.setClient(channelContext);
+			/*ImUtils.setClient(channelContext);*/
 			Aio.bindUser(channelContext, channelContext.getId());
 		}
 		return;

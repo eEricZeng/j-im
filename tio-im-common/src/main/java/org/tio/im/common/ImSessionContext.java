@@ -1,6 +1,5 @@
 package org.tio.im.common;
 
-import org.tio.im.common.http.websocket.WebSocketSessionContext;
 import org.tio.im.common.packets.Client;
 import org.tio.monitor.RateLimiterWrap;
 
@@ -9,7 +8,7 @@ import org.tio.monitor.RateLimiterWrap;
  * @author tanyaowu 
  *
  */
-public class ImSessionContext extends WebSocketSessionContext
+public class ImSessionContext
 {
 	/**
 	 * 消息请求频率控制器

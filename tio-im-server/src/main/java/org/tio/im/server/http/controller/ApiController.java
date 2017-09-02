@@ -7,13 +7,14 @@ import java.util.Map;
 
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.tio.core.intf.Packet;
+import org.tio.http.common.HttpConfig;
+import org.tio.http.common.HttpRequest;
+import org.tio.http.common.HttpResponse;
+import org.tio.http.server.annotation.RequestPath;
 import org.tio.im.common.Const;
-import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
-import org.tio.im.common.http.HttpRequestPacket;
-import org.tio.im.common.http.HttpResponsePacket;
-import org.tio.im.server.http.HttpServerConfig;
-import org.tio.im.server.http.annotation.RequestPath;
+import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.util.Resps;
 /**
  * 版本: [1.0]
@@ -24,19 +25,20 @@ import org.tio.im.server.util.Resps;
 public class ApiController {
 	
 	@RequestPath(value = "/message/send")
-	public HttpResponsePacket json(HttpRequestPacket httpRequestPacket, HttpServerConfig httpServerConfig, ChannelContext channelContext)throws Exception {
-		HttpResponsePacket httpResponsePacket = new HttpResponsePacket(httpRequestPacket);
-		Map<String,Object> resultMap = Resps.convertResPacket(httpRequestPacket, channelContext);
+	public HttpResponse json(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
+		HttpResponse response = new HttpResponse(request,httpConfig);
+		Map<String,Object> resultMap = Resps.convertResPacket(request.getBody(), channelContext);
 		if(resultMap != null){
 			ChannelContext toChannleContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-			ImPacket imPacket = (ImPacket)resultMap.get(Const.PACKET);
+			Packet packet = (Packet)resultMap.get(Const.PACKET);
+			ImStatus status = (ImStatus)resultMap.get(Const.STATUS);
 			if(toChannleContext == channelContext){//发送给自己，扯淡;
-				httpResponsePacket = (HttpResponsePacket)imPacket;
+				response = (HttpResponse)packet;
 			}else{
-				Aio.send(toChannleContext, imPacket);
-				httpResponsePacket.setBody(Resps.chatRespBody((ImStatus)imPacket.getStatus()));
+				Aio.send(toChannleContext, packet);
+				response.setBody(ImUtils.toChatRespBody(status),request);
 			}
 		}
-		return httpResponsePacket;
+		return response;
 	}
 }

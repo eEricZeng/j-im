@@ -50,7 +50,7 @@ public class HelloClientStarter {
 		HelloPacket packet = new HelloPacket();
 		String text = "{"
 						+ "\"from\":\"来源ID\","
-						+ "\"to\":\"93fe19ac-8e2d-44a9-9773-0d99bd87efb4\","
+						+ "\"to\":\"40e8d7d6-8f7d-4c29-8a98-90ae8c82ff0d\","
 						+ "\"content\":\"Tcp转Ws消息来啦..!\","
 						+ "\"msgType\":\"text\""
 						+ "}";

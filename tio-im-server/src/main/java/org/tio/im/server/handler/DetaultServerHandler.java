@@ -9,6 +9,7 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
+import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -17,7 +18,7 @@ import org.tio.core.intf.Packet;
 public class DetaultServerHandler extends AbServerHandler{
 
 	@Override
-	public void init() {
+	public void init(ServerGroupContext serverGroupContext) {
 		// TODO Auto-generated method stub
 		
 	}

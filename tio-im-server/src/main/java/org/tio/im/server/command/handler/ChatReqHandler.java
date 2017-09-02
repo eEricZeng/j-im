@@ -1,7 +1,7 @@
 package org.tio.im.server.command.handler;
 
 import org.tio.core.ChannelContext;
-import org.tio.im.common.ImPacket;
+import org.tio.core.intf.Packet;
 import org.tio.im.common.packets.Command;
 import org.tio.im.server.command.ImBsHandlerIntf;
 
@@ -53,10 +53,10 @@ public class ChatReqHandler implements ImBsHandlerIntf {
 	public static final String replaceText = "<span style='color:#ee3344;padding:4px;border:1px solid #ee3344;border-radius:5px;margin:4px 4px;'><a href='http://www.gov.cn' target='_blank'>此处为敏感词</a></span>";
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		if (packet.getBody() == null) {
+	public Object handler(Packet packet, ChannelContext channelContext) throws Exception {
+		/*if (packet.getBody() == null) {
 			throw new Exception("body is null");
-		}
+		}*/
 		/*ChatReqBody chatReqBody = null;
 		try{
 			chatReqBody = JSONObject.parseObject(packet.getBody(),ChatReqBody.class);

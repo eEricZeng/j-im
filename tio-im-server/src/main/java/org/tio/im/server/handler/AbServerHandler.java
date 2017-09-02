@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
+import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 版本: [1.0] 功能说明: 封装tioServerAioHandler，提供更丰富的方法供客户端定制化;
@@ -15,6 +16,6 @@ import org.tio.server.intf.ServerAioHandler;
 public abstract class AbServerHandler implements ServerAioHandler{
 	public abstract String name();
 	public abstract AbServerHandler build();
-	public abstract void init();
+	public abstract void init(ServerGroupContext serverGroupContext)throws Exception;
 	public abstract boolean isProtocol(ByteBuffer byteBuffer,Packet packet,ChannelContext channelContext)throws Throwable;
 }

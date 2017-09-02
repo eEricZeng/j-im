@@ -20,4 +20,6 @@ public interface Const
 	public static final String PACKET = "packet";
 	
 	public static final String STATUS = "status";
+	
+	public static final String HTTP_REQUEST = "httpRequest";
 }
