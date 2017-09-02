@@ -32,6 +32,7 @@ import com.jfinal.kit.PropKit;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午6:38:36
  */
+@SuppressWarnings("unused")
 public class WsServerHandler extends AbServerHandler{
 	
 	private Logger log = LoggerFactory.getLogger(WsServerHandler.class);
@@ -57,7 +58,7 @@ public class WsServerHandler extends AbServerHandler{
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
 		this.wsServerAioHandler = new WsServerAioHandler(new WsServerConfig(port),new WsMsgHandler());
-		log.info("WsServerHandler初始化完毕...");
+		log.info("ws server handler 初始化完毕...");
 	}
 
 	@Override
@@ -98,72 +99,6 @@ public class WsServerHandler extends AbServerHandler{
 		return this.wsServerAioHandler.decode(buffer, channelContext);
 	}
 	
-	public WsResponsePacket h(WsRequestPacket websocketPacket, byte[] bytes, Opcode opcode, ChannelContext channelContext) throws Exception {
-		WsResponsePacket wsResponsePacket = null;
-		if (opcode == Opcode.TEXT) {
-			if (bytes == null || bytes.length == 0) {
-				Aio.remove(channelContext, "错误的websocket包，body为空");
-				return null;
-			}
-			String text = new String(bytes, wsServerConfig.getCharset());
-			Object retObj = wsMsgHandler.onText(websocketPacket, text, channelContext);
-			String methodName = "onText";
-			wsResponsePacket = processRetObj(retObj, methodName, channelContext);
-			return wsResponsePacket;
-		} else if (opcode == Opcode.BINARY) {
-			if (bytes == null || bytes.length == 0) {
-				Aio.remove(channelContext, "错误的websocket包，body为空");
-				return null;
-			}
-			Object retObj = wsMsgHandler.onBytes(websocketPacket, bytes, channelContext);
-			String methodName = "onBytes";
-			wsResponsePacket = processRetObj(retObj, methodName, channelContext);
-			return wsResponsePacket;
-		} else if (opcode == Opcode.PING || opcode == Opcode.PONG) {
-			log.error("收到" + opcode);
-			return null;
-		} else if (opcode == Opcode.CLOSE) {
-			Object retObj = wsMsgHandler.onClose(websocketPacket, bytes, channelContext);
-			String methodName = "onClose";
-			wsResponsePacket = processRetObj(retObj, methodName, channelContext);
-			return wsResponsePacket;
-		} else {
-			Aio.remove(channelContext, "错误的websocket包，错误的Opcode");
-			return null;
-		}
-	}
-	
-	private WsResponsePacket processRetObj(Object obj, String methodName, ChannelContext channelContext) throws Exception {
-		WsResponsePacket wsResponsePacket = null;
-		if (obj == null) {
-			return null;
-		} else {
-			if (obj instanceof String) {
-				String str = (String) obj;
-				wsResponsePacket = new WsResponsePacket();
-				wsResponsePacket.setBody(str.getBytes(wsServerConfig.getCharset()));
-				wsResponsePacket.setWsOpcode(Opcode.TEXT);
-				return wsResponsePacket;
-			} else if (obj instanceof byte[]) {
-				wsResponsePacket = new WsResponsePacket();
-				wsResponsePacket.setBody((byte[]) obj);
-				wsResponsePacket.setWsOpcode(Opcode.BINARY);
-				return wsResponsePacket;
-			} else if (obj instanceof WsResponsePacket) {
-				return (WsResponsePacket) obj;
-			} else if (obj instanceof ByteBuffer) {
-				wsResponsePacket = new WsResponsePacket();
-				byte[] bs = ((ByteBuffer) obj).array();
-				wsResponsePacket.setBody(bs);
-				wsResponsePacket.setWsOpcode(Opcode.BINARY);
-				return wsResponsePacket;
-			} else {
-				log.error("{} {}.{}()方法，只允许返回byte[]、ByteBuffer、WsResponsePacket或null，但是程序返回了{}", channelContext, this.getClass().getName(), methodName, obj.getClass().getName());
-				return null;
-			}
-		}
-
-	}
 	@Override
 	public AbServerHandler build() {
 		
