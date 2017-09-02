@@ -24,7 +24,7 @@ public class DetaultServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public boolean isProtocol(ByteBuffer buffer,Packet packet,ChannelContext channelContext) {
+	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -16,7 +16,6 @@ import org.tio.http.common.session.HttpSession;
 import org.tio.http.server.HttpServerAioHandler;
 import org.tio.im.common.Const;
 import org.tio.im.common.Protocol;
-import org.tio.im.common.http.Method;
 import org.tio.im.common.packets.ChatReqBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.utils.ImUtils;
@@ -47,29 +46,11 @@ public class HttpServerHandler extends AbServerHandler{
 		this.httpServerAioHandler = HttpServerInit.httpServerAioHandler;
 	}
 	
-	public boolean isHttpMethod(ByteBuffer buffer)throws Exception{
-		for(Method method : Method.values()){
-			String value = method.getValue();
-			byte[] values = new byte[value.length()];
-			for(int i = 0 ;i<values.length ; i++){
-				values[i] = buffer.get(i);
-			}
-			String rqMethod = new String(values,HttpConst.CHARSET_NAME);
-			if(value.equals(rqMethod)){
-				return true;
-			}
-		}
-		return false;
-	}
 	@Override
-	public boolean isProtocol(ByteBuffer buffer,Packet packet,ChannelContext channelContext)throws Throwable{
+	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){
 			if(buffer != null){
-				if(isHttpMethod(buffer)){
-					channelContext.setAttribute(new HttpSession());
-					return true;
-				}
 				try{
 					HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
 					if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)

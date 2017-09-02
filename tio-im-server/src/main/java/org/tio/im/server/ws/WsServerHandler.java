@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tio.im.server.websocket;
+package org.tio.im.server.ws;
 
 import java.nio.ByteBuffer;
 
@@ -32,9 +32,9 @@ import com.jfinal.kit.PropKit;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午6:38:36
  */
-public class WebSocketServerHandler extends AbServerHandler{
+public class WsServerHandler extends AbServerHandler{
 	
-	private Logger log = LoggerFactory.getLogger(WebSocketServerHandler.class);
+	private Logger log = LoggerFactory.getLogger(WsServerHandler.class);
 	
 	private WsServerAioHandler wsServerAioHandler;
 	
@@ -42,14 +42,14 @@ public class WebSocketServerHandler extends AbServerHandler{
 	
 	private IWsMsgHandler wsMsgHandler;
 	
-	public WebSocketServerHandler() {}
+	public WsServerHandler() {}
 	
-	public WebSocketServerHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
+	public WsServerHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
 		this(new WsServerAioHandler(wsServerConfig, wsMsgHandler));
 		this.wsServerConfig = wsServerConfig;
 		this.wsMsgHandler = wsMsgHandler;
 	}
-	public WebSocketServerHandler(WsServerAioHandler wsServerAioHandler) {
+	public WsServerHandler(WsServerAioHandler wsServerAioHandler) {
 		this.wsServerAioHandler = wsServerAioHandler;
 	}
 	@Override
@@ -61,7 +61,7 @@ public class WebSocketServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public boolean isProtocol(ByteBuffer buffer,Packet packet,ChannelContext channelContext){
+	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){//第一次连接;
 			if(buffer != null){
@@ -167,7 +167,7 @@ public class WebSocketServerHandler extends AbServerHandler{
 	@Override
 	public AbServerHandler build() {
 		
-		return new WebSocketServerHandler(this.wsServerAioHandler);
+		return new WsServerHandler(this.wsServerAioHandler);
 	}
 	
 	@Override

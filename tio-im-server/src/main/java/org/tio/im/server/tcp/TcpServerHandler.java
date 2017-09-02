@@ -37,7 +37,7 @@ public class TcpServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public boolean isProtocol(ByteBuffer buffer , Packet packet,ChannelContext channelContext){
+	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){
 			if(buffer != null){

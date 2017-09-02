@@ -1,4 +1,4 @@
-package org.tio.im.server.websocket;
+package org.tio.im.server.ws;
 
 import java.nio.ByteBuffer;
 import java.util.Map;

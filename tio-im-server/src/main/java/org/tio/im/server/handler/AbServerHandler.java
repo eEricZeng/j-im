@@ -6,7 +6,6 @@ package org.tio.im.server.handler;
 import java.nio.ByteBuffer;
 
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
 import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
@@ -17,5 +16,5 @@ public abstract class AbServerHandler implements ServerAioHandler{
 	public abstract String name();
 	public abstract AbServerHandler build();
 	public abstract void init(ServerGroupContext serverGroupContext)throws Exception;
-	public abstract boolean isProtocol(ByteBuffer byteBuffer,Packet packet,ChannelContext channelContext)throws Throwable;
+	public abstract boolean isProtocol(ByteBuffer byteBuffer,ChannelContext channelContext)throws Throwable;
 }

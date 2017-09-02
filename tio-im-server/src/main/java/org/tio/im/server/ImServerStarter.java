@@ -34,10 +34,10 @@ public class ImServerStarter {
 
 	}
 
-	static ImServerAioHandler aioHandler = null ;
-	static ImServerAioListener aioListener = null;
+	static ImServerAioHandler aioHandler = new ImServerAioHandler() ;
+	static ImServerAioListener aioListener = new ImServerAioListener();
 	static ImGroupListener imGroupListener = new ImGroupListener();
-	static ServerGroupContext serverGroupContext = null;
+	static ServerGroupContext serverGroupContext = new ServerGroupContext(aioHandler, aioListener);
 	static AioServer aioServer = null;
 	static String bindIp = null;//"127.0.0.1";
 
@@ -56,9 +56,6 @@ public class ImServerStarter {
 	public static void start() throws Exception{
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
-		aioHandler = new ImServerAioHandler();
-		aioListener = new ImServerAioListener();
-		serverGroupContext = new ServerGroupContext(aioHandler, aioListener);
 		aioHandler.init(serverGroupContext);
 		aioServer = new AioServer(serverGroupContext);
 		

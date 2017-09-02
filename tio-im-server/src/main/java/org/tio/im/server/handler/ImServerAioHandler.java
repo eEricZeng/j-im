@@ -13,18 +13,18 @@ import org.tio.im.server.command.handler.HandshakeReqHandler;
 import org.tio.im.server.command.handler.HeartbeatReqHandler;
 import org.tio.im.server.http.HttpServerHandler;
 import org.tio.im.server.tcp.TcpServerHandler;
-import org.tio.im.server.websocket.WebSocketServerHandler;
+import org.tio.im.server.ws.WsServerHandler;
 import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
- * @author tanyaowu 
+ * @author WChao
  *
  */
 public class ImServerAioHandler extends DetaultServerHandler implements ServerAioHandler {
 
 	private  CommandManager commandManager = CommandManager.getInstance();
-	private  ServerHandlerManager serverHandlerManager = ServerHandlerManager.getInstance();
+	private  ServerHandlerManager handlerManager = ServerHandlerManager.getInstance();
 	@Override
 	public void init(ServerGroupContext serverGroupContext) {
 		commandManager.registerCommand(new HandshakeReqHandler())
@@ -37,10 +37,10 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 		//.registerCommand(new LoginReqHandler())
 		//.registerCommand(new ClientPageReqHandler());
 		
-		serverHandlerManager
+		handlerManager
 		.addServerHandler(new HttpServerHandler())
 		.addServerHandler(new TcpServerHandler())
-		.addServerHandler(new WebSocketServerHandler())
+		.addServerHandler(new WsServerHandler())
 		.init(serverGroupContext);
 	}
 	/** 
@@ -55,7 +55,7 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 	 */
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
+		AbServerHandler handler = handlerManager.getServerHandler(null,channelContext);
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -72,7 +72,7 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 	 */
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
+		AbServerHandler handler = handlerManager.getServerHandler(null,channelContext);
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -91,7 +91,7 @@ public class ImServerAioHandler extends DetaultServerHandler implements ServerAi
 	 */
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(buffer,null,channelContext);
+		AbServerHandler handler = handlerManager.getServerHandler(buffer,channelContext);
 		if(handler != null){
 			return handler.decode(buffer, channelContext);
 		}
