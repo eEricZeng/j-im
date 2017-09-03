@@ -30,11 +30,8 @@ import org.tio.server.ServerGroupContext;
  */
 public class HttpServerHandler extends AbServerHandler{
 
-	//private static Logger log = LoggerFactory.getLogger(HttpServerHandler.class);
-	
 	private HttpServerAioHandler httpServerAioHandler;
 	
-	private CommandManager commandManager = CommandManager.getInstance();
 	public HttpServerHandler() {}
 	
 	public HttpServerHandler(HttpServerAioHandler httpServerAioHandler){
@@ -86,7 +83,7 @@ public class HttpServerHandler extends AbServerHandler{
 			Integer cmd = chatBody.getCmd();
 			if(cmd == null)
 				cmd = Command.COMMAND_CHAT_REQ_VALUE;
-			channelContext.setAttribute(Protocol.COMMAND,commandManager.getCommand(cmd));
+			channelContext.setAttribute(Protocol.COMMAND,CommandManager.getInstance().getCommand(cmd));
 		}else{
 			channelContext.setAttribute(Protocol.COMMAND,null);
 		}

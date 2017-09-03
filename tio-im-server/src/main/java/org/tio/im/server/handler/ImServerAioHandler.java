@@ -21,11 +21,11 @@ import org.tio.server.intf.ServerAioHandler;
  * @author WChao
  *
  */
-public class ImServerAioHandler extends DetaultServerHandler implements ServerAioHandler {
+public class ImServerAioHandler implements ServerAioHandler{
 
 	private  CommandManager commandManager = CommandManager.getInstance();
 	private  ServerHandlerManager handlerManager = ServerHandlerManager.getInstance();
-	@Override
+	
 	public void init(ServerGroupContext serverGroupContext) {
 		commandManager.registerCommand(new HandshakeReqHandler())
 		//.registerCommand(new AuthReqHandler())
