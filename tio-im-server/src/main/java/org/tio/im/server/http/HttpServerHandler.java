@@ -4,25 +4,29 @@
 package org.tio.im.server.http;
 
 import java.nio.ByteBuffer;
-
+import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
-import org.tio.http.common.HttpConst;
-import org.tio.http.common.HttpRequest;
-import org.tio.http.common.HttpRequestDecoder;
-import org.tio.http.common.session.HttpSession;
-import org.tio.http.server.HttpServerAioHandler;
 import org.tio.im.common.Const;
 import org.tio.im.common.Protocol;
+import org.tio.im.common.http.HttpConfig;
+import org.tio.im.common.http.HttpConst;
+import org.tio.im.common.http.HttpRequest;
+import org.tio.im.common.http.HttpRequestDecoder;
+import org.tio.im.common.http.HttpResponse;
+import org.tio.im.common.http.HttpResponseEncoder;
+import org.tio.im.common.http.handler.IHttpRequestHandler;
+import org.tio.im.common.http.session.HttpSession;
 import org.tio.im.common.packets.ChatReqBody;
 import org.tio.im.common.packets.Command;
-import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.CommandManager;
+import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.im.server.init.HttpServerInit;
 import org.tio.server.ServerGroupContext;
+
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -30,17 +34,21 @@ import org.tio.server.ServerGroupContext;
  */
 public class HttpServerHandler extends AbServerHandler{
 
-	private HttpServerAioHandler httpServerAioHandler;
+	private HttpConfig httpConfig;
+	
+	private IHttpRequestHandler httpRequestHandler;
 	
 	public HttpServerHandler() {}
 	
-	public HttpServerHandler(HttpServerAioHandler httpServerAioHandler){
-		this.httpServerAioHandler = httpServerAioHandler;
+	public HttpServerHandler(IHttpRequestHandler httpRequestHandler , HttpConfig httpServerConfig){
+		this.httpRequestHandler = httpRequestHandler;
+		this.httpConfig = httpServerConfig;
 	}
 	@Override
 	public void init(ServerGroupContext serverGroupContext)throws Exception{
 		HttpServerInit.init(serverGroupContext);
-		this.httpServerAioHandler = HttpServerInit.httpServerAioHandler;
+		this.httpConfig = HttpServerInit.httpConfig;
+		this.httpRequestHandler = HttpServerInit.requestHandler;
 	}
 	
 	@Override
@@ -67,18 +75,22 @@ public class HttpServerHandler extends AbServerHandler{
 
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext,ChannelContext channelContext) {
-		return this.httpServerAioHandler.encode(packet, groupContext, channelContext);
+		HttpResponse httpResponsePacket = (HttpResponse) packet;
+		ByteBuffer byteBuffer = HttpResponseEncoder.encode(httpResponsePacket, groupContext, channelContext,false);
+		return byteBuffer;
 	}
 
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext)throws Exception {
-		this.httpServerAioHandler.handler(packet, channelContext);
+		HttpRequest httpRequestPacket = (HttpRequest) packet;
+		HttpResponse httpResponsePacket = httpRequestHandler.handler(httpRequestPacket, httpRequestPacket.getRequestLine());
+		Aio.send(channelContext, httpResponsePacket);
 	}
 
 	@Override
-	public HttpRequest decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
-		HttpRequest request = this.httpServerAioHandler.decode(buffer, channelContext);
-		ChatReqBody chatBody = ImUtils.parseChatBody(request.getBodyString());
+	public Packet decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
+		HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+		ChatReqBody chatBody = ChatReqHandler.parseChatBody(request.getBodyString());
 		if(chatBody != null){
 			Integer cmd = chatBody.getCmd();
 			if(cmd == null)
@@ -93,15 +105,23 @@ public class HttpServerHandler extends AbServerHandler{
 	
 	@Override
 	public AbServerHandler build() {
-		return new HttpServerHandler(this.getHttpServerAioHandler());
-	}
-	
-	public HttpServerAioHandler getHttpServerAioHandler() {
-		return httpServerAioHandler;
+		return new HttpServerHandler(this.getHttpRequestHandler(),this.getHttpConfig());
 	}
 
-	public void setHttpServerAioHandler(HttpServerAioHandler httpServerAioHandler) {
-		this.httpServerAioHandler = httpServerAioHandler;
+	public IHttpRequestHandler getHttpRequestHandler() {
+		return httpRequestHandler;
+	}
+
+	public void setHttpRequestHandler(IHttpRequestHandler httpRequestHandler) {
+		this.httpRequestHandler = httpRequestHandler;
+	}
+	
+	public HttpConfig getHttpConfig() {
+		return httpConfig;
+	}
+
+	public void setHttpConfig(HttpConfig httpConfig) {
+		this.httpConfig = httpConfig;
 	}
 
 	@Override

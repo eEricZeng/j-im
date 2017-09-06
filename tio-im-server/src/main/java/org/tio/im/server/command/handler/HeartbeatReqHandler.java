@@ -3,7 +3,7 @@ package org.tio.im.server.command.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
 import org.tio.im.server.command.ImBsHandlerIntf;
 
@@ -13,7 +13,7 @@ public class HeartbeatReqHandler implements ImBsHandlerIntf
 	private static Logger log = LoggerFactory.getLogger(HeartbeatReqHandler.class);
 
 	@Override
-	public Object handler(Packet packet, ChannelContext channelContext) throws Exception
+	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		return null;
 	}

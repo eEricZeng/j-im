@@ -17,14 +17,7 @@
 			<groupId>org.t-io</groupId>
 			<artifactId>tio-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.t-io</groupId>
-			<artifactId>tio-websocket-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.t-io</groupId>
-			<artifactId>tio-http-common</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>

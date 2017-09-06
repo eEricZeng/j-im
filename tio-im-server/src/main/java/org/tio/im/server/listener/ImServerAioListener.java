@@ -43,10 +43,9 @@ public class ImServerAioListener implements ServerAioListener {
 		int maxAllWarnCount = ImServerStarter.conf.getInt("request.maxAllWarnCount");
 		RateLimiterWrap rateLimiterWrap = new RateLimiterWrap(permitsPerSecond, warnClearInterval, maxWarnCount, maxAllWarnCount);
 
-		imSessionContext.setRequestRateLimiter(rateLimiterWrap);
-*/
+		imSessionContext.setRequestRateLimiter(rateLimiterWrap);*/
+
 		if (isConnected) {
-			/*ImUtils.setClient(channelContext);*/
 			Aio.bindUser(channelContext, channelContext.getId());
 		}
 		return;

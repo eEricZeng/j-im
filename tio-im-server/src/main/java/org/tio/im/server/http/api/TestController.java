@@ -1,15 +1,18 @@
-package org.tio.im.server.http.controller;
+package org.tio.im.server.http.api;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.http.common.HttpRequest;
-import org.tio.http.common.HttpResponse;
-import org.tio.http.common.UploadFile;
-import org.tio.http.server.annotation.RequestPath;
-import org.tio.http.server.util.Resps;
+import org.tio.im.common.http.HttpRequest;
+import org.tio.im.common.http.HttpResponse;
+import org.tio.im.common.http.UploadFile;
+import org.tio.im.common.packets.User;
+import org.tio.im.server.http.annotation.RequestPath;
+import org.tio.im.server.util.Resps;
+import org.tio.json.Json;
+
 /**
  * @author tanyaowu
  * 2017年6月29日 下午7:53:59
@@ -52,6 +55,12 @@ public class TestController {
 	public HttpResponse abtest1(HttpRequest request) throws Exception {
 		log.info("");
 		HttpResponse ret = Resps.html(request, "OK---------1");
+		return ret;
+	}
+
+	@RequestPath(value = "/bean")
+	public HttpResponse bean(User user, HttpRequest request) throws Exception {
+		HttpResponse ret = Resps.json(request, Json.toFormatedJson(user));
 		return ret;
 	}
 

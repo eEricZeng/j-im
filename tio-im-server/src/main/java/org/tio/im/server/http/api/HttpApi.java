@@ -1,20 +1,20 @@
 /**
  * 
  */
-package org.tio.im.server.http.controller;
+package org.tio.im.server.http.api;
 
 import java.util.Map;
 
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
-import org.tio.http.common.HttpConfig;
-import org.tio.http.common.HttpRequest;
-import org.tio.http.common.HttpResponse;
-import org.tio.http.server.annotation.RequestPath;
 import org.tio.im.common.Const;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
-import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.http.HttpConfig;
+import org.tio.im.common.http.HttpRequest;
+import org.tio.im.common.http.HttpResponse;
+import org.tio.im.server.command.handler.ChatReqHandler;
+import org.tio.im.server.http.annotation.RequestPath;
 import org.tio.im.server.util.Resps;
 /**
  * 版本: [1.0]
@@ -22,7 +22,7 @@ import org.tio.im.server.util.Resps;
  * 作者: WChao 创建时间: 2017年8月8日 上午9:08:48
  */
 @RequestPath(value = "/api")
-public class ApiController {
+public class HttpApi {
 	
 	@RequestPath(value = "/message/send")
 	public HttpResponse json(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
@@ -30,13 +30,13 @@ public class ApiController {
 		Map<String,Object> resultMap = Resps.convertResPacket(request.getBody(), channelContext);
 		if(resultMap != null){
 			ChannelContext toChannleContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-			Packet packet = (Packet)resultMap.get(Const.PACKET);
+			ImPacket packet = (ImPacket)resultMap.get(Const.PACKET);
 			ImStatus status = (ImStatus)resultMap.get(Const.STATUS);
 			if(toChannleContext == channelContext){//发送给自己，扯淡;
 				response = (HttpResponse)packet;
 			}else{
 				Aio.send(toChannleContext, packet);
-				response.setBody(ImUtils.toChatRespBody(status),request);
+				response.setBody(ChatReqHandler.toChatRespBody(status),request);
 			}
 		}
 		return response;

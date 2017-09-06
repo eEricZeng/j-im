@@ -14,7 +14,7 @@ import org.tio.im.common.Protocol;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月21日 下午4:00:31
  */
-public class TcpResponseEncoder {
+public class TcpServerEncoder {
 
 	public static ByteBuffer encode(TcpPacket tcpPacket, GroupContext groupContext, ChannelContext channelContext){
 		int bodyLen = 0;

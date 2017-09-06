@@ -8,20 +8,16 @@ import org.tio.monitor.RateLimiterWrap;
  * @author tanyaowu 
  *
  */
-public class ImSessionContext
+public class ImSessionContext extends SessionContext
 {
 	/**
 	 * 消息请求频率控制器
 	 */
 	private RateLimiterWrap requestRateLimiter = null;
 	
-	
 	private Client client = null;
 	
 	private String token = null;
-	
-	private ImPacketType packetType;
-	
 	
 	/**
 	 * 
@@ -92,13 +88,4 @@ public class ImSessionContext
 	public void setRequestRateLimiter(RateLimiterWrap requestRateLimiter) {
 		this.requestRateLimiter = requestRateLimiter;
 	}
-
-	public ImPacketType getPacketType() {
-		return packetType;
-	}
-
-	public void setPacketType(ImPacketType packetType) {
-		this.packetType = packetType;
-	}
-	
 }

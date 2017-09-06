@@ -5,18 +5,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tio.core.ChannelContext;
-import org.tio.http.common.HttpConst;
 import org.tio.im.common.ImSessionContext;
-import org.tio.im.common.ImStatus;
-import org.tio.im.common.packets.ChatReqBody;
-import org.tio.im.common.packets.ChatRespBody;
 import org.tio.im.common.packets.Client;
-import com.alibaba.fastjson.JSONObject;
-
 /**
- * 
- * @author WChao
- *
+ * @author tanyaowu 
+ * 2017年5月5日 下午5:35:02
  */
 public class ImUtils {
 
@@ -63,11 +56,11 @@ public class ImUtils {
 	}
 
 	public static String formatUserAgent(ChannelContext channelContext) {
-		/*WsSessionContext imSessionContext = (WsSessionContext)channelContext.getAttribute();
-		HttpRequest httpHandshakePacket = imSessionContext.getHandshakeRequestPacket();
+	/*	ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		HttpRequestPacket httpHandshakePacket = imSessionContext.getHandshakeRequestPacket();
 		
 		if (httpHandshakePacket != null) {
-			UserAgent userAgent = httpHandshakePacket.getu
+			UserAgent userAgent = httpHandshakePacket.getUserAgent();
 
 			String DeviceName = userAgent.getValue(UserAgent.DEVICE_NAME);//StringUtils.leftPad(userAgent.getValue(UserAgent.DEVICE_NAME), 1);
 			String DeviceCpu = userAgent.getValue("DeviceCpu"); //StringUtils.leftPad(userAgent.getValue("DeviceCpu"), 1);
@@ -79,48 +72,7 @@ public class ImUtils {
 		} else {
 			return "";
 		}*/
-		return null;
-	}
-	/**
-	 * 格式化状态码消息响应体;
-	 * @param status
-	 * @return
-	 */
-	public static byte[] toChatRespBody(ImStatus status){
-		return JSONObject.toJSONBytes(new ChatRespBody().setErrorCode(status.getCode()).setErrorMsg(status.getDescription()+" "+status.getText()));
-	}
-	/**
-	 * 判断是否属于指定格式聊天消息;
-	 * @param packet
-	 * @return
-	 */
-	public static ChatReqBody parseChatBody(byte[] body){
-		if(body == null)
-			return null;
-		ChatReqBody chatReqBody = null;
-		try{
-			String text = new String(body,HttpConst.CHARSET_NAME);
-		    chatReqBody = JSONObject.parseObject(text,ChatReqBody.class);
-			if(chatReqBody != null)
-				return chatReqBody;
-		}catch(Exception e){
-			
-		}
-		return chatReqBody;
-	}
-	/**
-	 * 判断是否属于指定格式聊天消息;
-	 * @param packet
-	 * @return
-	 */
-	public static ChatReqBody parseChatBody(String bodyStr){
-		if(bodyStr == null)
-			return null;
-		try {
-			return parseChatBody(bodyStr.getBytes(HttpConst.CHARSET_NAME));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		return null;
 	}
 	/**

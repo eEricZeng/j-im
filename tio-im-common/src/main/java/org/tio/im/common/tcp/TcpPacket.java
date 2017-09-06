@@ -4,7 +4,6 @@
 package org.tio.im.common.tcp;
 
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImPacketType;
 import org.tio.im.common.packets.Command;
 
 /**
@@ -21,9 +20,6 @@ public class TcpPacket extends ImPacket{
 	
 	public TcpPacket(Command command, byte[] body){
 		super(command, body);
-	}
-	public TcpPacket(Command command, byte[] body,ImPacketType type){
-		super(command, body,type);
 	}
 	public byte getVersion() {
 		return version;

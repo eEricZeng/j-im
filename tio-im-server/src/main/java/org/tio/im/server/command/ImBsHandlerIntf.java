@@ -1,13 +1,12 @@
 package org.tio.im.server.command;
 
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
 /**
  * 
- * 版本: [1.0]
- * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月1日 上午10:21:02
+ * @author tanyaowu 
+ *
  */
 public interface ImBsHandlerIntf
 {
@@ -29,5 +28,5 @@ public interface ImBsHandlerIntf
 	 * 2016年11月18日 下午1:08:45
 	 *
 	 */
-	public Object handler(Packet packet, ChannelContext channelContext)  throws Exception;
+	public Object handler(ImPacket packet, ChannelContext channelContext)  throws Exception;
 }

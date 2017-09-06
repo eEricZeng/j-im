@@ -17,9 +17,9 @@ import org.tio.im.common.packets.Command;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月21日 下午3:08:04
  */
-public class TcpRequestDecoder {
+public class TcpServerDecoder {
 	
-	private static Logger logger = Logger.getLogger(TcpRequestDecoder.class);
+	private static Logger logger = Logger.getLogger(TcpServerDecoder.class);
 	
 	public static ImPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException{
 		//获取第一个字节协议版本号;

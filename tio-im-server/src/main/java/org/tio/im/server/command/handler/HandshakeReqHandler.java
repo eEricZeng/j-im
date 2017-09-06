@@ -3,10 +3,10 @@ package org.tio.im.server.command.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
 import org.tio.im.server.command.ImBsHandlerIntf;
+
 
 public class HandshakeReqHandler implements ImBsHandlerIntf {
 	@SuppressWarnings("unused")
@@ -15,10 +15,9 @@ public class HandshakeReqHandler implements ImBsHandlerIntf {
 	private ImPacket handshakeRespPacket = new ImPacket(Command.COMMAND_HANDSHAKE_RESP);
 
 	@Override
-	public Object handler(Packet packet, ChannelContext channelContext) throws Exception {
-		System.out.println(handshakeRespPacket);
-		/*ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		imSessionContext.setHandshaked(true);
+	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception {
+		//ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+	/*	imSessionContext.setHandshaked(true);
 
 		boolean isWebsocket = imSessionContext.isWebsocket();
 		if (isWebsocket) {
@@ -47,7 +46,7 @@ public class HandshakeReqHandler implements ImBsHandlerIntf {
 			Aio.send(channelContext, handshakeRespPacket);
 		}*/
 
-		return null;
+		return handshakeRespPacket;
 	}
 
 	@Override

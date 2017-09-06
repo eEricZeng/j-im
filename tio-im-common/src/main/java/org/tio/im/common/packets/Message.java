@@ -11,6 +11,7 @@ package org.tio.im.common.packets;
 public class Message {
 	private Long createTime;//消息创建时间;
 	private String id ;//消息id，全局唯一;
+	private Integer cmd ;//消息命令;
 
 	public Long getCreateTime() {
 		return createTime;
@@ -26,5 +27,13 @@ public class Message {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Integer getCmd() {
+		return cmd;
+	}
+
+	public void setCmd(Integer cmd) {
+		this.cmd = cmd;
 	}
 }

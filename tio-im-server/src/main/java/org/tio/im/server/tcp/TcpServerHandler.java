@@ -14,12 +14,13 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.tcp.TcpPacket;
-import org.tio.im.common.tcp.TcpRequestDecoder;
-import org.tio.im.common.tcp.TcpResponseEncoder;
+import org.tio.im.common.tcp.TcpServerDecoder;
+import org.tio.im.common.tcp.TcpServerEncoder;
+import org.tio.im.common.tcp.TcpSessionContext;
+import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
@@ -44,11 +45,12 @@ public class TcpServerHandler extends AbServerHandler{
 				//获取第一个字节协议版本号;
 				byte version = buffer.get();
 				if(version == Protocol.VERSION){//TCP协议;
-					channelContext.setAttribute(new ImSessionContext());
+					channelContext.setAttribute(new TcpSessionContext());
+					ImUtils.setClient(channelContext);
 					return true;
 				}
 			}
-		}else if(sessionContext instanceof ImSessionContext){
+		}else if(sessionContext instanceof TcpSessionContext){
 			return true;
 		}
 		return false;
@@ -63,7 +65,7 @@ public class TcpServerHandler extends AbServerHandler{
 			return buffer;
 		}else if(tcpPacket.getCommand() == Command.COMMAND_CHAT_RESP){
 			
-			return TcpResponseEncoder.encode(tcpPacket, groupContext, channelContext);
+			return TcpServerEncoder.encode(tcpPacket, groupContext, channelContext);
 		}
 		return null;
 	}
@@ -84,7 +86,7 @@ public class TcpServerHandler extends AbServerHandler{
 
 	@Override
 	public ImPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
-		return TcpRequestDecoder.decode(buffer, channelContext);
+		return TcpServerDecoder.decode(buffer, channelContext);
 	}
 
 	@Override

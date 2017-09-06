@@ -14,17 +14,18 @@ import org.tio.im.server.command.handler.HeartbeatReqHandler;
 import org.tio.im.server.http.HttpServerHandler;
 import org.tio.im.server.tcp.TcpServerHandler;
 import org.tio.im.server.ws.WsServerHandler;
+import org.tio.im.server.ws.WsMsgHandler;
 import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
- * @author WChao
+ * @author tanyaowu 
  *
  */
-public class ImServerAioHandler implements ServerAioHandler{
+public class ImServerAioHandler implements ServerAioHandler {
 
 	private  CommandManager commandManager = CommandManager.getInstance();
-	private  ServerHandlerManager handlerManager = ServerHandlerManager.getInstance();
+	private  ServerHandlerManager serverHandlerManager = ServerHandlerManager.getInstance();
 	
 	public void init(ServerGroupContext serverGroupContext) {
 		commandManager.registerCommand(new HandshakeReqHandler())
@@ -32,12 +33,12 @@ public class ImServerAioHandler implements ServerAioHandler{
 		.registerCommand(new ChatReqHandler())
 		//.registerCommand(new JoinReqHandler())
 		.registerCommand(new HeartbeatReqHandler())
-		.registerCommand(new CloseReqHandler());
-		//.registerCommand(new WsMsgHandler());
+		.registerCommand(new CloseReqHandler())
+		.registerCommand(new WsMsgHandler());
 		//.registerCommand(new LoginReqHandler())
 		//.registerCommand(new ClientPageReqHandler());
 		
-		handlerManager
+		serverHandlerManager
 		.addServerHandler(new HttpServerHandler())
 		.addServerHandler(new TcpServerHandler())
 		.addServerHandler(new WsServerHandler())
@@ -55,7 +56,7 @@ public class ImServerAioHandler implements ServerAioHandler{
 	 */
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-		AbServerHandler handler = handlerManager.getServerHandler(null,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -72,7 +73,7 @@ public class ImServerAioHandler implements ServerAioHandler{
 	 */
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-		AbServerHandler handler = handlerManager.getServerHandler(null,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -91,7 +92,7 @@ public class ImServerAioHandler implements ServerAioHandler{
 	 */
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
-		AbServerHandler handler = handlerManager.getServerHandler(buffer,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(buffer,null,channelContext);
 		if(handler != null){
 			return handler.decode(buffer, channelContext);
 		}

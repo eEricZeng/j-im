@@ -7,7 +7,7 @@ package org.tio.im.common;
  */
 public interface Const
 {
-	String authkey = "mobo";
+	String authkey = "wchao";
 	
 	int SERVER_PORT = 8888;
 	

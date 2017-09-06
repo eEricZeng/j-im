@@ -18,8 +18,24 @@ public class ImPacket extends Packet
 	
 	private Command command;//消息命令;
 	
-	private ImPacketType type;//包类型;
+	public ImPacket(){}
 	
+	public ImPacket(byte[] body){
+		this.body = body;
+	}
+	
+	public ImPacket(Command command, byte[] body)
+	{
+		this(body);
+		this.setCommand(command);
+	}
+	
+	public ImPacket(Command command)
+	{
+		this();
+		this.setCommand(command);
+	}
+
 	public static byte encodeEncrypt(byte bs,boolean isEncrypt){
 		if(isEncrypt){
 			return (byte) (bs | Protocol.FIRST_BYTE_MASK_ENCRYPT);
@@ -102,59 +118,6 @@ public class ImPacket extends Packet
 		}
 		return ret;
 	}
-	public ImPacket(byte[] body){
-		this.body = body;
-	}
-	public ImPacket(Command command, byte[] body)
-	{
-		this(body);
-		this.setCommand(command);
-	}
-	public ImPacket(Command command, byte[] body ,ImPacketType type)
-	{
-		this(command,body);
-		this.type = type;
-	}
-	public ImPacket(Command command)
-	{
-		this();
-		this.setCommand(command);
-	}
-
-	public ImPacket()
-	{
-
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args)
-	{
-		byte data = -127;
-		System.out.println(data);
-		/*int xx2x = Integer.MAX_VALUE;
-		byte b = Byte.MAX_VALUE;
-		short fd = Short.MAX_VALUE;
-		final int fdsfd = (int) Math.pow(2, 23);*/
-		/*System.out.println("Math.pow(2, 23):" + Math.pow(2, 23));
-		System.out.println("Math.pow(2, 24):" + Math.pow(2, 24));
-		System.out.println("Math.pow(2, 8):" + Math.pow(2, 8));
-		System.out.println("Math.pow(2, 7):" + Math.pow(2, 7));
-		byte xx = FIRST_BYTE_MASK_COMPRESS ^ 0b01111111;
-		String xxx = Integer.toBinaryString(xx);
-		System.out.println(xxx);
-
-		byte yy = 0b01111111;
-		boolean isCompress = true;
-		xxx = Integer.toBinaryString(encodeCompress(yy, isCompress));
-		System.out.println(xxx);
-
-		isCompress = false;
-		xxx = Integer.toBinaryString(encodeCompress(yy, isCompress));
-		System.out.println(xxx);*/
-	}
-
 	public Command getCommand()
 	{
 		return command;
@@ -201,13 +164,5 @@ public class ImPacket extends Packet
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public ImPacketType getType() {
-		return type;
-	}
-
-	public void setType(ImPacketType type) {
-		this.type = type;
 	}
 }
