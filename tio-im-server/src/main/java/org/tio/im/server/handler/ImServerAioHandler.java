@@ -56,7 +56,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(null,channelContext);
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -73,7 +73,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(null,packet,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(null,channelContext);
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -92,7 +92,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
-		AbServerHandler handler = serverHandlerManager.getServerHandler(buffer,null,channelContext);
+		AbServerHandler handler = serverHandlerManager.getServerHandler(buffer,channelContext);
 		if(handler != null){
 			return handler.decode(buffer, channelContext);
 		}

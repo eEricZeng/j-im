@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
 import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
@@ -42,7 +41,7 @@ public class ServerHandlerManager{
 		return this;
 	}
 	
-	public AbServerHandler getServerHandler(ByteBuffer buffer,Packet packet,ChannelContext channelContext){
+	public AbServerHandler getServerHandler(ByteBuffer buffer,ChannelContext channelContext){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
 			ByteBuffer copyByteBuffer = null;
 			if(buffer != null){
