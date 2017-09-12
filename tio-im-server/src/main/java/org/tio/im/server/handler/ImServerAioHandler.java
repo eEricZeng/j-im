@@ -7,14 +7,17 @@ import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.server.command.CommandManager;
+import org.tio.im.server.command.handler.AuthReqHandler;
 import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.command.handler.CloseReqHandler;
 import org.tio.im.server.command.handler.HandshakeReqHandler;
 import org.tio.im.server.command.handler.HeartbeatReqHandler;
+import org.tio.im.server.command.handler.LoginReqHandler;
+import org.tio.im.server.command.handler.proc.TcpProCmdHandler;
+import org.tio.im.server.command.handler.proc.WsProCmdHandler;
 import org.tio.im.server.http.HttpServerHandler;
 import org.tio.im.server.tcp.TcpServerHandler;
 import org.tio.im.server.ws.WsServerHandler;
-import org.tio.im.server.ws.WsMsgHandler;
 import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
@@ -28,15 +31,17 @@ public class ImServerAioHandler implements ServerAioHandler {
 	private  ServerHandlerManager serverHandlerManager = ServerHandlerManager.getInstance();
 	
 	public void init(ServerGroupContext serverGroupContext) {
-		commandManager.registerCommand(new HandshakeReqHandler())
-		//.registerCommand(new AuthReqHandler())
+		commandManager
+		.registerCommand(new HandshakeReqHandler())
+		.registerCommand(new AuthReqHandler())
+		.registerCommand(new LoginReqHandler())
 		.registerCommand(new ChatReqHandler())
 		//.registerCommand(new JoinReqHandler())
 		.registerCommand(new HeartbeatReqHandler())
 		.registerCommand(new CloseReqHandler())
-		.registerCommand(new WsMsgHandler());
-		//.registerCommand(new LoginReqHandler())
-		//.registerCommand(new ClientPageReqHandler());
+		//添加不同协议的Cmd命令处理器;
+		.addProCmdHandler(new WsProCmdHandler())
+		.addProCmdHandler(new TcpProCmdHandler());
 		
 		serverHandlerManager
 		.addServerHandler(new HttpServerHandler())

@@ -6,9 +6,9 @@ import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.ImBsHandlerIntf;
+import org.tio.im.server.command.CmdHandler;
 
-public class CloseReqHandler implements ImBsHandlerIntf
+public class CloseReqHandler extends CmdHandler
 {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(CloseReqHandler.class);

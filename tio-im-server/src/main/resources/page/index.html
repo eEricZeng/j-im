@@ -23,6 +23,7 @@ function connect(){
 	logDiv = document.getElementById('logs');
 	socket = new WebSocket("ws:"+ip+":"+port);
 	socket.onopen = function(e){
+		console.log("ws:",e);
 		logDiv.innerHTML+="<font color='green' size='3'>连接成功...</font><br>";
 		scrollToBottom();
 	};

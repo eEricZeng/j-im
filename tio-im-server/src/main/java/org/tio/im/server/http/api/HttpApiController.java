@@ -22,7 +22,7 @@ import org.tio.im.server.util.Resps;
  * 作者: WChao 创建时间: 2017年8月8日 上午9:08:48
  */
 @RequestPath(value = "/api")
-public class HttpApi {
+public class HttpApiController {
 	
 	@RequestPath(value = "/message/send")
 	public HttpResponse json(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {

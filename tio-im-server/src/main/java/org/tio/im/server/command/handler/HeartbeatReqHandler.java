@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.ImBsHandlerIntf;
+import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 
-public class HeartbeatReqHandler implements ImBsHandlerIntf
+public class HeartbeatReqHandler extends CmdHandler
 {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(HeartbeatReqHandler.class);
@@ -15,7 +16,8 @@ public class HeartbeatReqHandler implements ImBsHandlerIntf
 	@Override
 	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
-		return null;
+		ProCmdHandlerIntf imHandler = cmdManager.getProCmdHandler(channelContext);
+		return imHandler.heartbeat(packet, channelContext);
 	}
 
 	@Override

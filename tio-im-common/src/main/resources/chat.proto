@@ -44,10 +44,6 @@ enum Command {
 
 	COMMAND_CANCEL_MSG_REQ = 15; //发出撤消消息指令(管理员可以撤消所有人的消息，自己可以撤消自己的消息)
 	COMMAND_CANCEL_MSG_RESP = 16; //收到撤消消息指令
-	
-	COMMAND_WEBSOCKET_REQ = 17;//WEBSOCKET请求;
-	COMMAND_WEBSOCKET_RESP = 18;//WebSocket指令响应;
-
 }
 
 /**

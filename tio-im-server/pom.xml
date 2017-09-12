@@ -38,6 +38,10 @@
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
   </dependencies>
   <build>
 		<plugins>

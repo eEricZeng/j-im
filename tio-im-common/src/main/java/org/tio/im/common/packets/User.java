@@ -9,13 +9,14 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年7月26日 下午3:13:47
  */
 public class User {
-	private int id;//user id
+	private String id;//user id
 	private String nick; //user nick
 	private String avatar; //用户头像
-	public int getId() {
+	
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getNick() {

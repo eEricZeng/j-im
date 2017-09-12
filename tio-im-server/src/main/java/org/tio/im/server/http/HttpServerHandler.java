@@ -19,14 +19,9 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseEncoder;
 import org.tio.im.common.http.handler.IHttpRequestHandler;
 import org.tio.im.common.http.session.HttpSession;
-import org.tio.im.common.packets.ChatReqBody;
-import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.CommandManager;
-import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.im.server.init.HttpServerInit;
 import org.tio.server.ServerGroupContext;
-
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -90,15 +85,6 @@ public class HttpServerHandler extends AbServerHandler{
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
 		HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
-		ChatReqBody chatBody = ChatReqHandler.parseChatBody(request.getBodyString());
-		if(chatBody != null){
-			Integer cmd = chatBody.getCmd();
-			if(cmd == null)
-				cmd = Command.COMMAND_CHAT_REQ_VALUE;
-			channelContext.setAttribute(Protocol.COMMAND,CommandManager.getInstance().getCommand(cmd));
-		}else{
-			channelContext.setAttribute(Protocol.COMMAND,null);
-		}
 		channelContext.setAttribute(Const.HTTP_REQUEST,request);
 		return request;
 	}

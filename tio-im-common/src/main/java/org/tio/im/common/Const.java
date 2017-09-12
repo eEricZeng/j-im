@@ -7,9 +7,9 @@ package org.tio.im.common;
  */
 public interface Const
 {
-	String authkey = "wchao";
+	public static final String authkey = "wchao";
 	
-	int SERVER_PORT = 8888;
+	public static final int SERVER_PORT = 8888;
 	
 	public static final String CHARSET = "utf-8";
 	

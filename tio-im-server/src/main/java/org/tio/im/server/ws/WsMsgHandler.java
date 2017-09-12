@@ -93,7 +93,6 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 * @throws Exception
 	 * @author: tanyaowu
 	 */
-	@Override
 	public WsResponsePacket handler(ImPacket imPacket, ChannelContext channelContext)throws Exception {
 		WsRequestPacket wsRequest = (WsRequestPacket)imPacket;
 		return h(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext);
@@ -196,13 +195,5 @@ public class WsMsgHandler implements IWsMsgHandler{
 	public void setWsServerConfig(WsServerConfig wsServerConfig) {
 		this.wsServerConfig = wsServerConfig;
 	}
-
-	@Override
-	public Command command() {
-		
-		return Command.COMMAND_WEBSOCKET_REQ;
-	}
-
-	
 
 }

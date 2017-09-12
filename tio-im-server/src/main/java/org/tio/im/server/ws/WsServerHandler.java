@@ -21,11 +21,14 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseEncoder;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsServerDecoder;
 import org.tio.im.common.ws.WsServerEncoder;
 import org.tio.im.common.ws.WsSessionContext;
+import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.server.ServerGroupContext;
 
@@ -37,7 +40,7 @@ import com.jfinal.kit.PropKit;
  */
 public class WsServerHandler extends AbServerHandler{
 	
-	private Logger log = LoggerFactory.getLogger(WsServerHandler.class);
+	private Logger logger = LoggerFactory.getLogger(WsServerHandler.class);
 	
 	private Packet packet = null;
 	
@@ -57,7 +60,7 @@ public class WsServerHandler extends AbServerHandler{
 		int port = PropKit.getInt("port");//启动端口
 		this.wsServerConfig = new WsServerConfig(port);
 		this.wsMsgHandler = new WsMsgHandler();
-		log.info("WebSocketServerHandler初始化完毕...");
+		logger.info("wsServerHandler 初始化完毕...");
 	}
 
 	@Override
@@ -98,29 +101,19 @@ public class WsServerHandler extends AbServerHandler{
 
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-		
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-
-		if (wsRequestPacket.isHandShake()) {
-			WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
-			HttpRequest request = wsSessionContext.getHandshakeRequestPacket();
-			HttpResponse httpResponse = wsSessionContext.getHandshakeResponsePacket();
-			WsResponsePacket wsResponse = wsMsgHandler.handshake(request, httpResponse, channelContext);
-			if (wsResponse == null) {
-				Aio.remove(channelContext, "业务层不同意握手");
-				return;
-			}
-			Aio.send(channelContext, wsResponse);
-			return;
+		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
+		if(cmdHandler == null){
+			String erroMsg = "不支持该cmd命令...";
+			logger.error(erroMsg);
+			WsResponsePacket responsePacket = new WsResponsePacket();
+			responsePacket.setBody(erroMsg.getBytes(wsServerConfig.getCharset()));
+			Aio.send(channelContext, wsRequestPacket);
 		}
-
-		Object wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
-
-		if (wsResponsePacket != null) {
-			Aio.send(channelContext, (WsResponsePacket)wsResponsePacket);
+		Object response = cmdHandler.handler(wsRequestPacket, channelContext);
+		if(response != null){
+			Aio.send(channelContext, (WsResponsePacket)response);
 		}
-
-		return;
 	}
 
 	@Override
@@ -140,11 +133,15 @@ public class WsServerHandler extends AbServerHandler{
 
 			WsRequestPacket wsRequestPacket = new WsRequestPacket();
 			wsRequestPacket.setHandShake(true);
-
+			wsRequestPacket.setCommand(Command.COMMAND_HANDSHAKE_REQ);
 			return wsRequestPacket;
 		}else{
 			WsRequestPacket wsRequestPacket = WsServerDecoder.decode(buffer, channelContext);
-			wsRequestPacket.setCommand(Command.COMMAND_WEBSOCKET_REQ);
+			if(wsRequestPacket.getWsOpcode() ==  Opcode.CLOSE){
+				wsRequestPacket.setCommand(Command.COMMAND_CLOSE_REQ);
+			}else{
+				wsRequestPacket.setCommand(Command.COMMAND_CHAT_REQ);
+			}
 			return wsRequestPacket;
 		}
 	}

@@ -4,25 +4,20 @@
 package org.tio.im.server.tcp;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
-import org.tio.im.common.ImPacket;
 import org.tio.im.common.Protocol;
-import org.tio.im.common.packets.Command;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerDecoder;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
@@ -59,15 +54,7 @@ public class TcpServerHandler extends AbServerHandler{
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext,ChannelContext channelContext) {
 		TcpPacket tcpPacket = (TcpPacket)packet;
-		if (tcpPacket.getCommand() == Command.COMMAND_HANDSHAKE_RESP) {
-			ByteBuffer buffer = ByteBuffer.allocate(1);
-			buffer.put(Protocol.HANDSHAKE_BYTE);
-			return buffer;
-		}else if(tcpPacket.getCommand() == Command.COMMAND_CHAT_RESP){
-			
-			return TcpServerEncoder.encode(tcpPacket, groupContext, channelContext);
-		}
-		return null;
+		return TcpServerEncoder.encode(tcpPacket, groupContext, channelContext);
 	}
 
 	@Override
@@ -75,17 +62,12 @@ public class TcpServerHandler extends AbServerHandler{
 		TcpPacket tcpPacket = (TcpPacket)packet;
 		String message = new String(tcpPacket.getBody(),Const.CHARSET);
 		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
-		System.out.println(onText);
-		Map<String,Object> resultMap = Resps.convertResPacket(tcpPacket.getBody(), channelContext);
-		if(resultMap != null){
-			ChannelContext toChnnelContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-			Packet imPacket = (Packet)resultMap.get(Const.PACKET);
-			Aio.send(toChnnelContext, imPacket);
-		}
+		logger.info(onText);
+		CommandManager.getInstance().getCommand(tcpPacket.getCommand()).handler(tcpPacket, channelContext);
 	}
 
 	@Override
-	public ImPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
+	public TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
 		return TcpServerDecoder.decode(buffer, channelContext);
 	}
 
