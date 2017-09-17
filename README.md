@@ -7,10 +7,26 @@
 {
     "from": "来源ID",
     "to": "目标ID",
+    "cmd":"命令码",
     "createTime": 消息创建时间Long类型,
     "msgType": "消息类型(text、image、vedio、news)",
     "content": "内容"
 }
+
+ **目前暂时支持的消息命令码:** 
+
+COMMAND_HANDSHAKE_REQ = 1; //握手请求，含http的websocket握手请求
+
+COMMAND_AUTH_REQ = 3; //鉴权请求
+	
+COMMAND_LOGIN_REQ = 5; //登录请求
+
+COMMAND_CHAT_REQ = 11; //聊天请求
+
+COMMAND_HEARTBEAT_REQ = 13; //心跳请求
+
+COMMAND_CLOSE_REQ = 14; //关闭请求
+
 ```
 ## 性能
 性能不用说，去参考[t-io性能指标](http://git.oschina.net/tywo45/t-io#%E6%9E%81%E9%9C%87%E6%92%BC%E7%9A%84%E6%80%A7%E8%83%BD)，相关版本第一时间与tio保持同步更新！
