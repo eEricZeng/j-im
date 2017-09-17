@@ -1,7 +1,6 @@
 package org.tio.im.server.command.handler;
 
 import org.apache.log4j.Logger;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
@@ -13,9 +12,9 @@ import org.tio.im.server.command.CmdHandler;
 import com.alibaba.fastjson.JSONObject;
 /**
  * 
- * 
- * @author tanyaowu 
- *
+ * 版本: [1.0]
+ * 功能说明: 
+ * 作者: WChao 创建时间: 2017年9月13日 下午1:39:35
  */
 public class AuthReqHandler extends CmdHandler
 {
@@ -36,8 +35,7 @@ public class AuthReqHandler extends CmdHandler
 		AuthRespBody authRespBody = new AuthRespBody();
 		imRespPacket.setCommand(Command.COMMAND_AUTH_RESP);
 		imRespPacket.setBody(JSONObject.toJSONBytes(authRespBody));
-		Aio.send(channelContext, imRespPacket);
-		return null;
+		return authRespBody;
 	}
 
 

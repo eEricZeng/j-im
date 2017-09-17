@@ -61,8 +61,16 @@ public class HelloPacket extends Packet
 	
 	
 	public static final int HEADER_LENGHT = 4;//消息头的长度
+	
+	private int command  = 0;
 	public static final String CHARSET = "utf-8";
 	
+	public HelloPacket(){
+		
+	}
+	public HelloPacket(int command){
+		this.command = command;
+	}
 	public static byte encodeEncrypt(byte bs,boolean isEncrypt){
 		if(isEncrypt){
 			return (byte) (bs | FIRST_BYTE_MASK_ENCRYPT);
@@ -162,4 +170,11 @@ public class HelloPacket extends Packet
 	{
 		this.body = body;
 	}
+	public int getCommand() {
+		return command;
+	}
+	public void setCommand(int command) {
+		this.command = command;
+	}
+	
 }

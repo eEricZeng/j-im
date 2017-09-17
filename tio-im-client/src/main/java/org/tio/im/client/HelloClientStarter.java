@@ -9,6 +9,9 @@ import org.tio.client.intf.ClientAioListener;
 import org.tio.core.Aio;
 import org.tio.core.Node;
 import org.tio.im.common.Const;
+import org.tio.im.common.packets.LoginReqBody;
+
+import com.alibaba.fastjson.JSONObject;
 /**
  * 
  * 版本: [1.0]
@@ -47,14 +50,18 @@ public class HelloClientStarter {
 	}
 
 	private static void send() throws Exception {
-		HelloPacket packet = new HelloPacket();
+		HelloPacket loginPacket = new HelloPacket(5);
+		LoginReqBody loginReqBody = new LoginReqBody("test1","123");
+		loginPacket.setBody(JSONObject.toJSONBytes(loginReqBody));
+		Aio.bSend(clientChannelContext, loginPacket);
 		String text = "{"
-						+ "\"from\":\"来源ID\","
-						+ "\"to\":\"a81205df-fce7-4d90-9a5e-65f6e6b7785f\","
-						+ "\"content\":\"Tcp转Ws消息来啦..!\","
-						+ "\"msgType\":\"text\""
-						+ "}";
-		packet.setBody(text.getBytes(HelloPacket.CHARSET));
-		Aio.send(clientChannelContext, packet);
+				+ "\"from\":\"test1\","
+				+ "\"to\":\"admin\","
+				+ "\"content\":\"Tcp转Ws消息来啦..!\","
+				+ "\"msgType\":\"text\""
+				+ "}";
+		HelloPacket chatPacket = new HelloPacket(11);
+		chatPacket.setBody(text.getBytes("utf-8"));
+		Aio.bSend(clientChannelContext, chatPacket);
 	}
 }

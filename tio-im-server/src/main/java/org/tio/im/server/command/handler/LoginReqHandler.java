@@ -63,7 +63,6 @@ public class LoginReqHandler extends CmdHandler {
 		loginRespBodyBuilder.setToken(token);
 		byte[] bodyByte = JSONObject.toJSONBytes(loginRespBodyBuilder);
 		ImPacket respPacket = new ImPacket(Command.COMMAND_LOGIN_RESP, bodyByte);
-		Aio.send(channelContext, respPacket);
 		return respPacket;
 	}
 

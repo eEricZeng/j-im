@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.tio.im.common.Const;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.packets.User;
+import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Md5;
 
 import com.xiaoleilu.hutool.util.RandomUtil;
@@ -67,6 +68,7 @@ public class UserService {
 		User user = tokenMap.get(token);
 		if (user == null) {
 			user = new User();
+			user.setId(UUIDSessionIdGenerator.instance.sessionId(null));
 			user.setNick(familyName[RandomUtil.randomInt(0, familyName.length - 1)] + secondName[RandomUtil.randomInt(0, secondName.length - 1)]);
 			user.setAvatar(nextImg());
 			if (tokenMap.size() > 10000) {

@@ -36,7 +36,7 @@ public class HttpApiController {
 				response = (HttpResponse)packet;
 			}else{
 				Aio.send(toChannleContext, packet);
-				response.setBody(ChatReqHandler.toChatRespBody(status),request);
+				response.setBody(ChatReqHandler.toImStatusBody(status),request);
 			}
 		}
 		return response;

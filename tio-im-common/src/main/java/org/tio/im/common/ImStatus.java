@@ -12,8 +12,7 @@ public enum ImStatus implements Status{
 	
 	C0(1,"offline","用户不在线"),
 	C1(0,"ok","发送成功"),
-	C2(2,"failed","发送失败,数据格式不正确,请参考:{\"from\":来源ID,\"to\":目标ID,\"createTime\":消息创建时间,\"msgType\":消息类型,\"content\":内容}");
-	
+	C2(2,"failed","发送失败,数据格式不正确,请参考:{'from':来源ID,'to':目标ID,'cmd':'消息命令码','createTime':消息创建时间(Long型),'msgType':消息类型,'content':内容}");	
 	private int status;
 	
 	private String description;

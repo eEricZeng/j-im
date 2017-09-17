@@ -24,7 +24,7 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseStatus;
 import org.tio.im.common.http.MimeType;
 import org.tio.im.common.http.session.HttpSession;
-import org.tio.im.common.packets.ChatReqBody;
+import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerEncoder;
@@ -35,6 +35,7 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.json.Json;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xiaoleilu.hutool.io.FileUtil;
 
 /**
@@ -350,12 +351,11 @@ public class Resps {
 	 */
 	public static Map<String,Object> convertResPacket(byte[] body, ChannelContext fromChannelContext) throws Exception{
 		Map<String,Object> resultMap =  new HashMap<String,Object>();
-		ChatReqBody chatReqBody = ChatReqHandler.parseChatBody(body);
-		if(chatReqBody != null){
-			ChannelContext toChannelContext = Aio.getChannelContextByUserid(fromChannelContext.getGroupContext(),chatReqBody.getTo());
+		ChatBody chatBody = ChatReqHandler.parseChatBody(body,fromChannelContext);
+		if(chatBody != null){
+			ChannelContext toChannelContext = Aio.getChannelContextByUserid(fromChannelContext.getGroupContext(),chatBody.getTo());
 			if(toChannelContext == null){
-				body = ChatReqHandler.toChatRespBody(ImStatus.C0);
-				Packet respPacket = convertPacket(body, fromChannelContext);
+				Packet respPacket = convertPacket(ChatReqHandler.toImStatusBody(ImStatus.C0), fromChannelContext);
 				resultMap.put(Const.CHANNEL,fromChannelContext);
 				resultMap.put(Const.PACKET,respPacket);
 				resultMap.put(Const.STATUS, ImStatus.C0);
@@ -363,8 +363,7 @@ public class Resps {
 			}else{
 				try{
 					resultMap.put(Const.CHANNEL,toChannelContext);
-					body = chatReqBody.getContent().getBytes(HttpConst.CHARSET_NAME);
-					Packet respPacket = convertPacket(body, toChannelContext);
+					Packet respPacket = convertPacket(JSONObject.toJSONString(chatBody).getBytes(HttpConst.CHARSET_NAME), toChannelContext);
 					resultMap.put(Const.PACKET,respPacket);
 					resultMap.put(Const.STATUS, ImStatus.C1);
 				}catch(Exception e){
@@ -372,8 +371,7 @@ public class Resps {
 				}
 			}
 		}else{
-			body = ChatReqHandler.toChatRespBody(ImStatus.C2);
-			Packet respPacket = convertPacket(body, fromChannelContext);
+			Packet respPacket = convertPacket(ChatReqHandler.toImStatusBody(ImStatus.C2), fromChannelContext);
 			resultMap.put(Const.CHANNEL,fromChannelContext);
 			resultMap.put(Const.PACKET,respPacket);
 			resultMap.put(Const.STATUS, ImStatus.C2);
@@ -382,9 +380,9 @@ public class Resps {
 		return resultMap;
 	}
 	
-	private static Packet convertPacket(byte[] body , ChannelContext channelContex){
+	public static ImPacket convertPacket(byte[] body , ChannelContext channelContex){
 		Object sessionContext = channelContex.getAttribute();
-		Packet respPacket = null;
+		ImPacket respPacket = null;
 		if(sessionContext instanceof HttpSession){//转HTTP协议响应包;
 			HttpRequest request = (HttpRequest)channelContex.getAttribute(Const.HTTP_REQUEST);
 			HttpResponse response = new HttpResponse(request,request.getHttpConfig());

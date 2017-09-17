@@ -8,7 +8,7 @@ package org.tio.im.common.packets;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 上午11:31:48
  */
-public class ChatRespBody extends ChatBody{
+public class RespBody extends ChatBody{
 	
 	private Integer errorCode;
 	
@@ -18,7 +18,7 @@ public class ChatRespBody extends ChatBody{
 		return errorCode;
 	}
 
-	public ChatRespBody setErrorCode(Integer errorCode) {
+	public RespBody setErrorCode(Integer errorCode) {
 		this.errorCode = errorCode;
 		return this;
 	}
@@ -27,7 +27,7 @@ public class ChatRespBody extends ChatBody{
 		return errorMsg;
 	}
 
-	public ChatRespBody setErrorMsg(String errorMsg) {
+	public RespBody setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
 		return this;
 	}

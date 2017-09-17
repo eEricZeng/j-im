@@ -15,12 +15,17 @@ import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
+import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.ChatReqHandler;
+import org.tio.im.server.command.handler.LoginReqHandler;
 import org.tio.im.server.util.Resps;
+
+import com.alibaba.fastjson.JSONObject;
 /**
  * @author tanyaowu 
  * 2017年6月28日 下午5:32:38
@@ -40,7 +45,20 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 */
 	@Override
 	public WsResponsePacket handshake(HttpRequest request, HttpResponse response,ChannelContext channelContext) throws Exception {
+		if(request.getParams() == null)
+			return null;
 		WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();
+		LoginReqHandler loginHandler = (LoginReqHandler)CommandManager.getInstance().getCommand(Command.COMMAND_LOGIN_REQ);
+		String username = request.getParams().get("username") == null ? null : (String)request.getParams().get("username")[0];
+		String password = request.getParams().get("password") == null ? null : (String)request.getParams().get("password")[0];
+		String token = request.getParams().get("token") == null ? null : (String)request.getParams().get("token")[0];
+		LoginReqBody loginBody = new LoginReqBody(username,password,token);
+		byte[] loginBytes = JSONObject.toJSONBytes(loginBody);
+		request.setBody(loginBytes);
+		request.setBodyString(new String(loginBytes,HttpConst.CHARSET_NAME));
+		Object loginResponse = loginHandler.handler(request, channelContext);
+		if(loginResponse == null)
+			return null;
 		WsResponsePacket wsResponsePacket = new WsResponsePacket();
 		wsResponsePacket.setHandShake(true);
 		wsResponsePacket.setCommand(Command.COMMAND_HANDSHAKE_RESP);
@@ -65,7 +83,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 		if(toChannleContext != channelContext){//不发送给自己;
 			Aio.send(toChannleContext, packet);
 		}
-		text = new String(ChatReqHandler.toChatRespBody(status),HttpConst.CHARSET_NAME);
+		text = new String(ChatReqHandler.toImStatusBody(status),HttpConst.CHARSET_NAME);
 		return text;
 	}
 

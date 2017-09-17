@@ -44,12 +44,12 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 		boolean isCompress = true;
 		boolean is4ByteLength = true;
 		boolean isEncrypt = true;
+		HelloPacket helloPacket = (HelloPacket)packet;
 		byte firstbyte = HelloPacket.encodeEncrypt(HelloPacket.VERSION, isEncrypt);
 		firstbyte = HelloPacket.encodeCompress(firstbyte, isCompress);
 		firstbyte = HelloPacket.encodeHasSynSeq(firstbyte, packet.getSynSeq() > 0);
 		firstbyte = HelloPacket.encode4ByteLength(firstbyte, is4ByteLength);
-		firstbyte = (byte) (firstbyte| 11);//消息类型;
-		HelloPacket helloPacket = (HelloPacket)packet;
+		firstbyte = (byte) (firstbyte| helloPacket.getCommand());//消息类型;
 		byte[] body = helloPacket.getBody();
 		int bodyLen = 0;
 		if (body != null)

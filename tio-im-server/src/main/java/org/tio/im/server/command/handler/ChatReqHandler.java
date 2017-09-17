@@ -4,9 +4,10 @@ import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConst;
-import org.tio.im.common.packets.ChatReqBody;
-import org.tio.im.common.packets.ChatRespBody;
+import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.RespBody;
+import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 
@@ -34,17 +35,36 @@ public class ChatReqHandler extends CmdHandler {
 	 * @param packet
 	 * @return
 	 */
-	public static ChatReqBody parseChatBody(byte[] body){
+	public static ChatBody parseChatBody(byte[] body){
 		if(body == null)
 			return null;
-		ChatReqBody chatReqBody = null;
+		ChatBody chatReqBody = null;
 		try{
 			String text = new String(body,HttpConst.CHARSET_NAME);
-		    chatReqBody = JSONObject.parseObject(text,ChatReqBody.class);
-			if(chatReqBody != null)
+		    chatReqBody = JSONObject.parseObject(text,ChatBody.class);
+			if(chatReqBody != null){
+				if(chatReqBody.getCreateTime() == null || "".equals(chatReqBody.getCreateTime()))
+					chatReqBody.setCreateTime(System.currentTimeMillis());
+				chatReqBody.setId(UUIDSessionIdGenerator.instance.sessionId(null));
 				return chatReqBody;
+			}
 		}catch(Exception e){
 			
+		}
+		return chatReqBody;
+	}
+	/**
+	 * 转换为聊天消息结构;
+	 * @param body
+	 * @param channelContext
+	 * @return
+	 */
+	public static ChatBody parseChatBody(byte[] body,ChannelContext channelContext){
+		ChatBody chatReqBody = parseChatBody(body);
+		if(chatReqBody != null){
+			if(chatReqBody.getFrom() == null || "".equals(chatReqBody.getFrom())){
+				chatReqBody.setFrom(channelContext.getId());
+			}
 		}
 		return chatReqBody;
 	}
@@ -53,7 +73,7 @@ public class ChatReqHandler extends CmdHandler {
 	 * @param packet
 	 * @return
 	 */
-	public static ChatReqBody parseChatBody(String bodyStr){
+	public static ChatBody parseChatBody(String bodyStr){
 		if(bodyStr == null)
 			return null;
 		try {
@@ -68,8 +88,8 @@ public class ChatReqHandler extends CmdHandler {
 	 * @param status
 	 * @return
 	 */
-	public static byte[] toChatRespBody(ImStatus status){
-		return JSONObject.toJSONBytes(new ChatRespBody().setErrorCode(status.getCode()).setErrorMsg(status.getDescription()+" "+status.getText()));
+	public static byte[] toImStatusBody(ImStatus status){
+		return JSONObject.toJSONBytes(new RespBody().setErrorCode(status.getCode()).setErrorMsg(status.getDescription()+" "+status.getText()));
 	}
 	@Override
 	public Command command() {

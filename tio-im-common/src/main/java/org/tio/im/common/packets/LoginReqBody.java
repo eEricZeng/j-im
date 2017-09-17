@@ -14,6 +14,19 @@ public class LoginReqBody extends Message {
 	private String loginname;
 	private String password;
 	private String token;
+	
+	public LoginReqBody(){}
+	public LoginReqBody(String token){
+		this.token = token;
+	}
+	public LoginReqBody(String loginname,String password){
+		this.loginname = loginname;
+		this.password = password;
+	}
+	public LoginReqBody(String loginname,String password,String token){
+		this(loginname,password);
+		this.token = token;
+	}
 	public String getLoginname() {
 		return loginname;
 	}

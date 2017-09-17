@@ -1,6 +1,5 @@
 package org.tio.im.server.listener;
 
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioListener;
@@ -45,9 +44,9 @@ public class ImServerAioListener implements ServerAioListener {
 
 		imSessionContext.setRequestRateLimiter(rateLimiterWrap);*/
 
-		if (isConnected) {
+		/*if (isConnected) {
 			Aio.bindUser(channelContext, channelContext.getId());
-		}
+		}*/
 		return;
 	}
 

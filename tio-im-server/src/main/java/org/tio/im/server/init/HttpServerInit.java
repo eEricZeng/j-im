@@ -36,6 +36,7 @@ public class HttpServerInit {
 
 		httpConfig = new HttpConfig(port,null);
 		httpConfig.setPageRoot(pageRoot);
+		httpConfig.setMaxLiveTimeOfStaticRes(0);//不缓存资源;
 		if (httpConfig.getSessionStore() == null) {
 			GuavaCache guavaCache = GuavaCache.register(httpConfig.getSessionCacheName(), null, httpConfig.getSessionTimeout());
 			httpConfig.setSessionStore(guavaCache);

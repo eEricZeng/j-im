@@ -13,6 +13,7 @@ import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
@@ -20,6 +21,8 @@ import org.tio.im.common.http.HttpRequestDecoder;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseEncoder;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.Message;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
@@ -30,8 +33,10 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
+import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.PropKit;
 /**
  * 版本: [1.0]
@@ -104,15 +109,14 @@ public class WsServerHandler extends AbServerHandler{
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
-			String erroMsg = "不支持该cmd命令...";
-			logger.error(erroMsg);
-			WsResponsePacket responsePacket = new WsResponsePacket();
-			responsePacket.setBody(erroMsg.getBytes(wsServerConfig.getCharset()));
-			Aio.send(channelContext, wsRequestPacket);
+			RespBody respBody = new RespBody().setErrorCode(ImStatus.C2.getCode()).setErrorMsg(ImStatus.C2.getText());
+			ImPacket responsePacket = Resps.convertPacket(JSONObject.toJSONBytes(respBody), channelContext);
+			Aio.send(channelContext, responsePacket);
+			return;
 		}
 		Object response = cmdHandler.handler(wsRequestPacket, channelContext);
 		if(response != null){
-			Aio.send(channelContext, (WsResponsePacket)response);
+			Aio.send(channelContext, (ImPacket)response);
 		}
 	}
 
@@ -137,11 +141,18 @@ public class WsServerHandler extends AbServerHandler{
 			return wsRequestPacket;
 		}else{
 			WsRequestPacket wsRequestPacket = WsServerDecoder.decode(buffer, channelContext);
-			if(wsRequestPacket.getWsOpcode() ==  Opcode.CLOSE){
-				wsRequestPacket.setCommand(Command.COMMAND_CLOSE_REQ);
+			Command command = null;
+			if(wsRequestPacket.getWsOpcode() == Opcode.CLOSE){
+				command = Command.COMMAND_CLOSE_REQ;
 			}else{
-				wsRequestPacket.setCommand(Command.COMMAND_CHAT_REQ);
+				try{
+					Message message = JSONObject.parseObject(wsRequestPacket.getBody(),Message.class);
+					command = Command.forNumber(message.getCmd());
+				}catch(Exception e){
+					return wsRequestPacket;
+				}
 			}
+			wsRequestPacket.setCommand(command);
 			return wsRequestPacket;
 		}
 	}
