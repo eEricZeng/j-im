@@ -76,7 +76,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 */
 	@Override
 	public Object onText(WsRequestPacket wsRequestPacket, String text, ChannelContext channelContext) throws Exception {
-		Map<String,Object> resultMap = Resps.convertResPacket(wsRequestPacket.getBody(), channelContext);
+		Map<String,Object> resultMap = Resps.convertChatResPacket(wsRequestPacket.getBody(), channelContext);
 		ChannelContext toChannleContext = (ChannelContext)resultMap.get(Const.CHANNEL);
 		Packet packet = (Packet)resultMap.get(Const.PACKET);
 		ImStatus status = (ImStatus)resultMap.get(Const.STATUS);

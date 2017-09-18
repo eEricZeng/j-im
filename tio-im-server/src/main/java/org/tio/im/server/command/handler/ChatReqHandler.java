@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ChatReqHandler extends CmdHandler {
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception {
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}

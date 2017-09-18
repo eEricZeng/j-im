@@ -8,17 +8,10 @@ package org.tio.im.common.packets;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 下午3:13:47
  */
-public class User {
-	private String id;//user id
+public class User extends Message{
 	private String nick; //user nick
 	private String avatar; //用户头像
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
+	private String type;//0:单个,1:所有在线用户,2:所有用户(在线+离线)
 	public String getNick() {
 		return nick;
 	}
@@ -30,5 +23,11 @@ public class User {
 	}
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }

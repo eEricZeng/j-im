@@ -27,7 +27,7 @@ public class HttpApiController {
 	@RequestPath(value = "/message/send")
 	public HttpResponse json(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
 		HttpResponse response = new HttpResponse(request,httpConfig);
-		Map<String,Object> resultMap = Resps.convertResPacket(request.getBody(), channelContext);
+		Map<String,Object> resultMap = Resps.convertChatResPacket(request.getBody(), channelContext);
 		if(resultMap != null){
 			ChannelContext toChannleContext = (ChannelContext)resultMap.get(Const.CHANNEL);
 			ImPacket packet = (ImPacket)resultMap.get(Const.PACKET);

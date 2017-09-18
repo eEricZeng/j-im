@@ -63,14 +63,11 @@ public class WsProCmdHandler implements ProCmdHandlerIntf {
 	@Override
 	public ImPacket chat(ImPacket packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-		Object wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
-
+		ImPacket wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
 		if (wsResponsePacket != null) {
-			WsResponsePacket wsResPacket = (WsResponsePacket)wsResponsePacket;
-			Aio.send(channelContext,wsResPacket);
-			return wsResPacket;
+			Aio.send(channelContext,wsResponsePacket);
 		}
-		return null;
+		return wsResponsePacket;
 	}
 
 

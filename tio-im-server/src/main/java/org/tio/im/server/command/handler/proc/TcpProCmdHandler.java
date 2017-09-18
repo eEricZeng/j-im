@@ -35,7 +35,7 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 	@Override
 	public ImPacket chat(ImPacket packet, ChannelContext channelContext) throws Exception {
 		TcpPacket tcpPacket = (TcpPacket)packet;
-		Map<String,Object> resultMap = Resps.convertResPacket(tcpPacket.getBody(), channelContext);
+		Map<String,Object> resultMap = Resps.convertChatResPacket(tcpPacket.getBody(), channelContext);
 		if(resultMap != null){
 			ChannelContext toChnnelContext = (ChannelContext)resultMap.get(Const.CHANNEL);
 			ImPacket imPacket = (ImPacket)resultMap.get(Const.PACKET);

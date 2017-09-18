@@ -25,7 +25,6 @@ import org.tio.im.common.http.HttpResponseStatus;
 import org.tio.im.common.http.MimeType;
 import org.tio.im.common.http.session.HttpSession;
 import org.tio.im.common.packets.ChatBody;
-import org.tio.im.common.packets.Command;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
@@ -335,8 +334,8 @@ public class Resps {
 		return ret;
 	}
 	
-	public static Map<String,Object> convertResPacket(ImPacket imPacket, ChannelContext fromChannelContext) throws Exception{
-		return convertResPacket(imPacket.getBody(),fromChannelContext);
+	public static Map<String,Object> convertChatResPacket(ImPacket imPacket, ChannelContext fromChannelContext) throws Exception{
+		return convertChatResPacket(imPacket.getBody(),fromChannelContext);
 	}
 	
 	/**
@@ -349,7 +348,7 @@ public class Resps {
 	 * @throws Exception 
 		 *
 	 */
-	public static Map<String,Object> convertResPacket(byte[] body, ChannelContext fromChannelContext) throws Exception{
+	public static Map<String,Object> convertChatResPacket(byte[] body, ChannelContext fromChannelContext) throws Exception{
 		Map<String,Object> resultMap =  new HashMap<String,Object>();
 		ChatBody chatBody = ChatReqHandler.parseChatBody(body,fromChannelContext);
 		if(chatBody != null){
@@ -389,7 +388,7 @@ public class Resps {
 			response.setBody(body, request);
 			respPacket = response;
 		}else if(sessionContext instanceof TcpSessionContext){//转TCP协议响应包;
-			TcpPacket tcpPacket = new TcpPacket(Command.COMMAND_CHAT_RESP, body);
+			TcpPacket tcpPacket = new TcpPacket(body);
 			TcpServerEncoder.encode(tcpPacket, channelContex.getGroupContext(), channelContex);
 			respPacket = tcpPacket;
 		}else if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
@@ -397,6 +396,15 @@ public class Resps {
 			wsResponsePacket.setBody(body);
 			wsResponsePacket.setWsOpcode(Opcode.TEXT);
 			respPacket =wsResponsePacket;
+		}
+		return respPacket;
+	}
+	
+	public static ImPacket convertPacket(ImPacket imPacket , ChannelContext channelContex){
+		byte[] body = imPacket.getBody();
+		ImPacket respPacket = convertPacket(body, channelContex);
+		if(respPacket != null){
+			respPacket.setCommand(imPacket.getCommand());
 		}
 		return respPacket;
 	}

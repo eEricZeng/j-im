@@ -29,6 +29,6 @@ public interface BsCmdHandlerIntf
 	 * 2016年11月18日 下午1:08:45
 	 *
 	 */
-	public Object handler(ImPacket packet, ChannelContext channelContext)  throws Exception;
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext)  throws Exception;
 	
 }

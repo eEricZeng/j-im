@@ -10,6 +10,7 @@ import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.AuthReqHandler;
 import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.command.handler.CloseReqHandler;
+import org.tio.im.server.command.handler.GetUserReqHandler;
 import org.tio.im.server.command.handler.HandshakeReqHandler;
 import org.tio.im.server.command.handler.HeartbeatReqHandler;
 import org.tio.im.server.command.handler.LoginReqHandler;
@@ -39,6 +40,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 		//.registerCommand(new JoinReqHandler())
 		.registerCommand(new HeartbeatReqHandler())
 		.registerCommand(new CloseReqHandler())
+		.registerCommand(new GetUserReqHandler())
 		//添加不同协议的Cmd命令处理器;
 		.addProCmdHandler(new WsProCmdHandler())
 		.addProCmdHandler(new TcpProCmdHandler());

@@ -22,7 +22,7 @@ public class AuthReqHandler extends CmdHandler
 	private Logger logger = Logger.getLogger(AuthReqHandler.class);
 	
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
@@ -35,7 +35,7 @@ public class AuthReqHandler extends CmdHandler
 		AuthRespBody authRespBody = new AuthRespBody();
 		imRespPacket.setCommand(Command.COMMAND_AUTH_RESP);
 		imRespPacket.setBody(JSONObject.toJSONBytes(authRespBody));
-		return authRespBody;
+		return imRespPacket;
 	}
 
 

@@ -21,6 +21,9 @@ public class TcpPacket extends ImPacket{
 	public TcpPacket(Command command, byte[] body){
 		super(command, body);
 	}
+	public TcpPacket( byte[] body){
+		super(body);
+	}
 	public byte getVersion() {
 		return version;
 	}

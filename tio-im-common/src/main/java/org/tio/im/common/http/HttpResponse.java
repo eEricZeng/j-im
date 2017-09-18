@@ -76,14 +76,12 @@ public class HttpResponse extends HttpPacket {
 				addHeader(HttpConst.ResponseHeaderKey.Keep_Alive, "timeout=10, max=20");
 			}
 		}
+		//暂时先这样...防止服务器一直不释放资源;
+		addHeader(HttpConst.ResponseHeaderKey.Connection, HttpConst.ResponseHeaderValue.Connection.close);
 		
-
 		if (httpConfig != null) {
 			addHeader(HttpConst.ResponseHeaderKey.Server, httpConfig.getServerInfo());
 		}
-		//		String xx = DatePattern.HTTP_DATETIME_FORMAT.format(SystemTimer.currentTimeMillis());
-		//		addHeader(HttpConst.ResponseHeaderKey.Date, DatePattern.HTTP_DATETIME_FORMAT.format(SystemTimer.currentTimeMillis()));
-		//		addHeader(HttpConst.ResponseHeaderKey.Date, new Date().toGMTString());
 	}
 
 	public boolean addCookie(Cookie cookie) {

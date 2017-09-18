@@ -23,7 +23,7 @@ public interface IWsMsgHandler
 	 * 2016年11月18日 下午1:08:45
 	 *
 	 */
-	public Object handler(ImPacket packet, ChannelContext channelContext)  throws Exception;
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext)  throws Exception;
 	/**
 	 * 对httpResponse参数进行补充并返回，如果返回null表示不想和对方建立连接，框架会断开连接，如果返回非null，框架会把这个对象发送给对方
 	 * @param request

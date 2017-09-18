@@ -14,7 +14,7 @@ public class HeartbeatReqHandler extends CmdHandler
 	private static Logger log = LoggerFactory.getLogger(HeartbeatReqHandler.class);
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		ProCmdHandlerIntf imHandler = cmdManager.getProCmdHandler(channelContext);
 		return imHandler.heartbeat(packet, channelContext);

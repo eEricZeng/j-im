@@ -4,15 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<title>t-io: 不仅仅是百万级TCP长连接框架</title>
-	<style type="text/css" media="screen">
-			#wrap{margin:10px auto; width:80%; height:99%;}
-			.unit{padding:5px; border:solid 1px #000; height:auto; margin-top:3px; clear:both;}	
-			.unit label{text-align:right;width:100px;line-height: 30px; display:inline-block;}
-			.unit input{line-height: 30px; width:100px; height:30px;}
-			.log {font-size:11px; font-family:Courier; height:65%; overflow: auto; background:black;}
-			.log p{padding:2px;margin:0;}
-	</style>
+<title>tio-im:支持百万在线用户</title>
+<style type="text/css" media="screen">
+		*{margin:0;padding:0;}
+		#wrap{margin:10px auto; width:80%; height:99%;}
+		.unit{margin-bottom:5px; padding:5px; border:solid 1px #000; height:auto;  clear:both;box-sizing:border-box;}	
+		.unit label{text-align:right;width:100px;line-height: 30px; display:inline-block;}
+		.unit input{line-height: 30px; width:100px; height:30px;}
+		.log {font-size:11px; font-family:Courier; overflow: auto; height:100%; background:black;width:85%;float:left}
+		.log p{padding:2px;margin:0;}
+		.content{width:100%;overflow:hidden;height:80%;margin:0 0 5px 0;}
+		.online{width: 15%;height: 100%;float:right;background: #FCFCFC;border:solid 1px #000;box-sizing:border-box;}
+</style>
+<script type="text/javascript" src="./static/js/date.js"></script>
 </head>
 <script>
 var socket ;
@@ -25,32 +29,31 @@ function connect(){
 	logDiv = document.getElementById('logs');
 	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&passowrd="+password);
 	socket.onopen = function(e){
-		console.log("ws:",e);
-		logDiv.innerHTML+="<font color='green' size='3'>登录成功...</font><br>";
+		logDiv.innerHTML+="<font color='green' size='2'>登录成功...</font><br>";
 		scrollToBottom();
 	};
 	socket.onerror = function(e){
-		logDiv.innerHTML+="<font color='red' size='3'>异常:"+e+"</font><br>";
+		logDiv.innerHTML+="<font color='red' size='2'>异常:"+e+"</font><br>";
 		scrollToBottom();
 	};
 	socket.onclose = function(e){
-		logDiv.innerHTML+="<font color='green' size='3'>退出登录...</font><br>";
+		logDiv.innerHTML+="<font color='green' size='2'>退出登录...</font><br>";
 		 scrollToBottom();
 	};
 	socket.onmessage = function(e){
 	   var data = e.data;
 	   var dataObj = eval("("+data+")");//转换为json对象
 	   if(!dataObj.errorCode && dataObj.errorCode != 0){
-	    	var createTime = new Date(dataObj.createTime).Format("yyyy-MM-dd HH:mm:ss");
+	    	var createTime = new Date(dataObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
 	 	    var from = dataObj.from;
 	 	    var content = dataObj.content;
 	    	//处理数据
-		    logDiv.innerHTML+="<font color='#87CEFA' size='3'>"+createTime+"</font><br>";
+		    logDiv.innerHTML+="<font color='#009ACD' size='2'>"+from+" "+createTime+"</font><br>";
 		    //处理数据
-		    logDiv.innerHTML+="<font color='#87CEFA' size='3'>"+from+":"+content+"</font><br>";
+		    logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
 	    }else{
 	    	 //处理数据
-		    logDiv.innerHTML+="<font color='green' size='3'>"+data+"</font><br>";
+		    logDiv.innerHTML+="<font color='green' size='2'>"+data+"</font><br>";
 	    }
 	    scrollToBottom();
 	};
@@ -80,21 +83,6 @@ function showServerConfig(obj){
         obj.value='关闭配置';
     }
 }
-Date.prototype.Format = function (fmt) { //author: meizz 
- var o = {
-     "M+": this.getMonth() + 1, //月份 
-     "d+": this.getDate(), //日 
-     "H+": this.getHours(), //小时 
-     "m+": this.getMinutes(), //分 
-     "s+": this.getSeconds(), //秒 
-     "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-     "S": this.getMilliseconds() //毫秒 
- };
- if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
- for (var k in o)
- if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
- return fmt;
-}
 </script>
 <body>
    <div id="wrap" style="height:600px;">
@@ -117,9 +105,15 @@ Date.prototype.Format = function (fmt) { //author: meizz
 			<label>聊天记录:</label>
 			<input type="button" value="清空记录" onclick="clearLogs();"/>
 		</div>
-		<div id="logs" class="unit log">
+		<div class="content">
+				<div id="logs" class="unit log">
+				</div>
+				<div id="onlinePanel" class="online">
+					&nbsp;在线成员(0/0)
+				</div>
+		
 		</div>
-		<div class="unit">
+				<div class="unit">
 			<label>输入内容:</label>
 			<input id="content" style="width:500px;"/>
 			<input onclick="javascript:send()"  type="button" value="发送" />

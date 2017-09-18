@@ -20,7 +20,7 @@ public class LoginReqHandler extends CmdHandler {
 	private static Logger log = LoggerFactory.getLogger(LoginReqHandler.class);
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception {
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
 		if (packet.getBody() == null) {
 			Aio.remove(channelContext, "body is null");
 			return null;
@@ -57,8 +57,8 @@ public class LoginReqHandler extends CmdHandler {
 		imSessionContext.setToken(token);
 		if(imSessionContext.getClient() == null){
 			ImUtils.setClient(channelContext);
-			imSessionContext.getClient().setUser(user);
 		}
+		imSessionContext.getClient().setUser(user);
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
 		byte[] bodyByte = JSONObject.toJSONBytes(loginRespBodyBuilder);

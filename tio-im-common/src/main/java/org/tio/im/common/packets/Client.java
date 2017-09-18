@@ -8,19 +8,12 @@ package org.tio.im.common.packets;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 下午3:11:55
  */
-public class Client {
-	private String id;//ChannelContext id
+public class Client extends Message{
 	private String ip; //客户端ip
 	private int port; //客户端port
 	private User user; //如果没登录过，则为null
 	private String region;  //地区
 	private String useragent;  //浏览器信息
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public String getIp() {
 		return ip;
 	}

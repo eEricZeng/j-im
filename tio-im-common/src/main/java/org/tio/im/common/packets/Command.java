@@ -142,20 +142,20 @@ public enum Command
   COMMAND_CANCEL_MSG_RESP(16),
   /**
    * <pre>
-   *WEBSOCKET请求;
+   *获取用户信息;
    * </pre>
    *
-   * <code>COMMAND_WEBSOCKET_REQ = 17;</code>
+   * <code>COMMAND_GET_USER_REQ = 17;</code>
    */
-  COMMAND_WEBSOCKET_REQ(17),
+  COMMAND_GET_USER_REQ(17),
   /**
    * <pre>
-   *WebSocket指令响应;
+   *获取用户信息响应;
    * </pre>
    *
-   * <code>COMMAND_WEBSOCKET_RESP = 18;</code>
+   * <code>COMMAND_GET_USER_RESP = 18;</code>
    */
-  COMMAND_WEBSOCKET_RESP(18),
+  COMMAND_GET_USER_RESP(18),
   UNRECOGNIZED(-1),
   ;
 
@@ -293,20 +293,20 @@ public enum Command
   public static final int COMMAND_CANCEL_MSG_RESP_VALUE = 16;
   /**
    * <pre>
-   *WEBSOCKET请求;
+   *获取用户信息;
    * </pre>
    *
-   * <code>COMMAND_WEBSOCKET_REQ = 17;</code>
+   * <code>COMMAND_GET_USER_REQ = 17;</code>
    */
-  public static final int COMMAND_WEBSOCKET_REQ_VALUE = 17;
+  public static final int COMMAND_GET_USER_REQ_VALUE = 17;
   /**
    * <pre>
-   *WebSocket指令响应;
+   *获取用户信息响应;
    * </pre>
    *
-   * <code>COMMAND_WEBSOCKET_RESP = 18;</code>
+   * <code>COMMAND_GET_USER_RESP = 18;</code>
    */
-  public static final int COMMAND_WEBSOCKET_RESP_VALUE = 18;
+  public static final int COMMAND_GET_USER_RESP_VALUE = 18;
 
 
   public final int getNumber() {
@@ -344,8 +344,8 @@ public enum Command
       case 14: return COMMAND_CLOSE_REQ;
       case 15: return COMMAND_CANCEL_MSG_REQ;
       case 16: return COMMAND_CANCEL_MSG_RESP;
-      case 17: return COMMAND_WEBSOCKET_REQ;
-      case 18: return COMMAND_WEBSOCKET_RESP;
+      case 17: return COMMAND_GET_USER_REQ;
+      case 18: return COMMAND_GET_USER_RESP;
       default: return null;
     }
   }

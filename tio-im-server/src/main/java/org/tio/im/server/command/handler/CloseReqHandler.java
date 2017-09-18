@@ -14,7 +14,7 @@ public class CloseReqHandler extends CmdHandler
 	private static Logger log = LoggerFactory.getLogger(CloseReqHandler.class);
 
 	@Override
-	public Object handler(ImPacket packet, ChannelContext channelContext) throws Exception
+	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		Aio.remove(channelContext, "收到关闭请求");
 		return null;
