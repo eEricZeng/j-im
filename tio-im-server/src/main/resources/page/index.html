@@ -43,7 +43,7 @@ function connect(){
 	socket.onmessage = function(e){
 	   var data = e.data;
 	   var dataObj = eval("("+data+")");//转换为json对象
-	   if(dataObj.code == 0 && dataObj.command == "COMMAND_CHAT_RESP"){
+	   if("undefined" == typeof(dataObj.code) && dataObj.command == "COMMAND_CHAT_RESP"){
 		    var chatObj = eval("("+dataObj.msg+")");
 	    	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
 	 	    var from = chatObj.from;

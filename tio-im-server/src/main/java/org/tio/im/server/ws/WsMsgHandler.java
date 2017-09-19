@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.LoginReqBody;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
@@ -76,8 +78,11 @@ public class WsMsgHandler implements IWsMsgHandler{
 		ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
 		if(toChannleContext != null){
 			Aio.send(toChannleContext, respChatPacket);
+			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
+			text = JSONObject.toJSONString(chatStatusPacket);
+		}else{
+			text = new String(respChatPacket.getBody(),HttpConst.CHARSET_NAME);
 		}
-		text = new String(respChatPacket.getBody(),HttpConst.CHARSET_NAME);
 		return text;
 	}
 

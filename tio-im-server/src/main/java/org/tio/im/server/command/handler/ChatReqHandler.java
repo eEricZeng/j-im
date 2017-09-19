@@ -63,7 +63,7 @@ public class ChatReqHandler extends CmdHandler {
 				respPacket.setStatus(ImStatus.C0);
 				return respPacket;
 			}else{
-				RespBody chatRespBody = new RespBody().setCode(ImStatus.C1.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
+				RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
 				ImPacket respPacket = Resps.convertPacket(chatRespBody, toChannelContext);
 				respPacket.setStatus(ImStatus.C1);
 				return respPacket;
