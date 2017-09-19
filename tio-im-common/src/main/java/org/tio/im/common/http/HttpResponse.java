@@ -76,7 +76,7 @@ public class HttpResponse extends HttpPacket {
 				addHeader(HttpConst.ResponseHeaderKey.Keep_Alive, "timeout=10, max=20");
 			}
 		}
-		//暂时先这样...防止服务器一直不释放资源;
+		//暂时先设置为短连接...防止服务器一直不释放资源;
 		addHeader(HttpConst.ResponseHeaderKey.Connection, HttpConst.ResponseHeaderValue.Connection.close);
 		
 		if (httpConfig != null) {

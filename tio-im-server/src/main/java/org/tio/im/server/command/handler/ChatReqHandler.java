@@ -89,7 +89,7 @@ public class ChatReqHandler extends CmdHandler {
 	 * @return
 	 */
 	public static byte[] toImStatusBody(ImStatus status){
-		return JSONObject.toJSONBytes(new RespBody().setErrorCode(status.getCode()).setErrorMsg(status.getDescription()+" "+status.getText()));
+		return JSONObject.toJSONBytes(new RespBody().setCode(status.getCode()).setMsg(status.getDescription()+" "+status.getText()));
 	}
 	@Override
 	public Command command() {

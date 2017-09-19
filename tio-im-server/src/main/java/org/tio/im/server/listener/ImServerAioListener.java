@@ -61,7 +61,10 @@ public class ImServerAioListener implements ServerAioListener {
 	 */
 	@Override
 	public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) {
-			//Aio.remove(channelContext, "onAfterSent");
+		/*ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		if(imSessionContext != null && imSessionContext instanceof HttpSession){
+			Aio.remove(channelContext, "Http onAfterSent!");
+		}*/
 	}
 
 	/** 

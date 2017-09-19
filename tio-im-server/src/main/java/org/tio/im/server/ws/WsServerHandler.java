@@ -109,7 +109,7 @@ public class WsServerHandler extends AbServerHandler{
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
-			RespBody respBody = new RespBody().setErrorCode(ImStatus.C2.getCode()).setErrorMsg(ImStatus.C2.getText());
+			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText());
 			ImPacket responsePacket = Resps.convertPacket(JSONObject.toJSONBytes(respBody), channelContext);
 			Aio.send(channelContext, responsePacket);
 			return;
