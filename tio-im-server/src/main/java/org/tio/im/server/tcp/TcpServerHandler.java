@@ -6,21 +6,27 @@ package org.tio.im.server.tcp;
 import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
+import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
+import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.Message;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerDecoder;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
+import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
 
 import com.alibaba.fastjson.JSONObject;
@@ -68,7 +74,17 @@ public class TcpServerHandler extends AbServerHandler{
 		String message = new String(tcpPacket.getBody(),Const.CHARSET);
 		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
 		logger.info(onText);
-		CommandManager.getInstance().getCommand(tcpPacket.getCommand()).handler(tcpPacket, channelContext);
+		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(tcpPacket.getCommand());
+		if(cmdHandler == null){
+			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText()).setCommand(Command.COMMAND_UNKNOW);
+			ImPacket responsePacket = Resps.convertPacket(respBody, channelContext);
+			Aio.send(channelContext, responsePacket);
+			return;
+		}
+		Object response = cmdHandler.handler(tcpPacket, channelContext);
+		if(response != null){
+			Aio.send(channelContext, (ImPacket)response);
+		}
 	}
 
 	@Override

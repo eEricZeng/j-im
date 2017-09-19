@@ -64,9 +64,6 @@ public class WsProCmdHandler implements ProCmdHandlerIntf {
 	public ImPacket chat(ImPacket packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		ImPacket wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
-		if (wsResponsePacket != null) {
-			Aio.send(channelContext,wsResponsePacket);
-		}
 		return wsResponsePacket;
 	}
 

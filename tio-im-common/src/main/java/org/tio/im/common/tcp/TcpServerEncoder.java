@@ -34,6 +34,7 @@ public class TcpServerEncoder {
 		maskByte = ImPacket.encodeCompress(maskByte, isCompress);
 		maskByte = ImPacket.encodeHasSynSeq(maskByte, tcpPacket.getSynSeq() > 0);
 		maskByte = ImPacket.encode4ByteLength(maskByte, is4ByteLength);
+		if(tcpPacket.getCommand() != null)
 		maskByte = (byte) (maskByte|tcpPacket.getCommand().getNumber());//消息类型;
 		
 		tcpPacket.setVersion(version);

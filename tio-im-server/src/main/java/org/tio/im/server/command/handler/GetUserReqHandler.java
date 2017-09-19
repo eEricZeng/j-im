@@ -5,7 +5,9 @@ package org.tio.im.server.command.handler;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.CmdHandler;
@@ -38,7 +40,7 @@ public class GetUserReqHandler extends CmdHandler{
 		}
 		if(clients == null)
 			return null;
-		ImPacket resPacket = new ImPacket(Command.COMMAND_GET_USER_RESP, JSONObject.toJSONBytes(clients));
+		RespBody resPacket = new RespBody().setCode(ImStatus.C100.getCode()).setCommand(Command.COMMAND_GET_USER_RESP).setMsg(JSONObject.toJSONString(clients));
 		return Resps.convertPacket(resPacket, channelContext);
 	}
 

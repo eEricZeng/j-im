@@ -1,13 +1,14 @@
 package org.tio.im.client;
 
-import org.tio.core.intf.Packet;
+import org.tio.im.common.ImPacket;
+import org.tio.im.common.packets.Command;
 
 /**
  * 
  * @author tanyaowu 
  *
  */
-public class HelloPacket extends Packet
+public class HelloPacket extends ImPacket
 {
 	private static final long serialVersionUID = 6774137219419914592L;
 
@@ -62,14 +63,16 @@ public class HelloPacket extends Packet
 	
 	public static final int HEADER_LENGHT = 4;//消息头的长度
 	
-	private int command  = 0;
 	public static final String CHARSET = "utf-8";
 	
 	public HelloPacket(){
 		
 	}
-	public HelloPacket(int command){
-		this.command = command;
+	public HelloPacket(Command command){
+		super(command);
+	}
+	public HelloPacket(Command command,byte[] body){
+		super(command,body);
 	}
 	public static byte encodeEncrypt(byte bs,boolean isEncrypt){
 		if(isEncrypt){
@@ -152,29 +155,4 @@ public class HelloPacket extends Packet
 		}
 		return ret;
 	}
-	
-	private byte[] body;
-
-	/**
-	 * @return the body
-	 */
-	public byte[] getBody()
-	{
-		return body;
-	}
-
-	/**
-	 * @param body the body to set
-	 */
-	public void setBody(byte[] body)
-	{
-		this.body = body;
-	}
-	public int getCommand() {
-		return command;
-	}
-	public void setCommand(int command) {
-		this.command = command;
-	}
-	
 }

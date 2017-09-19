@@ -16,6 +16,10 @@ public class RespBody{
 	
 	private Command command;
 
+	public RespBody(){}
+	public RespBody(Command command){
+		this.command = command;
+	}
 	public Integer getCode() {
 		return code;
 	}

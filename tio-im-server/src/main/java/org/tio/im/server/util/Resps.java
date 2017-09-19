@@ -4,19 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
@@ -24,14 +20,13 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseStatus;
 import org.tio.im.common.http.MimeType;
 import org.tio.im.common.http.session.HttpSession;
-import org.tio.im.common.packets.ChatBody;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
-import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.json.Json;
 
 import com.alibaba.fastjson.JSONObject;
@@ -334,62 +329,20 @@ public class Resps {
 		return ret;
 	}
 	
-	public static Map<String,Object> convertChatResPacket(ImPacket imPacket, ChannelContext fromChannelContext) throws Exception{
-		return convertChatResPacket(imPacket.getBody(),fromChannelContext);
-	}
-	
-	/**
-	 * 
-		 * 功能描述：[转换不同协议响应包]
-		 * 创建者：WChao 创建时间: 2017年8月29日 下午7:22:53
-		 * @param packet
-		 * @param fromChannelContext
-		 * @return
-	 * @throws Exception 
-		 *
-	 */
-	public static Map<String,Object> convertChatResPacket(byte[] body, ChannelContext fromChannelContext) throws Exception{
-		Map<String,Object> resultMap =  new HashMap<String,Object>();
-		ChatBody chatBody = ChatReqHandler.parseChatBody(body,fromChannelContext);
-		if(chatBody != null){
-			ChannelContext toChannelContext = Aio.getChannelContextByUserid(fromChannelContext.getGroupContext(),chatBody.getTo());
-			if(toChannelContext == null){
-				Packet respPacket = convertPacket(ChatReqHandler.toImStatusBody(ImStatus.C0), fromChannelContext);
-				resultMap.put(Const.CHANNEL,fromChannelContext);
-				resultMap.put(Const.PACKET,respPacket);
-				resultMap.put(Const.STATUS, ImStatus.C0);
-				return resultMap;
-			}else{
-				try{
-					resultMap.put(Const.CHANNEL,toChannelContext);
-					Packet respPacket = convertPacket(JSONObject.toJSONString(chatBody).getBytes(HttpConst.CHARSET_NAME), toChannelContext);
-					resultMap.put(Const.PACKET,respPacket);
-					resultMap.put(Const.STATUS, ImStatus.C1);
-				}catch(Exception e){
-					
-				}
-			}
-		}else{
-			Packet respPacket = convertPacket(ChatReqHandler.toImStatusBody(ImStatus.C2), fromChannelContext);
-			resultMap.put(Const.CHANNEL,fromChannelContext);
-			resultMap.put(Const.PACKET,respPacket);
-			resultMap.put(Const.STATUS, ImStatus.C2);
-			return resultMap;
-		}
-		return resultMap;
-	}
-	
-	public static ImPacket convertPacket(byte[] body , ChannelContext channelContex){
-		Object sessionContext = channelContex.getAttribute();
+	public static ImPacket convertPacket(RespBody respBody, ChannelContext channelContext){
+		Object sessionContext = channelContext.getAttribute();
 		ImPacket respPacket = null;
+		if(respBody == null)
+			return respPacket;
+		byte[] body = JSONObject.toJSONBytes(respBody);
 		if(sessionContext instanceof HttpSession){//转HTTP协议响应包;
-			HttpRequest request = (HttpRequest)channelContex.getAttribute(Const.HTTP_REQUEST);
+			HttpRequest request = (HttpRequest)channelContext.getAttribute(Const.HTTP_REQUEST);
 			HttpResponse response = new HttpResponse(request,request.getHttpConfig());
 			response.setBody(body, request);
 			respPacket = response;
 		}else if(sessionContext instanceof TcpSessionContext){//转TCP协议响应包;
 			TcpPacket tcpPacket = new TcpPacket(body);
-			TcpServerEncoder.encode(tcpPacket, channelContex.getGroupContext(), channelContex);
+			TcpServerEncoder.encode(tcpPacket, channelContext.getGroupContext(), channelContext);
 			respPacket = tcpPacket;
 		}else if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
 			WsResponsePacket wsResponsePacket = new WsResponsePacket();
@@ -397,14 +350,8 @@ public class Resps {
 			wsResponsePacket.setWsOpcode(Opcode.TEXT);
 			respPacket =wsResponsePacket;
 		}
-		return respPacket;
-	}
-	
-	public static ImPacket convertPacket(ImPacket imPacket , ChannelContext channelContex){
-		byte[] body = imPacket.getBody();
-		ImPacket respPacket = convertPacket(body, channelContex);
-		if(respPacket != null){
-			respPacket.setCommand(imPacket.getCommand());
+		if(respBody.getCommand() != null){
+			respPacket.setCommand(respBody.getCommand());
 		}
 		return respPacket;
 	}

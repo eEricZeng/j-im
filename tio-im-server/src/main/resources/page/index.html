@@ -43,10 +43,11 @@ function connect(){
 	socket.onmessage = function(e){
 	   var data = e.data;
 	   var dataObj = eval("("+data+")");//转换为json对象
-	   if(!dataObj.errorCode && dataObj.errorCode != 0){
-	    	var createTime = new Date(dataObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
-	 	    var from = dataObj.from;
-	 	    var content = dataObj.content;
+	   if(dataObj.code == 0 && dataObj.command == "COMMAND_CHAT_RESP"){
+		    var chatObj = eval("("+dataObj.msg+")");
+	    	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
+	 	    var from = chatObj.from;
+	 	    var content = chatObj.content;
 	    	//处理数据
 		    logDiv.innerHTML+="<font color='#009ACD' size='2'>"+from+" "+createTime+"</font><br>";
 		    //处理数据

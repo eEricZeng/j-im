@@ -4,16 +4,17 @@
 package org.tio.im.server.command.handler.proc;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
-
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
-import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
+import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpSessionContext;
+import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.util.Resps;
 
 /**
@@ -35,14 +36,16 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 	@Override
 	public ImPacket chat(ImPacket packet, ChannelContext channelContext) throws Exception {
 		TcpPacket tcpPacket = (TcpPacket)packet;
-		Map<String,Object> resultMap = Resps.convertChatResPacket(tcpPacket.getBody(), channelContext);
-		if(resultMap != null){
-			ChannelContext toChnnelContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-			ImPacket imPacket = (ImPacket)resultMap.get(Const.PACKET);
-			Aio.send(toChnnelContext, imPacket);
-			return imPacket;
+		ChatBody chatBody = ChatReqHandler.parseChatBody(tcpPacket.getBody(), channelContext);
+		ImPacket resChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
+		ChannelContext toChnnelContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
+		if(resChatPacket.getStatus() == ImStatus.C1){
+			Aio.send(toChnnelContext, resChatPacket);
+			RespBody respBody = new RespBody().setCode(ImStatus.C1.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C1.getText());
+			return Resps.convertPacket(respBody, channelContext);
+		}else{
+			return resChatPacket;
 		}
-		return null;
 	}
 
 	

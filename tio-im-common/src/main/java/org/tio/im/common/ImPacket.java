@@ -155,7 +155,7 @@ public class ImPacket extends Packet
 	@Override
 	public String logstr()
 	{
-		return this.command.name();
+		return this.command == null ? Command.COMMAND_UNKNOW.name() : this.command.name();
 	}
 
 	public Status getStatus() {

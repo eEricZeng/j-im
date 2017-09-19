@@ -1,19 +1,15 @@
 package org.tio.im.server.ws;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
-import org.tio.core.intf.Packet;
-import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
-import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
+import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.ws.Opcode;
@@ -23,7 +19,6 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.ChatReqHandler;
 import org.tio.im.server.command.handler.LoginReqHandler;
-import org.tio.im.server.util.Resps;
 
 import com.alibaba.fastjson.JSONObject;
 /**
@@ -76,14 +71,13 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 */
 	@Override
 	public Object onText(WsRequestPacket wsRequestPacket, String text, ChannelContext channelContext) throws Exception {
-		Map<String,Object> resultMap = Resps.convertChatResPacket(wsRequestPacket.getBody(), channelContext);
-		ChannelContext toChannleContext = (ChannelContext)resultMap.get(Const.CHANNEL);
-		Packet packet = (Packet)resultMap.get(Const.PACKET);
-		ImStatus status = (ImStatus)resultMap.get(Const.STATUS);
-		if(toChannleContext != channelContext){//不发送给自己;
-			Aio.send(toChannleContext, packet);
+		ChatBody chatBody = ChatReqHandler.parseChatBody(wsRequestPacket.getBody(), channelContext);
+		ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
+		ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
+		if(toChannleContext != null){
+			Aio.send(toChannleContext, respChatPacket);
 		}
-		text = new String(ChatReqHandler.toImStatusBody(status),HttpConst.CHARSET_NAME);
+		text = new String(respChatPacket.getBody(),HttpConst.CHARSET_NAME);
 		return text;
 	}
 
