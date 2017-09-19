@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.im.server.handler.ImServerAioHandler;
 import org.tio.im.server.listener.ImGroupListener;
 import org.tio.im.server.listener.ImServerAioListener;
+import org.tio.im.server.service.ImgMnService;
 import org.tio.server.AioServer;
 import com.jfinal.kit.PropKit;
 /**
@@ -46,6 +47,7 @@ public class ImServerStarter {
 	 */
 	public static void main(String[] args) throws Exception {
 		start();
+		ImgMnService.start();//启动头像爬虫;
 	}
 
 	public static void start() throws Exception{

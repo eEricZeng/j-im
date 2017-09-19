@@ -30,6 +30,7 @@ function connect(){
 	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&passowrd="+password);
 	socket.onopen = function(e){
 		logDiv.innerHTML+="<font color='green' size='2'>登录成功...</font><br>";
+		socket.send("{\"cmd\":17,\"type\":\"1\"}");//获取在线用户列表;
 		scrollToBottom();
 	};
 	socket.onerror = function(e){
@@ -38,7 +39,8 @@ function connect(){
 	};
 	socket.onclose = function(e){
 		logDiv.innerHTML+="<font color='green' size='2'>退出登录...</font><br>";
-		 scrollToBottom();
+		document.getElementById("onlinePanel").innerHTML="&nbsp;在线成员(0/0)";
+		scrollToBottom();
 	};
 	socket.onmessage = function(e){
 	   var data = e.data;
@@ -52,6 +54,14 @@ function connect(){
 		    logDiv.innerHTML+="<font color='#009ACD' size='2'>"+from+" "+createTime+"</font><br>";
 		    //处理数据
 		    logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
+	    }else if(dataObj.command == "COMMAND_GET_USER_RESP"){
+	    	var onlineUsers = eval("("+dataObj.msg+")");
+	    	var onlineTitle = "&nbsp;在线成员("+onlineUsers.length+"/"+onlineUsers.length+")";
+	    	for(var i = 0 ; i < onlineUsers.length ; i++){
+				var user = onlineUsers[i].user;
+				onlineTitle +="<div style=\"line-height: 25px;margin-top: 5px;padding-left:15px;\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">"+user.nick+"</div>";
+	    	}
+	    	document.getElementById("onlinePanel").innerHTML=onlineTitle;
 	    }else{
 	    	 //处理数据
 		    logDiv.innerHTML+="<font color='green' size='2'>"+data+"</font><br>";
@@ -112,7 +122,6 @@ function showServerConfig(obj){
 				<div id="onlinePanel" class="online">
 					&nbsp;在线成员(0/0)
 				</div>
-		
 		</div>
 				<div class="unit">
 			<label>输入内容:</label>
