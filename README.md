@@ -3,7 +3,7 @@
  tio-im是基于[t-io](http://git.oschina.net/tywo45/t-io)写的**IM**，主要目标降低即时通讯门槛，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如(http、websocket、tcp自定义im协议)等，并可以通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
 
 ## 消息格式
-```
+
 ## 1.聊天请求消息结构
  
 {
@@ -68,7 +68,7 @@
 说明:请求:COMMAND_GET_USER_REQ(17) 响应:COMMAND_GET_USER_RESP(18)
 
 
-```
+
 ## 性能
 性能不用说，去参考[t-io性能指标](http://git.oschina.net/tywo45/t-io#%E6%9E%81%E9%9C%87%E6%92%BC%E7%9A%84%E6%80%A7%E8%83%BD)，相关版本第一时间与tio保持同步更新！
 
