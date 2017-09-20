@@ -5,7 +5,7 @@
 ## 消息格式
 
  **1.聊天请求消息结构** 
- 
+ ```
 {
     "from": "来源ID",
     "to": "目标ID",
@@ -14,8 +14,8 @@
     "msgType": "消息类型(text、image、vedio、news)",
     "content": "内容"
 }
-
-说明:请求:COMMAND_CHAT_REQ(1) 响应:COMMAND_CHAT_RESP(2)
+```
+请求:COMMAND_CHAT_REQ(1) 响应:COMMAND_CHAT_RESP(2)
 
  **2.鉴权请求消息结构** 
 {
@@ -23,7 +23,7 @@
     "token": "校验码"
 }
 
-说明:请求:COMMAND_AUTH_REQ(3) 响应:COMMAND_AUTH_RESP(4)
+请求:COMMAND_AUTH_REQ(3) 响应:COMMAND_AUTH_RESP(4)
 
  **3.握手请求消息结构** 
 {
@@ -41,7 +41,7 @@
     "token": "校验码(此字段可与logingname、password共存,也可只选一种方式)"
 }
 
-说明:请求:COMMAND_LOGIN_REQ(5) 响应:COMMAND_LOGIN_RESP(6)
+请求:COMMAND_LOGIN_REQ(5) 响应:COMMAND_LOGIN_RESP(6)
 
  **5.心跳请求消息结构** 
 {
@@ -49,23 +49,23 @@
     "hbbyte":"心跳1个字节"
 }
 
-说明:请求:COMMAND_HEARTBEAT_REQ(13) 响应:无
+请求:COMMAND_HEARTBEAT_REQ(13) 响应:无
 
  **6.关闭、退出请求消息结构** 
 {
     "cmd":命令码(14)
 }
 
-说明:请求:COMMAND_CLOSE_REQ(14) 响应:无
+请求:COMMAND_CLOSE_REQ(14) 响应:无
 
  **7.获取用户信息请求消息结构** 
 {
      "cmd":命令码(17),
      "id":"用户id(只在type为0或是无的时候需要)",
-     "type":"获取类型(0:指定用户,1:所有在线用户,2:所有用户[在线+离线])
+     "type":"获取类型(0:指定用户,1:所有在线用户,2:所有用户[在线+离线说明:])
 }
 
-说明:请求:COMMAND_GET_USER_REQ(17) 响应:COMMAND_GET_USER_RESP(18)
+请求:COMMAND_GET_USER_REQ(17) 响应:COMMAND_GET_USER_RESP(18)
 
 
 
