@@ -57,7 +57,7 @@ public class HelloClientStarter {
 		String text = "{"
 				+ "\"from\":\"test1\","
 				+ "\"to\":\"admin\","
-				+ "\"content\":\"Tcp转Ws消息来啦..!\","
+				+ "\"content\":\"我是Tcp转Ws消息过来，凑热闹来啦..!\","
 				+ "\"msgType\":\"text\""
 				+ "}";
 		HelloPacket chatPacket = new HelloPacket(Command.COMMAND_CHAT_REQ,text.getBytes("utf-8"));

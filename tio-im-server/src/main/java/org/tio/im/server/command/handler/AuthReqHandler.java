@@ -4,10 +4,12 @@ import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImStatus;
 import org.tio.im.common.packets.AuthReqBody;
-import org.tio.im.common.packets.AuthRespBody;
 import org.tio.im.common.packets.Command;
+import org.tio.im.common.packets.RespBody;
 import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.util.Resps;
 
 import com.alibaba.fastjson.JSONObject;
 /**
@@ -25,17 +27,16 @@ public class AuthReqHandler extends CmdHandler
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		if (packet.getBody() == null) {
-			throw new Exception("body is null");
+			RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C301.getCode()).setMsg(ImStatus.C301.getText());
+			return Resps.convertPacket(respBody, channelContext);
 		}
 		AuthReqBody authReqBody = JSONObject.parseObject(packet.getBody(), AuthReqBody.class);
 		String token = authReqBody.getToken() == null ? "" : authReqBody.getToken();
 		String data = token +  Const.authkey;
 		logger.info(data);
-		ImPacket imRespPacket = new ImPacket();
-		AuthRespBody authRespBody = new AuthRespBody();
-		imRespPacket.setCommand(Command.COMMAND_AUTH_RESP);
-		imRespPacket.setBody(JSONObject.toJSONBytes(authRespBody));
-		return imRespPacket;
+		authReqBody.setToken(data);
+		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C300.getCode()).setMsg(JSONObject.toJSONString(authReqBody));
+		return Resps.convertPacket(respBody, channelContext);
 	}
 
 

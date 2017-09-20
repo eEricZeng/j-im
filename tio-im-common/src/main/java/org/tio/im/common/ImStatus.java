@@ -16,7 +16,9 @@ public enum ImStatus implements Status{
 	C100(100,"ok","获取用户信息成功!"),
 	C101(101,"get user failed !","获取用户信息失败!"),
 	C200(200,"ok","登录成功!"),
-	C201(201,"login failed !","登录失败!");
+	C201(201,"login failed !","登录失败!"),
+	C300(300,"ok","鉴权成功!"),
+	C301(301,"auth failed!","鉴权失败!");
 	private int status;
 	
 	private String description;
