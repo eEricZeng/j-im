@@ -15,56 +15,62 @@
     "content": "内容"
 }
 ```
-请求:COMMAND_CHAT_REQ(1) 响应:COMMAND_CHAT_RESP(2)
+请求:COMMAND_CHAT_REQ(11) 响应:COMMAND_CHAT_RESP(12)
 
  **2.鉴权请求消息结构** 
+```
 {
     "cmd":命令码(3),
     "token": "校验码"
 }
-
+```
 请求:COMMAND_AUTH_REQ(3) 响应:COMMAND_AUTH_RESP(4)
 
  **3.握手请求消息结构** 
+```
 {
     "cmd":命令码(1),
     "hbyte":"握手1个字节"
 }
-
+```
 说明:请求:COMMAND_HANDSHAKE_REQ(1) 响应:COMMAND_HANDSHAKE_RESP(2)
 
  **4.登录请求消息结构** 
+```
 {
     "cmd":命令码(5),
     "loginname": "用户名",
     "password": "密码",
     "token": "校验码(此字段可与logingname、password共存,也可只选一种方式)"
 }
-
+```
 请求:COMMAND_LOGIN_REQ(5) 响应:COMMAND_LOGIN_RESP(6)
 
  **5.心跳请求消息结构** 
+```
 {
     "cmd":命令码(13),
     "hbbyte":"心跳1个字节"
 }
-
+```
 请求:COMMAND_HEARTBEAT_REQ(13) 响应:无
 
  **6.关闭、退出请求消息结构** 
+```
 {
     "cmd":命令码(14)
 }
-
+```
 请求:COMMAND_CLOSE_REQ(14) 响应:无
 
  **7.获取用户信息请求消息结构** 
+```
 {
      "cmd":命令码(17),
      "id":"用户id(只在type为0或是无的时候需要)",
      "type":"获取类型(0:指定用户,1:所有在线用户,2:所有用户[在线+离线说明:])
 }
-
+```
 请求:COMMAND_GET_USER_REQ(17) 响应:COMMAND_GET_USER_RESP(18)
 
 
