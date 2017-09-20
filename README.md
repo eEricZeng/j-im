@@ -36,7 +36,7 @@ COMMAND_CLOSE_REQ = 14; //关闭请求
 
 
 ## tio-im一些截图
-![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190038_eb44e170_410355.jpeg "tio-im-1.jpg")
+![输入图片说明](https://git.oschina.net/uploads/images/2017/0920/154315_4882a2cc_410355.jpeg "tio-im-1.jpg")
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
