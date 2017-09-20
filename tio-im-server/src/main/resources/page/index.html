@@ -6,25 +6,27 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <title>tio-im:支持百万在线用户</title>
 <style type="text/css" media="screen">
-		*{margin:0;padding:0;}
-		#wrap{margin:10px auto; width:80%; height:99%;}
-		.unit{margin-bottom:5px; padding:5px; border:solid 1px #000; height:auto;  clear:both;box-sizing:border-box;}	
-		.unit label{text-align:right;width:100px;line-height: 30px; display:inline-block;}
-		.unit input{line-height: 30px; width:100px; height:30px;}
-		.log {font-size:11px; font-family:Courier; overflow: auto; height:100%; background:black;width:85%;float:left}
-		.log p{padding:2px;margin:0;}
-		.content{width:100%;overflow:hidden;height:80%;margin:0 0 5px 0;}
-		.online{width: 15%;height: 100%;float:right;background: #FCFCFC;border:solid 1px #000;box-sizing:border-box;}
+	*{margin:0;padding:0;}
+	#wrap{margin:10px auto; width:80%; height:99%;}
+	.unit{margin-bottom:5px; padding:5px; border:solid 1px #000; height:auto;  clear:both;box-sizing:border-box;}	
+	.unit label{text-align:right;width:100px;line-height: 30px; display:inline-block;}
+	.unit input{line-height: 30px; width:100px; height:30px;}
+	.log {font-size:11px; font-family:Courier; overflow: auto; height:100%; background:black;width:85%;float:left}
+	.log p{padding:2px;margin:0;}
+	.content{width:100%;overflow:hidden;height:80%;margin:0 0 5px 0;}
+	.online{width: 15%;height: 100%;float:right;background: #FCFCFC;border:solid 1px #000;box-sizing:border-box;}
 </style>
 <script type="text/javascript" src="./static/js/date.js"></script>
 </head>
 <script>
 var socket ;
 var logDiv;
+var username;
+var onSelected;
 function connect(){
 	var ip = document.getElementById("serverIp").value;
 	var port = document.getElementById("port").value;
-	var username = document.getElementById("username").value;
+	username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
 	logDiv = document.getElementById('logs');
 	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&passowrd="+password);
@@ -59,9 +61,12 @@ function connect(){
 	    	var onlineTitle = "&nbsp;在线成员("+onlineUsers.length+"/"+onlineUsers.length+")";
 	    	for(var i = 0 ; i < onlineUsers.length ; i++){
 				var user = onlineUsers[i].user;
-				onlineTitle +="<div style=\"line-height: 25px;margin-top: 5px;padding-left:15px;\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">"+user.nick+"</div>";
+				onlineTitle +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
 	    	}
 	    	document.getElementById("onlinePanel").innerHTML=onlineTitle;
+	    }else if("0" == dataObj.code && dataObj.command == "COMMAND_CHAT_RESP")
+	    {
+	    	//发送成功后的状态处理...
 	    }else{
 	    	 //处理数据
 		    logDiv.innerHTML+="<font color='green' size='2'>"+data+"</font><br>";
@@ -73,8 +78,23 @@ function disConnect(){
 	socket.close(); 
 }
 function send(){
+	var toId = "";
+	if(onSelected){
+		toId = onSelected.getElementsByTagName("img")[0].alt;
+	}
+	var createTime = new Date().getTime();
 	var content = document.getElementById('content').value;
-	socket.send(content);
+	if(content == "")
+		return ;
+	var msg = "{\"from\": \""+username+"\",\"to\": \""+toId+"\",\"cmd\":11,\"createTime\":"+createTime+",\"msgType\": \"text\",\"content\": \""+content+"\"}";
+	socket.send(msg);
+	var chatObj = eval("("+msg+")");
+	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
+  	//处理数据
+	logDiv.innerHTML+="<font color='#9ACD32' size='2'>"+chatObj.from+" "+createTime+"</font><br>";
+	//处理数据
+	logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+chatObj.content+"</font><br>";
+	document.getElementById('content').value = "";
 }
 function scrollToBottom(){
 	var logDiv = document.getElementById('logs');
@@ -94,12 +114,47 @@ function showServerConfig(obj){
         obj.value='关闭配置';
     }
 }
+function onlineDb(obj){
+	if(onSelected){
+		if(onSelected.id != obj.id){
+			onSelected.style.background = "";
+		}
+	}
+	obj.style.background = "#D4D4D4";
+	onSelected = obj;
+	var sendBtn = document.getElementById("sendBtn");
+　　 sendBtn.style="width: 150px;"
+	sendBtn.value="发送给:"+onSelected.id;
+}
+function onlineMove(obj){
+	if("undefined" == typeof(onSelected) || onSelected.id != obj.id){
+		obj.style.background = "#F0F0F0";
+	}
+}
+function onlineLeave(obj){
+	var onlineDiv = document.getElementById("onlinePanel").getElementsByTagName("div");
+	for(var i =0 ; i < onlineDiv.length ; i++){
+		if("undefined" == typeof(onSelected) || onSelected.id != onlineDiv[i].id){
+			onlineDiv[i].style.background = "";
+		}
+	}
+}
+function setUserName(){
+	document.getElementById("username").value = new Date().getTime();
+}
+function keyDown(e) {
+	var ev= window.event||e;
+	//13是键盘上面固定的回车键
+	if (ev.keyCode == 13) {
+		send();
+	}
+}
 </script>
-<body>
+<body onload="setUserName();">
    <div id="wrap" style="height:600px;">
 		<div class="unit">
 			<label >用户名:</label>
-			<input  id="username" value="admin"/>
+			<input  id="username" value=""/>
 			<label style="width: 60px;">密码:</label>
 			<input  id="password" value ="123"/>
 			<input onclick="javascript:connect();"  type="button" value="登录" />
@@ -123,10 +178,10 @@ function showServerConfig(obj){
 					&nbsp;在线成员(0/0)
 				</div>
 		</div>
-				<div class="unit">
-			<label>输入内容:</label>
-			<input id="content" style="width:500px;"/>
-			<input onclick="javascript:send()"  type="button" value="发送" />
+		<div class="unit">
+			<label >输入内容:</label>
+			<input id="content" style="width:500px;" onkeydown="keyDown(event)"/>
+			<input onclick="javascript:send()" id="sendBtn"  type="button"  value="发送" />
 		</div>
    </div>
 </body>
