@@ -137,6 +137,8 @@ public class ImUtils {
 		if(packet.getBody() == null)
 			return;
 		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
+		if(withLockChannels == null)
+			return;
 		Set<ChannelContext> channels = withLockChannels.getObj();
 		if(channels.size() > 0){
 			for(ChannelContext channelContext : channels){
