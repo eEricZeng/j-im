@@ -83,7 +83,13 @@
 
 
 ## tio-im一些截图
+
+  Web访问地址:http://localhost:8888
+
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0920/154315_4882a2cc_410355.jpeg "tio-im-1.jpg")
+
+  Http协议api调用地址:http://localhost:8888/api/message/send
+
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
