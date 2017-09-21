@@ -10,9 +10,9 @@ import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-import org.tio.im.server.util.Resps;
 
 import com.alibaba.fastjson.JSONObject;
 

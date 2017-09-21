@@ -10,7 +10,7 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.UploadFile;
 import org.tio.im.common.packets.User;
 import org.tio.im.server.http.annotation.RequestPath;
-import org.tio.im.server.util.Resps;
+import org.tio.im.server.util.HttpResps;
 import org.tio.json.Json;
 
 /**
@@ -44,7 +44,7 @@ public class TestController {
 
 	@RequestPath(value = "/abtest")
 	public HttpResponse abtest(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.html(request, "OK");
+		HttpResponse ret = HttpResps.html(request, "OK");
 		return ret;
 	}
 
@@ -54,57 +54,57 @@ public class TestController {
 	@RequestPath(value = "/abtest")
 	public HttpResponse abtest1(HttpRequest request) throws Exception {
 		log.info("");
-		HttpResponse ret = Resps.html(request, "OK---------1");
+		HttpResponse ret = HttpResps.html(request, "OK---------1");
 		return ret;
 	}
 
 	@RequestPath(value = "/bean")
 	public HttpResponse bean(User user, HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.json(request, Json.toFormatedJson(user));
+		HttpResponse ret = HttpResps.json(request, Json.toFormatedJson(user));
 		return ret;
 	}
 
 	@RequestPath(value = "/filetest")
 	public HttpResponse filetest(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.file(request, new File("d:/tio.exe"));
+		HttpResponse ret = HttpResps.file(request, new File("d:/tio.exe"));
 		return ret;
 	}
 
 	@RequestPath(value = "/filetest.zip")
 	public HttpResponse filetest_zip(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.file(request, new File("d:/eclipse-jee-neon-R-win32-x86_64.zip"));
+		HttpResponse ret = HttpResps.file(request, new File("d:/eclipse-jee-neon-R-win32-x86_64.zip"));
 		return ret;
 	}
 
 	@RequestPath(value = "/getsession")
 	public HttpResponse getsession(HttpRequest request) throws Exception {
 		String value = (String) request.getHttpSession().getAttribute("test");
-		HttpResponse ret = Resps.json(request, "获取的值:" + value);
+		HttpResponse ret = HttpResps.json(request, "获取的值:" + value);
 		return ret;
 	}
 
 	@RequestPath(value = "/html")
 	public HttpResponse html(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.html(request, html);
+		HttpResponse ret = HttpResps.html(request, html);
 		return ret;
 	}
 
 	@RequestPath(value = "/json")
 	public HttpResponse json(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.json(request, "{\"ret\":\"OK\"}");
+		HttpResponse ret = HttpResps.json(request, "{\"ret\":\"OK\"}");
 		return ret;
 	}
 
 	@RequestPath(value = "/plain")
 	public HttpResponse plain(String before, String end, HttpRequest request) throws Exception {
 		String bodyString = request.getBodyString();
-		HttpResponse ret = Resps.html(request, bodyString);
+		HttpResponse ret = HttpResps.html(request, bodyString);
 		return ret;
 	}
 
 	@RequestPath(value = "/post")
 	public HttpResponse post(String before, String end, HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.html(request, "before:" + before + "<br>end:" + end);
+		HttpResponse ret = HttpResps.html(request, "before:" + before + "<br>end:" + end);
 		return ret;
 
 	}
@@ -112,13 +112,13 @@ public class TestController {
 	@RequestPath(value = "/putsession")
 	public HttpResponse putsession(String value, HttpRequest request) throws Exception {
 		request.getHttpSession().setAttribute("test", value, request.getHttpConfig());
-		HttpResponse ret = Resps.json(request, "设置成功:" + value);
+		HttpResponse ret = HttpResps.json(request, "设置成功:" + value);
 		return ret;
 	}
 
 	@RequestPath(value = "/txt")
 	public HttpResponse txt(HttpRequest request) throws Exception {
-		HttpResponse ret = Resps.txt(request, txt);
+		HttpResponse ret = HttpResps.txt(request, txt);
 		return ret;
 	}
 
@@ -142,9 +142,9 @@ public class TestController {
 			System.out.println("【" + before + "】");
 			System.out.println("【" + end + "】");
 
-			ret = Resps.html(request, "文件【" + uploadFile.getName() + "】【" + uploadFile.getSize() + "字节】上传成功");
+			ret = HttpResps.html(request, "文件【" + uploadFile.getName() + "】【" + uploadFile.getSize() + "字节】上传成功");
 		} else {
-			ret = Resps.html(request, "请选择文件再上传");
+			ret = HttpResps.html(request, "请选择文件再上传");
 		}
 		return ret;
 	}

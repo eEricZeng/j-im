@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Client;
 import org.tio.utils.lock.SetWithLock;
@@ -122,6 +123,29 @@ public class ImUtils {
 		}
 		return clients;
 	}
+	
+	/**
+	 * 
+		 * 功能描述：[发送到群组里的所有不同协议端]
+		 * 创建者：WChao 创建时间: 2017年9月21日 下午3:26:57
+		 * @param groupContext
+		 * @param group
+		 * @param packet
+		 *
+	 */
+	public static void sendToGroup(GroupContext groupContext, String group, ImPacket packet){
+		if(packet.getBody() == null)
+			return;
+		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
+		Set<ChannelContext> channels = withLockChannels.getObj();
+		if(channels.size() > 0){
+			for(ChannelContext channelContext : channels){
+				ImPacket respPacket = Resps.convertPacket(packet.getBody(), channelContext);
+				Aio.sendToId(groupContext,channelContext.getId(), respPacket);
+			}
+		}
+	}
+	
 	public static String formatUserAgent(ChannelContext channelContext) {
 	/*	ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		HttpRequestPacket httpHandshakePacket = imSessionContext.getHandshakeRequestPacket();

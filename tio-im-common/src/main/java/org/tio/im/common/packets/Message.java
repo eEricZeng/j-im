@@ -9,9 +9,9 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年7月26日 上午11:32:57
  */
 public class Message {
-	private Long createTime;//消息创建时间;
-	private String id ;//消息id，全局唯一;
-	private Integer cmd ;//消息命令;
+	protected Long createTime;//消息创建时间;
+	protected String id ;//消息id，全局唯一;
+	protected Integer cmd ;//消息命令;
 
 	public Long getCreateTime() {
 		return createTime;

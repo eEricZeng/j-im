@@ -14,9 +14,9 @@ import org.tio.im.common.packets.LoginRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.service.UserService;
-import org.tio.im.server.util.Resps;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -68,7 +68,7 @@ public class LoginReqHandler extends CmdHandler {
 		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP).setCode(ImStatus.C200.getCode()).setMsg(JSONObject.toJSONString(loginRespBodyBuilder));
 		return Resps.convertPacket(respBody, channelContext);
 	}
-
+	
 	@Override
 	public Command command() {
 		return Command.COMMAND_LOGIN_REQ;

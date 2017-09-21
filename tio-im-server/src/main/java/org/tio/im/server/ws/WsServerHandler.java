@@ -24,6 +24,7 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.Message;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
@@ -33,7 +34,6 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
 
 import com.alibaba.fastjson.JSONObject;

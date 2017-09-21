@@ -23,6 +23,7 @@ var socket ;
 var logDiv;
 var username;
 var onSelected;
+var onlineUserCmd = "{\"cmd\":17,\"type\":\"1\"}";
 function connect(){
 	var ip = document.getElementById("serverIp").value;
 	var port = document.getElementById("port").value;
@@ -32,7 +33,7 @@ function connect(){
 	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&passowrd="+password);
 	socket.onopen = function(e){
 		logDiv.innerHTML+="<font color='green' size='2'>登录成功...</font><br>";
-		socket.send("{\"cmd\":17,\"type\":\"1\"}");//获取在线用户列表;
+		socket.send(onlineUserCmd);//获取在线用户列表;
 		scrollToBottom();
 	};
 	socket.onerror = function(e){
@@ -47,32 +48,68 @@ function connect(){
 	socket.onmessage = function(e){
 	   var data = e.data;
 	   var dataObj = eval("("+data+")");//转换为json对象
-	   if("undefined" == typeof(dataObj.code) && dataObj.command == "COMMAND_CHAT_RESP"){
-		    var chatObj = eval("("+dataObj.msg+")");
-	    	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
-	 	    var from = chatObj.from;
-	 	    var content = chatObj.content;
-	    	//处理数据
-		    logDiv.innerHTML+="<font color='#009ACD' size='2'>"+from+" "+createTime+"</font><br>";
-		    //处理数据
-		    logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
-	    }else if(dataObj.command == "COMMAND_GET_USER_RESP"){
-	    	var onlineUsers = eval("("+dataObj.msg+")");
-	    	var onlineTitle = "&nbsp;在线成员("+onlineUsers.length+"/"+onlineUsers.length+")";
-	    	for(var i = 0 ; i < onlineUsers.length ; i++){
-				var user = onlineUsers[i].user;
-				onlineTitle +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
-	    	}
-	    	document.getElementById("onlinePanel").innerHTML=onlineTitle;
-	    }else if("0" == dataObj.code && dataObj.command == "COMMAND_CHAT_RESP")
-	    {
-	    	//发送成功后的状态处理...
-	    }else{
-	    	 //处理数据
-		    logDiv.innerHTML+="<font color='green' size='2'>"+data+"</font><br>";
-	    }
-	    scrollToBottom();
+	   if("undefined" == typeof(dataObj.code) && dataObj.command == "COMMAND_CHAT_RESP"){//接收到聊天响应处理;
+		   COMMAND_CHAT_RESP(dataObj);
+	   }else if(dataObj.command == "COMMAND_GET_USER_RESP"){//获取用户信息响应处理;
+		   COMMAND_GET_USER_RESP(dataObj);
+	   }else if("0" == dataObj.code && dataObj.command == "COMMAND_CHAT_RESP"){//聊天发送状态;
+		   COMMAND_CHAT_RESP_SEND_STATUS(dataObj);
+	   }else if("400" == dataObj.code && dataObj.command == "COMMAND_JOIN_GROUP_RESP"){//加入群组响应状态处理;
+		   COMMAND_JOIN_GROUP_RESP(dataObj);
+	   }else if("9" == dataObj.code && dataObj.command == "COMMAND_JOIN_GROUP_NOTIFY_RESP"){//加入群组的消息通知处理;
+		   COMMAND_JOIN_GROUP_NOTIFY_RESP(dataObj);
+	   }else if("10" == dataObj.code && dataObj.command == "COMMAND_EXIT_GROUP_NOTIFY_RESP"){
+		   COMMAND_EXIT_GROUP_NOTIFY_RESP(dataObj);
+	   }else{
+		   OTHER(data);
+	   }
+	   scrollToBottom();
 	};
+}
+function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
+	var exitGroupNotify = eval("("+data.msg+")");
+	logDiv.innerHTML+="<font color='#A52A2A' size='2'>"+exitGroupNotify.user.nick+"("+exitGroupNotify.user.id+")退出群聊...</font><br>";
+	socket.send(onlineUserCmd);//获取在线用户列表;
+}
+//加入群组的消息通知处理;
+function COMMAND_JOIN_GROUP_NOTIFY_RESP(data){
+	var joinGroupNotify = eval("("+data.msg+")");
+	logDiv.innerHTML+="<font color='#A020F0' size='2'>"+joinGroupNotify.user.nick+"("+joinGroupNotify.user.id+")加入群聊...</font><br>";
+	socket.send(onlineUserCmd);//获取在线用户列表;
+}
+//加入群组响应状态处理;
+function COMMAND_JOIN_GROUP_RESP(data){
+	  //成功加入群组响应信息;
+}
+//发送聊天请求发送状态处理;
+function COMMAND_CHAT_RESP_SEND_STATUS(data){
+     //发送成功后的状态处理...
+}
+//获取用户信息响应处理;
+function COMMAND_GET_USER_RESP(data){
+   	var onlineUsers = eval("("+data.msg+")");
+   	var onlineTitle = "&nbsp;在线成员("+onlineUsers.length+"/"+onlineUsers.length+")";
+   	for(var i = 0 ; i < onlineUsers.length ; i++){
+		var user = onlineUsers[i].user;
+		onlineTitle +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
+   	}
+   	document.getElementById("onlinePanel").innerHTML=onlineTitle;
+}
+//接收到聊天响应处理;
+function COMMAND_CHAT_RESP(data){
+    var chatObj = eval("("+data.msg+")");
+   	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
+	var from = chatObj.from;
+	var content = chatObj.content;
+   	//处理数据
+    logDiv.innerHTML+="<font color='#009ACD' size='2'>"+from+" "+createTime+"</font><br>";
+    //处理数据
+    logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
+}
+//其它信息处理;
+function OTHER(data){
+		 //处理数据
+	logDiv.innerHTML+="<font color='green' size='2'>"+data+"</font><br>";
 }
 function disConnect(){
 	socket.close(); 
@@ -91,7 +128,7 @@ function send(){
 	var chatObj = eval("("+msg+")");
 	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
   	//处理数据
-	logDiv.innerHTML+="<font color='#9ACD32' size='2'>"+chatObj.from+" "+createTime+"</font><br>";
+	logDiv.innerHTML+="<font color='#ADFF2F' size='2'>"+chatObj.from+" "+createTime+"</font><br>";
 	//处理数据
 	logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+chatObj.content+"</font><br>";
 	document.getElementById('content').value = "";

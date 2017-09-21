@@ -10,8 +10,8 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
-import org.tio.im.server.util.Resps;
 
 import com.alibaba.fastjson.JSONObject;
 

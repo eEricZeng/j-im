@@ -9,18 +9,21 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年7月26日 下午5:15:18
  */
 public class ExitGroupNotifyRespBody {
-	private Client client;
+	private User user;
 	private String group;
-	public Client getClient() {
-		return client;
+	
+	public User getUser() {
+		return user;
 	}
-	public void setClient(Client client) {
-		this.client = client;
+	public ExitGroupNotifyRespBody setUser(User user) {
+		this.user = user;
+		return this;
 	}
 	public String getGroup() {
 		return group;
 	}
-	public void setGroup(String group) {
+	public ExitGroupNotifyRespBody setGroup(String group) {
 		this.group = group;
+		return this;
 	}
 }

@@ -4,6 +4,7 @@
 package org.tio.im.server.command.handler.proc;
 
 import java.nio.ByteBuffer;
+
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
@@ -14,8 +15,8 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpSessionContext;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.handler.ChatReqHandler;
-import org.tio.im.server.util.Resps;
 
 /**
  * 版本: [1.0]

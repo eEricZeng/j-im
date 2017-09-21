@@ -25,7 +25,7 @@ import org.tio.im.common.http.listener.IHttpServerListener;
 import org.tio.im.common.http.session.HttpSession;
 import org.tio.im.server.http.mvc.Routes;
 import org.tio.im.server.util.ClassUtils;
-import org.tio.im.server.util.Resps;
+import org.tio.im.server.util.HttpResps;
 import org.tio.utils.cache.guava.GuavaCache;
 
 import com.xiaoleilu.hutool.convert.Convert;
@@ -252,7 +252,7 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 					long lastModified = fileCache.getLastModified();
 					log.info("从缓存获取:[{}], {}", path, bodyBytes.length);
 
-					ret = Resps.try304(request, lastModified);
+					ret = HttpResps.try304(request, lastModified);
 					if (ret != null) {
 						ret.addHeader(HttpConst.ResponseHeaderKey.tio_from_cache, "true");
 
@@ -276,7 +276,7 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 					}
 
 					if (file.exists()) {
-						ret = Resps.file(request, file);
+						ret = HttpResps.file(request, file);
 						ret.setStaticRes(true);
 
 						if (contentCache != null && request.getIsSupportGzip()) {
@@ -394,10 +394,10 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 		String root = FileUtil.getAbsolutePath(httpConfig.getPageRoot());
 		File file = new File(root + file404);
 		if (file.exists()) {
-			HttpResponse ret = Resps.redirect(request, file404 + "?tio_initpath=" + requestLine.getPathAndQuery());
+			HttpResponse ret = HttpResps.redirect(request, file404 + "?tio_initpath=" + requestLine.getPathAndQuery());
 			return ret;
 		} else {
-			HttpResponse ret = Resps.html(request, "404");
+			HttpResponse ret = HttpResps.html(request, "404");
 			return ret;
 		}
 	}
@@ -408,10 +408,10 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 		String root = FileUtil.getAbsolutePath(httpConfig.getPageRoot());
 		File file = new File(root + file500);
 		if (file.exists()) {
-			HttpResponse ret = Resps.redirect(request, file500 + "?tio_initpath=" + requestLine.getPathAndQuery());
+			HttpResponse ret = HttpResps.redirect(request, file500 + "?tio_initpath=" + requestLine.getPathAndQuery());
 			return ret;
 		} else {
-			HttpResponse ret = Resps.html(request, "500");
+			HttpResponse ret = HttpResps.html(request, "500");
 			return ret;
 		}
 	}

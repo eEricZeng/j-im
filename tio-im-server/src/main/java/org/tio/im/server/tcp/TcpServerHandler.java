@@ -23,10 +23,10 @@ import org.tio.im.common.tcp.TcpServerDecoder;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import org.tio.im.server.util.Resps;
 import org.tio.server.ServerGroupContext;
 
 import com.alibaba.fastjson.JSONObject;

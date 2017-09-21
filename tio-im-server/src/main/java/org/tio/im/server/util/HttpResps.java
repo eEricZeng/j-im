@@ -10,34 +10,22 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
-import org.tio.im.common.Const;
-import org.tio.im.common.ImPacket;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.HttpResponseStatus;
 import org.tio.im.common.http.MimeType;
-import org.tio.im.common.http.session.HttpSession;
-import org.tio.im.common.packets.RespBody;
-import org.tio.im.common.tcp.TcpPacket;
-import org.tio.im.common.tcp.TcpServerEncoder;
-import org.tio.im.common.tcp.TcpSessionContext;
-import org.tio.im.common.ws.Opcode;
-import org.tio.im.common.ws.WsResponsePacket;
-import org.tio.im.common.ws.WsSessionContext;
 import org.tio.json.Json;
 
-import com.alibaba.fastjson.JSONObject;
 import com.xiaoleilu.hutool.io.FileUtil;
 
 /**
  * @author tanyaowu
  * 2017年6月29日 下午4:17:24
  */
-public class Resps {
-	private static Logger log = LoggerFactory.getLogger(Resps.class);
+public class HttpResps {
+	private static Logger log = LoggerFactory.getLogger(HttpResps.class);
 
 	/**
 	 * Content-Type: text/css; charset=utf-8
@@ -328,37 +316,10 @@ public class Resps {
 		HttpResponse ret = string(request, bodyString, charset, MimeType.TEXT_PLAIN_TXT.getType() + "; charset=" + charset);
 		return ret;
 	}
-	
-	public static ImPacket convertPacket(RespBody respBody, ChannelContext channelContext){
-		Object sessionContext = channelContext.getAttribute();
-		ImPacket respPacket = null;
-		if(respBody == null)
-			return respPacket;
-		byte[] body = JSONObject.toJSONBytes(respBody);
-		if(sessionContext instanceof HttpSession){//转HTTP协议响应包;
-			HttpRequest request = (HttpRequest)channelContext.getAttribute(Const.HTTP_REQUEST);
-			HttpResponse response = new HttpResponse(request,request.getHttpConfig());
-			response.setBody(body, request);
-			respPacket = response;
-		}else if(sessionContext instanceof TcpSessionContext){//转TCP协议响应包;
-			TcpPacket tcpPacket = new TcpPacket(body);
-			TcpServerEncoder.encode(tcpPacket, channelContext.getGroupContext(), channelContext);
-			respPacket = tcpPacket;
-		}else if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
-			WsResponsePacket wsResponsePacket = new WsResponsePacket();
-			wsResponsePacket.setBody(body);
-			wsResponsePacket.setWsOpcode(Opcode.TEXT);
-			respPacket =wsResponsePacket;
-		}
-		if(respBody.getCommand() != null){
-			respPacket.setCommand(respBody.getCommand());
-		}
-		return respPacket;
-	}
 	/**
 	 *
 	 * @author tanyaowu
 	 */
-	private Resps() {
+	private HttpResps() {
 	}
 }
