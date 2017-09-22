@@ -110,8 +110,11 @@ function COMMAND_CHAT_RESP(data){
 		return;
 	var content = chatObj.content;
 	var user = getOnlineUserById(from);
-   	//处理数据
-    logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+user.nick+"("+user.id+")"+" "+createTime+"</font><br>";
+	if(user){
+		 logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+user.nick+"("+user.id+")"+" "+createTime+"</font><br>";
+	}else{
+		logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+from+" "+createTime+"</font><br>";
+	}
     //处理数据
     logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
 }
