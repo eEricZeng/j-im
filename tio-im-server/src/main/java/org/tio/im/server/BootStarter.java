@@ -15,16 +15,16 @@ import com.jfinal.kit.PropKit;
   * @date 2017年9月3日 下午11:32:02  
   *
  */
-public class ImServerStarter {
+public class BootStarter {
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(ImServerStarter.class);
+	private static Logger log = LoggerFactory.getLogger(BootStarter.class);
 
 	/**
 	 * 
 	  * @author WChao wchaojava@163.com  
 	  * @date 2017年9月3日 下午11:34:58
 	 */
-	public ImServerStarter() {
+	public BootStarter() {
 
 	}
 

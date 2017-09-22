@@ -4,12 +4,12 @@
 package org.tio.im.server.command.handler;
 
 import org.tio.core.ChannelContext;
+import org.tio.im.common.ImAio;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
-import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
 
@@ -32,16 +32,16 @@ public class GetUserReqHandler extends CmdHandler{
 		User user = JSONObject.parseObject(packet.getBody(),User.class);
 		Object clients = null;
 		if(user.getType() == null || "0".equals(user.getType())){
-			clients = ImUtils.getUser(channelContext.getGroupContext(), user.getId());
+			clients = ImAio.getUser(channelContext.getGroupContext(), user.getId());
 		}else if( "1".equals(user.getType())){
-			clients = ImUtils.getAllOnlineUser(channelContext.getGroupContext());
+			clients = ImAio.getAllOnlineUser(channelContext.getGroupContext());
 		}else if("2".equals(user.getType())){
-			clients = ImUtils.getAllUser(channelContext.getGroupContext());
+			clients = ImAio.getAllUser(channelContext.getGroupContext());
 		}
 		if(clients == null)
 			return null;
 		RespBody resPacket = new RespBody().setCode(ImStatus.C100.getCode()).setCommand(Command.COMMAND_GET_USER_RESP).setMsg(JSONObject.toJSONString(clients));
-		return Resps.convertPacket(resPacket, channelContext);
+		return Resps.convertRespPacket(resPacket, channelContext);
 	}
 
 }

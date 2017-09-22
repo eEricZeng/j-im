@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.tio.im.common.ImAio;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
@@ -15,9 +16,9 @@ import org.tio.im.common.packets.JoinGroupRespBody;
 import org.tio.im.common.packets.JoinGroupResult;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
-import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
+
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoleilu.hutool.util.BeanUtil;
 
@@ -57,7 +58,7 @@ public class JoinGroupReqHandler extends CmdHandler {
 		joinGroupRespBody.setResult(joinGroupResult);
 		
 		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP).setCode(ImStatus.C400.getCode()).setMsg(JSONObject.toJSONString(joinGroupRespBody));
-		ImPacket respPacket = Resps.convertPacket(joinRespBody, channelContext);
+		ImPacket respPacket = Resps.convertRespPacket(joinRespBody, channelContext);
 		
 		Aio.send(channelContext, respPacket);
 		
@@ -72,7 +73,7 @@ public class JoinGroupReqHandler extends CmdHandler {
 				.setMsg(JSONObject.toJSONString(joinGroupNotifyRespBody));
 		
 		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(joinGroupNotifyCmdRespBody));
-		ImUtils.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
+		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
 		
 		return null;
 	}

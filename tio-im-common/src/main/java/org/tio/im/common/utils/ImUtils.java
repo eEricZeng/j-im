@@ -2,16 +2,10 @@ package org.tio.im.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
-import org.tio.core.GroupContext;
-import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Client;
-import org.tio.utils.lock.SetWithLock;
 /**
  * @author tanyaowu 
  * 2017年5月5日 下午5:35:02
@@ -57,94 +51,6 @@ public class ImUtils {
 			return validArr.get(0);
 		} else {
 			return validArr.get(validArr.size() - 2) + validArr.get(validArr.size() - 1);
-		}
-	}
-	/**
-	 * 
-		 * 功能描述：[根据用户ID获取当前用户]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:34:39
-		 * @param groupContext
-		 * @param userid
-		 * @return
-		 *
-	 */
-	public static Client getUser(GroupContext groupContext,String userid){
-		ChannelContext channelContext = Aio.getChannelContextByUserid(groupContext, userid);
-		if(channelContext != null){
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			Client client = imSessionContext.getClient();
-			return client;
-		}
-		return null;
-	}
-	/**
-	 * 
-		 * 功能描述：[获取所有用户(在线+离线)]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:31:54
-		 * @param groupContext
-		 * @return
-		 *
-	 */
-	public static List<Client> getAllUser(GroupContext groupContext){
-		List<Client> clients = new ArrayList<Client>();
-		SetWithLock<ChannelContext> allChannels = Aio.getAllChannelContexts(groupContext);
-		Set<ChannelContext> allChannelSets = allChannels.getObj();
-		if(allChannelSets == null)
-			return clients;
-		for(ChannelContext channelContext : allChannelSets){
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			Client client = imSessionContext.getClient();
-			if(client != null)
-			clients.add(client);
-		}
-		return clients;
-	}
-	/**
-	 * 
-		 * 功能描述：[获取所有在线用户]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:31:42
-		 * @param groupContext
-		 * @return
-		 *
-	 */
-	public static List<Client> getAllOnlineUser(GroupContext groupContext){
-		List<Client> clients = new ArrayList<Client>();
-		SetWithLock<ChannelContext> allChannels = Aio.getAllConnectedsChannelContexts(groupContext);
-		Set<ChannelContext> allChannelSets = allChannels.getObj();
-		if(allChannelSets == null)
-			return clients;
-		for(ChannelContext channelContext : allChannelSets){
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			if(imSessionContext != null){
-				Client client = imSessionContext.getClient();
-				if(client != null)
-				clients.add(client);
-			}
-		}
-		return clients;
-	}
-	
-	/**
-	 * 
-		 * 功能描述：[发送到群组里的所有不同协议端]
-		 * 创建者：WChao 创建时间: 2017年9月21日 下午3:26:57
-		 * @param groupContext
-		 * @param group
-		 * @param packet
-		 *
-	 */
-	public static void sendToGroup(GroupContext groupContext, String group, ImPacket packet){
-		if(packet.getBody() == null)
-			return;
-		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
-		if(withLockChannels == null)
-			return;
-		Set<ChannelContext> channels = withLockChannels.getObj();
-		if(channels.size() > 0){
-			for(ChannelContext channelContext : channels){
-				ImPacket respPacket = Resps.convertPacket(packet.getBody(), channelContext);
-				Aio.sendToId(groupContext,channelContext.getId(), respPacket);
-			}
 		}
 	}
 	

@@ -6,7 +6,7 @@ import org.tio.im.common.http.GroupContextKey;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.http.handler.IHttpRequestHandler;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
-import org.tio.im.server.ImServerStarter;
+import org.tio.im.server.BootStarter;
 import org.tio.im.server.http.DefaultHttpRequestHandler;
 import org.tio.im.server.http.mvc.Routes;
 import org.tio.server.ServerGroupContext;
@@ -32,7 +32,7 @@ public class HttpServerInit {
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
 		String pageRoot = PropKit.get("http.page");//html/css/js等的根目录，支持classpath:，也支持绝对路径
-		String[] scanPackages = new String[] { ImServerStarter.class.getPackage().getName() };//tio mvc需要扫描的根目录包
+		String[] scanPackages = new String[] { BootStarter.class.getPackage().getName() };//tio mvc需要扫描的根目录包
 
 		httpConfig = new HttpConfig(port,null);
 		httpConfig.setPageRoot(pageRoot);

@@ -55,6 +55,8 @@ public class HelloClientStarter {
 		HelloPacket loginPacket = new HelloPacket(Command.COMMAND_LOGIN_REQ,loginBody);
 		Aio.bSend(clientChannelContext, loginPacket);//先登录;
 		String text = "{"
+				+ "\"group_id\":\"100\","
+				+ "\"chatType\":\"1\","
 				+ "\"from\":\"test1\","
 				+ "\"to\":\"admin\","
 				+ "\"content\":\"我是Tcp转Ws消息过来，凑热闹来啦..!\","

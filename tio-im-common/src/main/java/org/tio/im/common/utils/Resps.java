@@ -24,12 +24,12 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class Resps {
 	
-	public static ImPacket convertPacket(RespBody respBody, ChannelContext channelContext){
+	public static ImPacket convertRespPacket(RespBody respBody, ChannelContext channelContext){
 		ImPacket respPacket = null;
 		if(respBody == null)
 			return respPacket;
 		byte[] body = JSONObject.toJSONBytes(respBody);
-		respPacket = convertPacket(body, channelContext);
+		respPacket = convertRespPacket(body, channelContext);
 		if(respBody.getCommand() != null){
 			respPacket.setCommand(respBody.getCommand());
 		}
@@ -44,7 +44,7 @@ public class Resps {
 		 * @return
 		 *
 	 */
-	public static ImPacket convertPacket(byte[] body, ChannelContext channelContext){
+	public static ImPacket convertRespPacket(byte[] body, ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
 		ImPacket respPacket = null;
 		if(body == null)

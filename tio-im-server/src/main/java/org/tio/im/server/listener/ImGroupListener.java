@@ -2,13 +2,13 @@ package org.tio.im.server.listener;
 
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.GroupListener;
+import org.tio.im.common.ImAio;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.ExitGroupNotifyRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
-import org.tio.im.common.utils.ImUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoleilu.hutool.util.BeanUtil;
@@ -66,7 +66,7 @@ public class ImGroupListener implements GroupListener{
 				.setCode(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP.getNumber())
 				.setMsg(JSONObject.toJSONString(exitGroupNotifyRespBody));
 		ImPacket exitGroupNotifyrespPacket = new ImPacket(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(exitGroupNotifyCmdRespBody));
-		ImUtils.sendToGroup(channelContext.getGroupContext(), group, exitGroupNotifyrespPacket);
+		ImAio.sendToGroup(channelContext.getGroupContext(), group, exitGroupNotifyrespPacket);
 		
 	}
 }

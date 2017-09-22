@@ -3,34 +3,60 @@ package org.tio.im.server.command.handler;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
+import org.tio.im.common.ImAio;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.packets.ChatBody;
+import org.tio.im.common.packets.ChatType;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
+import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 
- * 
- * @author tanyaowu 
- *
+ * 版本: [1.0]
+ * 功能说明: 
+ * 作者: WChao 创建时间: 2017年9月22日 下午2:58:59
  */
 public class ChatReqHandler extends CmdHandler {
 
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
+		/*ProCmdHandlerIntf imHandler = cmdManager.getProCmdHandler(channelContext);
+		return imHandler.chat(packet, channelContext);*/
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}
-		ProCmdHandlerIntf imHandler = cmdManager.getProCmdHandler(channelContext);
-		return imHandler.chat(packet, channelContext);
+		ChatBody chatBody = ChatReqHandler.parseChatBody(packet.getBody(), channelContext);
+		if(chatBody == null){
+			ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
+			return respChatPacket;
+		}
+		if(chatBody.getChatType() == null || ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){
+			ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
+			ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
+			if(toChannleContext != null){
+				Aio.send(toChannleContext, respChatPacket);
+				RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
+				return Resps.convertRespPacket(chatStatusPacket, channelContext);
+			}else{
+				return respChatPacket;
+			}
+		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
+			String group_id = chatBody.getGroup_id();
+			RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
+			ImPacket imPacket = new ImPacket(JSONObject.toJSONBytes(chatRespBody));
+			ImAio.sendToGroup(channelContext.getGroupContext(), group_id, imPacket);
+			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
+			return Resps.convertRespPacket(chatStatusPacket, channelContext);
+		}
+		return null;
 	}
 	/**
 	 * 功能描述：[转换聊天请求不同协议响应包]
@@ -59,18 +85,18 @@ public class ChatReqHandler extends CmdHandler {
 			ChannelContext toChannelContext = getToChannel(chatBody, channelContext.getGroupContext());
 			if(toChannelContext == null){
 				RespBody chatRespBody = new RespBody().setCode(ImStatus.C0.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C0.getText());
-				ImPacket respPacket = Resps.convertPacket(chatRespBody, channelContext);
+				ImPacket respPacket = Resps.convertRespPacket(chatRespBody, channelContext);
 				respPacket.setStatus(ImStatus.C0);
 				return respPacket;
 			}else{
 				RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
-				ImPacket respPacket = Resps.convertPacket(chatRespBody, toChannelContext);
+				ImPacket respPacket = Resps.convertRespPacket(chatRespBody, toChannelContext);
 				respPacket.setStatus(ImStatus.C1);
 				return respPacket;
 			}
 		}else{
 			RespBody chatRespBody = new RespBody().setCode(ImStatus.C2.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C2.getText());
-			ImPacket respPacket = Resps.convertPacket(chatRespBody, channelContext);
+			ImPacket respPacket = Resps.convertRespPacket(chatRespBody, channelContext);
 			respPacket.setStatus(ImStatus.C2);
 			return respPacket;
 		}
@@ -115,7 +141,13 @@ public class ChatReqHandler extends CmdHandler {
 		ChatBody chatReqBody = parseChatBody(body);
 		if(chatReqBody != null){
 			if(chatReqBody.getFrom() == null || "".equals(chatReqBody.getFrom())){
-				chatReqBody.setFrom(channelContext.getId());
+				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+				User user = imSessionContext.getClient().getUser();
+				if(user != null){
+					chatReqBody.setFrom(user.getNick());
+				}else{
+					chatReqBody.setFrom(channelContext.getId());
+				}
 			}
 		}
 		return chatReqBody;

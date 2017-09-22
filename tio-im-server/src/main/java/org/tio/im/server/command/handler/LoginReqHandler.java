@@ -66,7 +66,7 @@ public class LoginReqHandler extends CmdHandler {
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
 		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP).setCode(ImStatus.C200.getCode()).setMsg(JSONObject.toJSONString(loginRespBodyBuilder));
-		return Resps.convertPacket(respBody, channelContext);
+		return Resps.convertRespPacket(respBody, channelContext);
 	}
 	
 	@Override

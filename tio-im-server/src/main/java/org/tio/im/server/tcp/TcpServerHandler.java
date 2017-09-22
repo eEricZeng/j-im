@@ -77,7 +77,7 @@ public class TcpServerHandler extends AbServerHandler{
 		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(tcpPacket.getCommand());
 		if(cmdHandler == null){
 			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText()).setCommand(Command.COMMAND_UNKNOW);
-			ImPacket responsePacket = Resps.convertPacket(respBody, channelContext);
+			ImPacket responsePacket = Resps.convertRespPacket(respBody, channelContext);
 			Aio.send(channelContext, responsePacket);
 			return;
 		}

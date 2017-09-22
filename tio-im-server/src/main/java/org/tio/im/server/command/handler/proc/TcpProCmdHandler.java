@@ -43,7 +43,7 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 		if(resChatPacket.getStatus() == ImStatus.C1){
 			Aio.send(toChnnelContext, resChatPacket);
 			RespBody respBody = new RespBody().setCode(ImStatus.C1.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C1.getText());
-			return Resps.convertPacket(respBody, channelContext);
+			return Resps.convertRespPacket(respBody, channelContext);
 		}else{
 			return resChatPacket;
 		}

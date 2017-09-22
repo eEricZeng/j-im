@@ -15,7 +15,7 @@ public class ChatBody extends Message {
 	private String msgType;//消息类型;(如：text、image、vedio、news)
 	private Integer chatType;//聊天类型;(如公聊、私聊)
 	private String content;//消息内容;
-	private String group;//消息发到哪个群组;
+	private String group_id;//消息发到哪个群组;
 	
 	public String getFrom() {
 		return from;
@@ -41,11 +41,12 @@ public class ChatBody extends Message {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getGroup() {
-		return group;
+	
+	public String getGroup_id() {
+		return group_id;
 	}
-	public void setGroup(String group) {
-		this.group = group;
+	public void setGroup_id(String group_id) {
+		this.group_id = group_id;
 	}
 	public Integer getChatType() {
 		return chatType;

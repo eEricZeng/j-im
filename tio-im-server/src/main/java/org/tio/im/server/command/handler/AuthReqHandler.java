@@ -28,7 +28,7 @@ public class AuthReqHandler extends CmdHandler
 	{
 		if (packet.getBody() == null) {
 			RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C301.getCode()).setMsg(ImStatus.C301.getText());
-			return Resps.convertPacket(respBody, channelContext);
+			return Resps.convertRespPacket(respBody, channelContext);
 		}
 		AuthReqBody authReqBody = JSONObject.parseObject(packet.getBody(), AuthReqBody.class);
 		String token = authReqBody.getToken() == null ? "" : authReqBody.getToken();
@@ -36,7 +36,7 @@ public class AuthReqHandler extends CmdHandler
 		logger.info(data);
 		authReqBody.setToken(data);
 		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C300.getCode()).setMsg(JSONObject.toJSONString(authReqBody));
-		return Resps.convertPacket(respBody, channelContext);
+		return Resps.convertRespPacket(respBody, channelContext);
 	}
 
 
