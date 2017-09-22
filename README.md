@@ -12,6 +12,8 @@
     "cmd":命令码(11),
     "createTime": 消息创建时间Long类型,
     "msgType": "消息类型(text、image、vedio、news)",
+    "chatType":"聊天类型(0:私聊,1:公聊,2:其它)",
+    "group_id":"群组id仅在chatType为(1)时需要",
     "content": "内容"
 }
 ```
