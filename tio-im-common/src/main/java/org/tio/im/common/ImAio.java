@@ -76,9 +76,11 @@ public class ImAio {
 			return users;
 		for(ChannelContext channelContext : userChannels){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			Client client = imSessionContext.getClient();
-			if(client != null && client.getUser() != null){
-				users.add(client.getUser());
+			if(imSessionContext != null){
+				Client client = imSessionContext.getClient();
+				if(client != null && client.getUser() != null){
+					users.add(client.getUser());
+				}
 			}
 		}
 		return users;
@@ -103,6 +105,7 @@ public class ImAio {
 		if(channels.size() > 0){
 			for(ChannelContext channelContext : channels){
 				ImPacket respPacket = Resps.convertRespPacket(packet.getBody(),channelContext);
+				respPacket.setCommand(packet.getCommand());
 				Aio.sendToId(groupContext,channelContext.getId(), respPacket);
 			}
 		}

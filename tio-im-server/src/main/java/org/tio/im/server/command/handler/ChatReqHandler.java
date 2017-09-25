@@ -42,6 +42,7 @@ public class ChatReqHandler extends CmdHandler {
 			ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
 			ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
 			if(toChannleContext != null){
+				respChatPacket.setCommand(Command.COMMAND_CHAT_RESP);
 				Aio.send(toChannleContext, respChatPacket);
 				RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
 				return Resps.convertRespPacket(chatStatusPacket, channelContext);
@@ -51,7 +52,7 @@ public class ChatReqHandler extends CmdHandler {
 		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
 			String group_id = chatBody.getGroup_id();
 			RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
-			ImPacket imPacket = new ImPacket(JSONObject.toJSONBytes(chatRespBody));
+			ImPacket imPacket = new ImPacket(Command.COMMAND_CHAT_RESP,JSONObject.toJSONBytes(chatRespBody));
 			ImAio.sendToGroup(channelContext.getGroupContext(), group_id, imPacket);
 			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
 			return Resps.convertRespPacket(chatStatusPacket, channelContext);

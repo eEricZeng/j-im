@@ -103,20 +103,6 @@ public class WsPacket extends ImPacket {
 	}
 
 	/**
-	 * @see org.tio.core.intf.Packet#logstr()
-	 *
-	 * @return
-	 * @author tanyaowu
-	 * 2017年2月22日 下午3:15:18
-	 *
-	 */
-	@Override
-	public String logstr() {
-		return null;
-
-	}
-
-	/**
 	 * @param isHandShake the isHandShake to set
 	 */
 	public void setHandShake(boolean isHandShake) {
