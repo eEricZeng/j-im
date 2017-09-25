@@ -27,6 +27,10 @@ var onlineUserCmd = "{\"cmd\":17,\"type\":\"1\"}";
 var curUser;
 var onlineUserArray = [];
 function connect(){
+	if(curUser){
+		alert("当前已登录,请先退出登录!");
+		return;
+	}
 	var ip = document.getElementById("serverIp").value;
 	var port = document.getElementById("port").value;
 	username = document.getElementById("username").value;
@@ -44,6 +48,7 @@ function connect(){
 		scrollToBottom();
 	};
 	socket.onclose = function(e){
+		curUser = null;
 		logDiv.innerHTML+="<font color='green' size='1'>退出登录...</font><br>";
 		document.getElementById("onlinePanel").innerHTML="&nbsp;在线成员(0/0)";
 		scrollToBottom();
