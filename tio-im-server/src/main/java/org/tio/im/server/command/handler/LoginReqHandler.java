@@ -52,7 +52,7 @@ public class LoginReqHandler extends CmdHandler {
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}
-		String userid = user.getId();
+		String userid = user.getUserid();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
 		Aio.bindUser(channelContext,userid);
 		if (StringUtils.isBlank(token)) {
@@ -65,7 +65,7 @@ public class LoginReqHandler extends CmdHandler {
 		imSessionContext.getClient().setUser(user);
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
-		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP).setCode(ImStatus.C200.getCode()).setMsg(JSONObject.toJSONString(loginRespBodyBuilder));
+		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C200).setData(loginRespBodyBuilder.toString());
 		return Resps.convertRespPacket(respBody, channelContext);
 	}
 	

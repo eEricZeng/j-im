@@ -10,12 +10,12 @@ import java.util.List;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 下午3:13:47
  */
-public class User extends Message{
+public class User{
 	
+	private String userid;//用户id;
 	private String nick; //user nick
 	private String avatar; //用户头像
-	private String type;//0:单个,1:所有在线用户,2:所有用户(在线+离线)
-	private List<Group> groups;//属于哪些群组;
+	private List<Group> groups;//拥有哪些群组;
 	
 	public String getNick() {
 		return nick;
@@ -29,11 +29,11 @@ public class User extends Message{
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	public String getType() {
-		return type;
+	public String getUserid() {
+		return userid;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
 	public List<Group> getGroups() {
 		return groups;

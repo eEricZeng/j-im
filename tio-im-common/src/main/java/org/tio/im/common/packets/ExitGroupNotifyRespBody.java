@@ -8,7 +8,7 @@ package org.tio.im.common.packets;
  * 功能说明: 退出群组通知消息体
  * 作者: WChao 创建时间: 2017年7月26日 下午5:15:18
  */
-public class ExitGroupNotifyRespBody {
+public class ExitGroupNotifyRespBody extends Message{
 	private User user;
 	private String group;
 	

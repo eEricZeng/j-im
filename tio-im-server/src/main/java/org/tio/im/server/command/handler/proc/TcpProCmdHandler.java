@@ -65,7 +65,7 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 	@Override
 	public ImPacket heartbeat(ImPacket packet, ChannelContext channelContext) throws Exception {
 		
-		return null;
+		return new ImPacket(Command.COMMAND_HEARTBEAT_REQ, packet.getBody());
 	}
 
 }

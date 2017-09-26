@@ -62,11 +62,9 @@ public class ImGroupListener implements GroupListener{
 		
 		exitGroupNotifyRespBody.setUser(notifyUser);
 		
-		RespBody exitGroupNotifyCmdRespBody = new RespBody(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP)
-				.setCode(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP.getNumber())
-				.setMsg(JSONObject.toJSONString(exitGroupNotifyRespBody));
-		ImPacket exitGroupNotifyrespPacket = new ImPacket(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(exitGroupNotifyCmdRespBody));
-		ImAio.sendToGroup(channelContext.getGroupContext(), group, exitGroupNotifyrespPacket);
+		RespBody respBody = new RespBody(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP).setData(exitGroupNotifyRespBody.toString());
+		ImPacket imPacket = new ImPacket(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(respBody));
+		ImAio.sendToGroup(channelContext.getGroupContext(), group, imPacket);
 		
 	}
 }

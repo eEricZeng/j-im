@@ -27,7 +27,7 @@ public class AuthReqHandler extends CmdHandler
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
 		if (packet.getBody() == null) {
-			RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C301.getCode()).setMsg(ImStatus.C301.getText());
+			RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C301);
 			return Resps.convertRespPacket(respBody, channelContext);
 		}
 		AuthReqBody authReqBody = JSONObject.parseObject(packet.getBody(), AuthReqBody.class);
@@ -35,7 +35,7 @@ public class AuthReqHandler extends CmdHandler
 		String data = token +  Const.authkey;
 		logger.info(data);
 		authReqBody.setToken(data);
-		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP).setCode(ImStatus.C300.getCode()).setMsg(JSONObject.toJSONString(authReqBody));
+		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C300).setData(JSONObject.toJSONString(authReqBody));
 		return Resps.convertRespPacket(respBody, channelContext);
 	}
 

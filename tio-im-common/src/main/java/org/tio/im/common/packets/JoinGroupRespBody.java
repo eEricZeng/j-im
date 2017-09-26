@@ -8,7 +8,7 @@ package org.tio.im.common.packets;
  * 功能说明: 加入群组响应
  * 作者: WChao 创建时间: 2017年7月26日 下午5:09:20
  */
-public class JoinGroupRespBody {
+public class JoinGroupRespBody extends Message {
 	public JoinGroupResult result;
 	public String group;
 	public JoinGroupResult getResult() {

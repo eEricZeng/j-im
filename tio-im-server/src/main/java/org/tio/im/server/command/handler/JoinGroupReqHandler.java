@@ -57,10 +57,8 @@ public class JoinGroupReqHandler extends CmdHandler {
 		joinGroupRespBody.setGroup(groupId);
 		joinGroupRespBody.setResult(joinGroupResult);
 		
-		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP).setCode(ImStatus.C400.getCode()).setMsg(JSONObject.toJSONString(joinGroupRespBody));
+		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C400).setData(joinGroupRespBody.toString());
 		ImPacket respPacket = Resps.convertRespPacket(joinRespBody, channelContext);
-		
-		Aio.send(channelContext, respPacket);
 		
 		User notifyUser = new User();
 		BeanUtil.copyProperties(imSessionContext.getClient().getUser(), notifyUser);
@@ -68,14 +66,12 @@ public class JoinGroupReqHandler extends CmdHandler {
 		
 		//发进房间通知  COMMAND_JOIN_GROUP_NOTIFY_RESP
 		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
-		RespBody joinGroupNotifyCmdRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP)
-				.setCode(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP.getNumber())
-				.setMsg(JSONObject.toJSONString(joinGroupNotifyRespBody));
+		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP).setData(joinGroupNotifyRespBody.toString());
 		
-		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(joinGroupNotifyCmdRespBody));
+		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(notifyRespBody));
 		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
 		
-		return null;
+		return respPacket;
 	}
 	@Override
 	public Command command() {

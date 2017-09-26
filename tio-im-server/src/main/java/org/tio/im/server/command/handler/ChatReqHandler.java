@@ -42,19 +42,17 @@ public class ChatReqHandler extends CmdHandler {
 			ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
 			ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
 			if(toChannleContext != null){
-				respChatPacket.setCommand(Command.COMMAND_CHAT_RESP);
 				Aio.send(toChannleContext, respChatPacket);
-				RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
+				RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C1);
 				return Resps.convertRespPacket(chatStatusPacket, channelContext);
 			}else{
 				return respChatPacket;
 			}
 		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
 			String group_id = chatBody.getGroup_id();
-			RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
-			ImPacket imPacket = new ImPacket(Command.COMMAND_CHAT_RESP,JSONObject.toJSONBytes(chatRespBody));
+			ImPacket imPacket = new ImPacket(Command.COMMAND_CHAT_RESP,JSONObject.toJSONBytes(new RespBody(Command.COMMAND_CHAT_RESP).setData(chatBody.toString())));
 			ImAio.sendToGroup(channelContext.getGroupContext(), group_id, imPacket);
-			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP).setCode(ImStatus.C1.getCode()).setMsg(ImStatus.C1.getText());
+			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C1);
 			return Resps.convertRespPacket(chatStatusPacket, channelContext);
 		}
 		return null;
@@ -85,18 +83,18 @@ public class ChatReqHandler extends CmdHandler {
 		if(chatBody != null){
 			ChannelContext toChannelContext = getToChannel(chatBody, channelContext.getGroupContext());
 			if(toChannelContext == null){
-				RespBody chatRespBody = new RespBody().setCode(ImStatus.C0.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C0.getText());
+				RespBody chatRespBody = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C0);
 				ImPacket respPacket = Resps.convertRespPacket(chatRespBody, channelContext);
 				respPacket.setStatus(ImStatus.C0);
 				return respPacket;
 			}else{
-				RespBody chatRespBody = new RespBody().setCommand(Command.COMMAND_CHAT_RESP).setMsg(JSONObject.toJSONString(chatBody));
+				RespBody chatRespBody = new RespBody(Command.COMMAND_CHAT_RESP).setData(JSONObject.toJSONString(chatBody));
 				ImPacket respPacket = Resps.convertRespPacket(chatRespBody, toChannelContext);
 				respPacket.setStatus(ImStatus.C1);
 				return respPacket;
 			}
 		}else{
-			RespBody chatRespBody = new RespBody().setCode(ImStatus.C2.getCode()).setCommand(Command.COMMAND_CHAT_RESP).setMsg(ImStatus.C2.getText());
+			RespBody chatRespBody = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C2);
 			ImPacket respPacket = Resps.convertRespPacket(chatRespBody, channelContext);
 			respPacket.setStatus(ImStatus.C2);
 			return respPacket;
