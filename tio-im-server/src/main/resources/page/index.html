@@ -76,13 +76,13 @@ function connect(){
 }
 function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
 	var exitGroupNotify = eval("("+data.data+")");
-	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+exitGroupNotify.user.nick+"("+exitGroupNotify.user.userid+")退出群聊...</font><br>";
+	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+exitGroupNotify.user.nick+"("+exitGroupNotify.user.id+")退出群聊...</font><br>";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
 //加入群组的消息通知处理;
 function COMMAND_JOIN_GROUP_NOTIFY_RESP(data){
 	var joinGroupNotify = eval("("+data.data+")");
-	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+joinGroupNotify.user.nick+"("+joinGroupNotify.user.userid+")加入群聊...</font><br>";
+	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+joinGroupNotify.user.nick+"("+joinGroupNotify.user.id+")加入群聊...</font><br>";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
 //加入群组响应状态处理;
@@ -116,7 +116,7 @@ function COMMAND_CHAT_RESP(data){
 	var content = chatObj.content;
 	var user = getOnlineUserById(from);
 	if(user){
-		 logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+user.nick+"("+user.userid+")"+" "+createTime+"</font><br>";
+		 logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+user.nick+"("+user.id+")"+" "+createTime+"</font><br>";
 	}else{
 		logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+from+" "+createTime+"</font><br>";
 	}
@@ -131,7 +131,7 @@ function OTHER(data){
 function getOnlineUserById(id){
   	for(var i = 0 ; i < onlineUserArray.length ; i++){
 		var user = onlineUserArray[i];
-		if(user.userid == id){
+		if(user.id == id){
 			return user;
 		}
 	}
@@ -140,7 +140,7 @@ function initOnlineUsers(){
 	var onlineUserStr = "&nbsp;在线成员("+onlineUserArray.length+"/"+onlineUserArray.length+")";
    	for(var i = 0 ; i < onlineUserArray.length ; i++){
 		var user = onlineUserArray[i];
-		onlineUserStr +="<div id=\""+user.userid+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.userid+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.userid+")</font></div>";
+		onlineUserStr +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
    	}
    	document.getElementById("onlinePanel").innerHTML=onlineUserStr;
 }
@@ -177,7 +177,7 @@ function sendGroup(){
 	var chatObj = eval("("+msg+")");
 	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
   	//处理数据
-	logDiv.innerHTML+="<font color='#228B22' size='1' style='font-weight: bold'>"+curUser.nick+"("+curUser.userid+")"+" "+createTime+"</font><br>";
+	logDiv.innerHTML+="<font color='#228B22' size='1' style='font-weight: bold'>"+curUser.nick+"("+curUser.id+")"+" "+createTime+"</font><br>";
 	//处理数据
 	logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+chatObj.content+"</font><br>";
 	document.getElementById('content').value = "";

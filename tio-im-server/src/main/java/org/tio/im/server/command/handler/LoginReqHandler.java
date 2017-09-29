@@ -52,7 +52,7 @@ public class LoginReqHandler extends CmdHandler {
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}
-		String userid = user.getUserid();
+		String userid = user.getId();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
 		Aio.bindUser(channelContext,userid);
 		if (StringUtils.isBlank(token)) {

@@ -50,7 +50,7 @@ public class UserService {
 		String key = Const.authkey;
 		String token = Md5.sign(text, key, HttpConst.CHARSET_NAME);
 		User user = getUser(token);
-		user.setUserid(loginname);
+		user.setId(loginname);
 		return user;
 	}
 	/**
@@ -64,11 +64,11 @@ public class UserService {
 		User user = tokenMap.get(token);
 		if (user == null) {
 			user = new User();
-			user.setUserid(UUIDSessionIdGenerator.instance.sessionId(null));
+			user.setId(UUIDSessionIdGenerator.instance.sessionId(null));
 			user.setNick(familyName[RandomUtil.randomInt(0, familyName.length - 1)] + secondName[RandomUtil.randomInt(0, secondName.length - 1)]);
-			List<Group> groups = new ArrayList<Group>();
-			groups.add(new Group("100","tio-im朋友圈"));
-			user.setGroups(groups);
+			
+			user.setGroups(initGroups(user));
+			user.setFrends(initFriends(user));
 			user.setAvatar(nextImg());
 			
 			if (tokenMap.size() > 10000) {
@@ -77,6 +77,26 @@ public class UserService {
 			tokenMap.put(token, user);
 		}
 		return user;
+	}
+	
+	public static List<Group> initGroups(User user){
+		//模拟的群组;正式根据业务去查数据库或者缓存;
+		List<Group> groups = new ArrayList<Group>();
+		groups.add(new Group("100","tio-im朋友圈"));
+		return groups;
+	}
+	public static List<Group> initFriends(User user){
+		List<Group> friends = new ArrayList<Group>();
+		Group myFriend = new Group("1","我的好友");
+		List<User> myFriendGroupUsers = new ArrayList<User>();
+		User user1 = new User();
+		user1.setId(UUIDSessionIdGenerator.instance.sessionId(null));
+		user1.setNick(familyName[RandomUtil.randomInt(0, familyName.length - 1)] + secondName[RandomUtil.randomInt(0, secondName.length - 1)]);
+		user1.setAvatar(nextImg());
+		myFriendGroupUsers.add(user1);
+		myFriend.setUsers(myFriendGroupUsers);
+		friends.add(myFriend);
+		return friends;
 	}
 	
 	public static String nextImg() {
