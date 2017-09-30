@@ -68,7 +68,7 @@ public class UserService {
 			user.setNick(familyName[RandomUtil.randomInt(0, familyName.length - 1)] + secondName[RandomUtil.randomInt(0, secondName.length - 1)]);
 			
 			user.setGroups(initGroups(user));
-			user.setFrends(initFriends(user));
+			user.setFriends(initFriends(user));
 			user.setAvatar(nextImg());
 			
 			if (tokenMap.size() > 10000) {

@@ -17,8 +17,8 @@ public class User{
 	private String avatar; //用户头像
 	private String status;//在线状态(online、offline)
 	private String sign;//个性签名;
-	private List<Group> frends;//我的好友分组;
-	private List<Group> groups;//拥有哪些群组;
+	private List<Group> friends;//好友列表;
+	private List<Group> groups;//群组列表;
 	
 	public String getNick() {
 		return nick;
@@ -57,11 +57,10 @@ public class User{
 	public void setSign(String sign) {
 		this.sign = sign;
 	}
-	public List<Group> getFrends() {
-		return frends;
+	public List<Group> getFriends() {
+		return friends;
 	}
-	public void setFrends(List<Group> frends) {
-		this.frends = frends;
+	public void setFriends(List<Group> friends) {
+		this.friends = friends;
 	}
-
 }
