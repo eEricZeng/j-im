@@ -103,6 +103,6 @@ tio-im会有一个成长过程，一如t-io的发展历程，会从丑小鸭变�
 [t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)
 
 ## 联系方式
-
      QQ群号:
+
     ![输入图片说明](https://gitee.com/uploads/images/2017/1022/010331_73ecf8af_410355.jpeg "无标题.jpg")
