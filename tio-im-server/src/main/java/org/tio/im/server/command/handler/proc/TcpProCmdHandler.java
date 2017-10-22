@@ -29,7 +29,7 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {
 		ByteBuffer buffer = ByteBuffer.allocate(1);
 		buffer.put(Protocol.HANDSHAKE_BYTE);
-		ImPacket handshakeResPacket = new ImPacket(Command.COMMAND_HANDSHAKE_RESP,buffer.array());
+		ImPacket handshakeResPacket = Resps.convertRespPacket(buffer.array(), Command.COMMAND_HANDSHAKE_RESP, channelContext);
 		return handshakeResPacket;
 	}
 
@@ -64,8 +64,8 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 
 	@Override
 	public ImPacket heartbeat(ImPacket packet, ChannelContext channelContext) throws Exception {
-		
-		return new ImPacket(Command.COMMAND_HEARTBEAT_REQ, packet.getBody());
+		ImPacket heartPacket = Resps.convertRespPacket(packet.getBody(),Command.COMMAND_HEARTBEAT_REQ,channelContext);
+		return heartPacket;
 	}
 
 }

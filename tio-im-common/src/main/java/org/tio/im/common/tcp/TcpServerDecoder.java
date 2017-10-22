@@ -27,8 +27,9 @@ public class TcpServerDecoder {
 			throw new AioDecodeException("协议版本号不匹配!");
 		}
 		byte maskByte = buffer.get();
-		int command = maskByte & 0x0F;
-		if(Command.forNumber(command) == null){
+		//cmd命令码
+		byte cmdByte = buffer.get();
+		if(Command.forNumber(cmdByte) == null){
 			throw new AioDecodeException("不支持的cmd命令...");
 		}
 		int bodyLen = buffer.getInt();
@@ -41,8 +42,8 @@ public class TcpServerDecoder {
 		byte[] body = new byte[bodyLen];
 		buffer.get(body,0,bodyLen);
 		logger.info("TCP解码成功...");
-		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte消息的长度+消息体的长度
-		TcpPacket tcpPacket = new TcpPacket(Command.forNumber(command), body);
+		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+1byte命令码+4byte消息的长度+消息体的长度
+		TcpPacket tcpPacket = new TcpPacket(Command.forNumber(cmdByte), body);
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
 		return tcpPacket;

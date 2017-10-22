@@ -34,19 +34,21 @@ public class TcpServerEncoder {
 		maskByte = ImPacket.encodeCompress(maskByte, isCompress);
 		maskByte = ImPacket.encodeHasSynSeq(maskByte, tcpPacket.getSynSeq() > 0);
 		maskByte = ImPacket.encode4ByteLength(maskByte, is4ByteLength);
+		byte cmdByte = 0x00;
 		if(tcpPacket.getCommand() != null)
-		maskByte = (byte) (maskByte|tcpPacket.getCommand().getNumber());//消息类型;
+		cmdByte = (byte) (cmdByte|tcpPacket.getCommand().getNumber());//消息类型;
 		
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
 		
-		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte消息的长度+消息体的长度
-		int allLen = 1+1+4+bodyLen;
+		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+1byte命令码+4byte消息的长度+消息体
+		int allLen = 1+1+1+4+bodyLen;
 		ByteBuffer buffer = ByteBuffer.allocate(allLen);
 		//设置字节序
 		buffer.order(groupContext.getByteOrder());
 		buffer.put(tcpPacket.getVersion());
 		buffer.put(tcpPacket.getMask());
+		buffer.put(cmdByte);
 		buffer.putInt(bodyLen);
 		buffer.put(body);
 		return buffer;

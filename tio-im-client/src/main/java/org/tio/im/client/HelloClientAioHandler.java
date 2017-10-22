@@ -8,6 +8,7 @@ import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.AioHandler;
 import org.tio.core.intf.Packet;
+import org.tio.im.common.packets.Command;
 /**
  * 
  * 版本: [1.0]
@@ -45,11 +46,13 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 		boolean is4ByteLength = true;
 		boolean isEncrypt = true;
 		HelloPacket helloPacket = (HelloPacket)packet;
-		byte firstbyte = HelloPacket.encodeEncrypt(HelloPacket.VERSION, isEncrypt);
-		firstbyte = HelloPacket.encodeCompress(firstbyte, isCompress);
-		firstbyte = HelloPacket.encodeHasSynSeq(firstbyte, packet.getSynSeq() > 0);
-		firstbyte = HelloPacket.encode4ByteLength(firstbyte, is4ByteLength);
-		firstbyte = (byte) (firstbyte| helloPacket.getCommand().getNumber());//消息类型;
+		
+		byte markebyte = HelloPacket.encodeEncrypt(HelloPacket.VERSION, isEncrypt);
+		markebyte = HelloPacket.encodeCompress(markebyte, isCompress);
+		markebyte = HelloPacket.encodeHasSynSeq(markebyte, packet.getSynSeq() > 0);
+		markebyte = HelloPacket.encode4ByteLength(markebyte, is4ByteLength);
+		
+		byte cmdbyte = (byte) (0x00 | helloPacket.getCommand().getNumber());//消息类型;
 		byte[] body = helloPacket.getBody();
 		int bodyLen = 0;
 		if (body != null)
@@ -57,13 +60,14 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 			bodyLen = body.length;
 		}
 
-		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte消息的长度+消息体的长度
-		int allLen = 1+1+4+bodyLen;
+		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+1bytecmd命令码+4byte消息的长度+消息体的长度
+		int allLen = 1+1+1+4+bodyLen;
 		ByteBuffer buffer = ByteBuffer.allocate(allLen);
 		//设置字节序
 		buffer.order(groupContext.getByteOrder());
 		buffer.put(HelloPacket.VERSION);
-		buffer.put(firstbyte);
+		buffer.put(markebyte);
+		buffer.put(cmdbyte);
 		buffer.putInt(bodyLen);
 		buffer.put(body);
 		return buffer;
@@ -76,8 +80,8 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 		if(version != 0x01){
 			throw new AioDecodeException("协议版本号不匹配");
 		}
-		byte maskByte = buffer.get();
-		int command = maskByte & 0x0F;
+		buffer.get();//消息标志位mask
+		byte command = buffer.get();//消息cmd类型;
 		int bodyLen = buffer.getInt();
 		int readableLength = buffer.limit() - buffer.position();
 		//数据不正确，则抛出AioDecodeException异常
@@ -87,10 +91,9 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 		}
 		byte[] body = new byte[bodyLen];
 		buffer.get(body,0,bodyLen);
-		System.out.println("TCP解码成功..."+command);
+		System.out.println("TCP解码成功..."+Command.forNumber(command));
 		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte消息的长度+消息体的长度
-		HelloPacket tcpPacket = new HelloPacket();
-		tcpPacket.setBody(body);
+		HelloPacket tcpPacket = new HelloPacket(Command.forNumber(command),body);
 		return tcpPacket;
 	}
 	

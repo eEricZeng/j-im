@@ -16,7 +16,6 @@ import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
-import org.tio.im.common.packets.Message;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerDecoder;
@@ -28,8 +27,6 @@ import org.tio.im.server.command.CmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.server.ServerGroupContext;
-
-import com.alibaba.fastjson.JSONObject;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -90,13 +87,6 @@ public class TcpServerHandler extends AbServerHandler{
 	@Override
 	public TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
 		TcpPacket tcpPacket = TcpServerDecoder.decode(buffer, channelContext);
-		try{
-			Message message = JSONObject.parseObject(tcpPacket.getBody(),Message.class);
-			Command command = Command.forNumber(message.getCmd());
-			tcpPacket.setCommand(command);
-		}catch(Exception e){
-			return tcpPacket;
-		}
 		return tcpPacket;
 	}
 

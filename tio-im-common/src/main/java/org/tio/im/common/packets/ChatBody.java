@@ -20,38 +20,45 @@ public class ChatBody extends Message {
 	public String getFrom() {
 		return from;
 	}
-	public void setFrom(String from) {
+	public ChatBody setFrom(String from) {
 		this.from = from;
+		return this;
 	}
 	public String getTo() {
 		return to;
 	}
-	public void setTo(String to) {
+	public ChatBody setTo(String to) {
 		this.to = to;
+		return this;
 	}
 	public String getMsgType() {
 		return msgType;
 	}
-	public void setMsgType(String msgType) {
+	public ChatBody setMsgType(String msgType) {
 		this.msgType = msgType;
+		return this;
 	}
 	public String getContent() {
 		return content;
 	}
-	public void setContent(String content) {
+	public ChatBody setContent(String content) {
 		this.content = content;
+		return this;
 	}
 	
 	public String getGroup_id() {
 		return group_id;
 	}
-	public void setGroup_id(String group_id) {
+	public ChatBody setGroup_id(String group_id) {
 		this.group_id = group_id;
+		return this;
 	}
 	public Integer getChatType() {
 		return chatType;
 	}
-	public void setChatType(Integer chatType) {
+	public ChatBody setChatType(Integer chatType) {
 		this.chatType = chatType;
+		return this;
 	}
+	
 }

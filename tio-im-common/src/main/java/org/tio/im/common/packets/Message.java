@@ -3,6 +3,8 @@
  */
 package org.tio.im.common.packets;
 
+import java.util.Date;
+
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +16,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class Message {
 	
-	protected Long createTime;//消息创建时间;
+	protected Long createTime = new Date().getTime();//消息创建时间;
 	protected String id = UUIDSessionIdGenerator.instance.sessionId(null);//消息id，全局唯一;
 	protected Integer cmd ;//消息命令;
 

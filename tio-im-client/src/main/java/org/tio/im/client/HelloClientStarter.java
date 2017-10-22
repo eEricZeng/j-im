@@ -9,6 +9,7 @@ import org.tio.client.intf.ClientAioListener;
 import org.tio.core.Aio;
 import org.tio.core.Node;
 import org.tio.im.common.Const;
+import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.LoginReqBody;
 
@@ -54,15 +55,14 @@ public class HelloClientStarter {
 		byte[] loginBody = JSONObject.toJSONBytes(new LoginReqBody("test1","123"));
 		HelloPacket loginPacket = new HelloPacket(Command.COMMAND_LOGIN_REQ,loginBody);
 		Aio.bSend(clientChannelContext, loginPacket);//先登录;
-		String text = "{"
-				+ "\"group_id\":\"100\","
-				+ "\"chatType\":\"1\","
-				+ "\"from\":\"test1\","
-				+ "\"to\":\"admin\","
-				+ "\"content\":\"我是Tcp转Ws消息过来，凑热闹来啦..!\","
-				+ "\"msgType\":\"text\""
-				+ "}";
-		HelloPacket chatPacket = new HelloPacket(Command.COMMAND_CHAT_REQ,text.getBytes("utf-8"));
+		ChatBody chatBody = new ChatBody()
+				.setFrom("hello_client")
+				.setTo("admin")
+				.setMsgType("text")
+				.setChatType(1)
+				.setGroup_id("100")
+				.setContent("普通Socket客户端转Ws消息测试!");
+		HelloPacket chatPacket = new HelloPacket(Command.COMMAND_CHAT_REQ,chatBody.toString().getBytes("utf-8"));
 		Aio.bSend(clientChannelContext, chatPacket);
 	}
 }

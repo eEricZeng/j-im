@@ -1,11 +1,15 @@
 package org.tio.im.common.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
+import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.session.HttpSession;
+import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerEncoder;
@@ -13,8 +17,6 @@ import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * 
@@ -24,14 +26,18 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class Resps {
 	
+	private static Logger logger = LoggerFactory.getLogger(Resps.class);
+	
 	public static ImPacket convertRespPacket(RespBody respBody, ChannelContext channelContext){
 		ImPacket respPacket = null;
 		if(respBody == null)
 			return respPacket;
-		byte[] body = JSONObject.toJSONBytes(respBody);
-		respPacket = convertRespPacket(body, channelContext);
-		if(respBody.getCommand() != null){
-			respPacket.setCommand(respBody.getCommand());
+		byte[] body;
+		try {
+			body = respBody.toString().getBytes(HttpConst.CHARSET_NAME);
+			respPacket = convertRespPacket(body,respBody.getCommand(), channelContext);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return respPacket;
 	}
@@ -44,7 +50,7 @@ public class Resps {
 		 * @return
 		 *
 	 */
-	public static ImPacket convertRespPacket(byte[] body, ChannelContext channelContext){
+	public static ImPacket convertRespPacket(byte[] body,Command command, ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
 		ImPacket respPacket = null;
 		if(body == null)
@@ -55,7 +61,7 @@ public class Resps {
 			response.setBody(body, request);
 			respPacket = response;
 		}else if(sessionContext instanceof TcpSessionContext){//转TCP协议响应包;
-			TcpPacket tcpPacket = new TcpPacket(body);
+			TcpPacket tcpPacket = new TcpPacket(command,body);
 			TcpServerEncoder.encode(tcpPacket, channelContext.getGroupContext(), channelContext);
 			respPacket = tcpPacket;
 		}else if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
@@ -64,6 +70,7 @@ public class Resps {
 			wsResponsePacket.setWsOpcode(Opcode.TEXT);
 			respPacket =wsResponsePacket;
 		}
+		respPacket.setCommand(command);
 		return respPacket;
 	}
 	private Resps() {}

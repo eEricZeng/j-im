@@ -104,8 +104,7 @@ public class ImAio {
 		Set<ChannelContext> channels = withLockChannels.getObj();
 		if(channels.size() > 0){
 			for(ChannelContext channelContext : channels){
-				ImPacket respPacket = Resps.convertRespPacket(packet.getBody(),channelContext);
-				respPacket.setCommand(packet.getCommand());
+				ImPacket respPacket = Resps.convertRespPacket(packet.getBody(),packet.getCommand(),channelContext);
 				Aio.sendToId(groupContext,channelContext.getId(), respPacket);
 			}
 		}
