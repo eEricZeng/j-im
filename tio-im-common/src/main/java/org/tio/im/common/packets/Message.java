@@ -48,4 +48,8 @@ public class Message {
 	public String toString() {
 		return JSONObject.toJSONString(this);
 	}
+	
+	public byte[] toByte(){
+		return JSONObject.toJSONBytes(this);
+	}
 }

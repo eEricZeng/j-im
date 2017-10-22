@@ -13,5 +13,4 @@ public interface ProCmdHandlerIntf
 	public boolean isProtocol(ChannelContext channelContext)throws Exception;
 	public ImPacket handshake(ImPacket packet,ChannelContext channelContext)  throws Exception;
 	public ImPacket chat(ImPacket packet,ChannelContext channelContext) throws Exception;
-	public ImPacket heartbeat(ImPacket packet,ChannelContext channelContext) throws Exception;
 }

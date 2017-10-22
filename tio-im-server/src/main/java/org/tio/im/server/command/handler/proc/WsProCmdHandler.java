@@ -8,8 +8,6 @@ import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
-import org.tio.im.common.packets.Command;
-import org.tio.im.common.utils.Resps;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
@@ -68,12 +66,4 @@ public class WsProCmdHandler implements ProCmdHandlerIntf {
 		ImPacket wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
 		return wsResponsePacket;
 	}
-
-
-	@Override
-	public ImPacket heartbeat(ImPacket packet, ChannelContext channelContext) throws Exception {
-		ImPacket heartPacket = Resps.convertRespPacket(packet.getBody(),Command.COMMAND_HEARTBEAT_REQ,channelContext);
-		return heartPacket;
-	}
-
 }

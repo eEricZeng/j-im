@@ -69,5 +69,8 @@ public class RespBody{
 		return JSONObject.toJSONString(this);
 	}
 	
+	public byte[] toByte(){
+		return JSONObject.toJSONBytes(this);
+	}
 	
 }
