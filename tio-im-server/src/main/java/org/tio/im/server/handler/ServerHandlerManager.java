@@ -50,7 +50,7 @@ public class ServerHandlerManager{
 			AbServerHandler serverHandler = entry.getValue();
 			try {
 				if(serverHandler.isProtocol(copyByteBuffer,channelContext)){
-					return serverHandler.build();
+					return serverHandler;
 				}
 			} catch (Throwable e) {
 				logger.error(e);

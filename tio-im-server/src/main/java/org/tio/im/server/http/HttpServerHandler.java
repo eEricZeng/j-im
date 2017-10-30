@@ -51,15 +51,11 @@ public class HttpServerHandler extends AbServerHandler{
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){
 			if(buffer != null){
-				try{
-					HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
-					if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
-					{
-						channelContext.setAttribute(new HttpSession());
-						return true;
-					}
-				}catch(Throwable e){
-					e.printStackTrace();
+				HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+				if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
+				{
+					channelContext.setAttribute(new HttpSession());
+					return true;
 				}
 			}
 		}else if(sessionContext instanceof HttpSession){
@@ -89,11 +85,6 @@ public class HttpServerHandler extends AbServerHandler{
 		return request;
 	}
 	
-	@Override
-	public AbServerHandler build() {
-		return new HttpServerHandler(this.getHttpRequestHandler(),this.getHttpConfig());
-	}
-
 	public IHttpRequestHandler getHttpRequestHandler() {
 		return httpRequestHandler;
 	}

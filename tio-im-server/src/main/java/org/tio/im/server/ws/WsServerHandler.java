@@ -47,8 +47,6 @@ public class WsServerHandler extends AbServerHandler{
 	
 	private Logger logger = LoggerFactory.getLogger(WsServerHandler.class);
 	
-	private Packet packet = null;
-	
 	private WsServerConfig wsServerConfig;
 
 	private IWsMsgHandler wsMsgHandler;
@@ -69,20 +67,16 @@ public class WsServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext){
+	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){//第一次连接;
 			if(buffer != null){
-				try{
-					HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
-					if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
-					{
-						channelContext.setAttribute(new WsSessionContext());
-						ImUtils.setClient(channelContext);
-						return true;
-					}
-				}catch(Throwable e){
-					e.printStackTrace();
+				HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+				if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
+				{
+					channelContext.setAttribute(new WsSessionContext());
+					ImUtils.setClient(channelContext);
+					return true;
 				}
 			}
 		}else if(sessionContext instanceof WsSessionContext){
@@ -155,21 +149,6 @@ public class WsServerHandler extends AbServerHandler{
 			wsRequestPacket.setCommand(command);
 			return wsRequestPacket;
 		}
-	}
-
-	@Override
-	public AbServerHandler build() {
-		
-		return new WsServerHandler(this.wsServerConfig,this.wsMsgHandler);
-	}
-
-	public Packet getPacket() {
-		return packet;
-	}
-
-	public WsServerHandler setPacket(Packet packet) {
-		this.packet = packet;
-		return this;
 	}
 
 	public WsServerConfig getWsServerConfig() {

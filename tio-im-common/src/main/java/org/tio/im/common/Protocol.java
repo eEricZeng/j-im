@@ -20,7 +20,7 @@ public interface Protocol{
 	 */
 	public final static byte VERSION = 1;
 	
-	public final static String WEBSOCKET = "websocket";
+	public final static String WEBSOCKET = "ws";
 	
 	public final static String HTTP = "http";
 	

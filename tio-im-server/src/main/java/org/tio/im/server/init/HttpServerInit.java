@@ -55,7 +55,7 @@ public class HttpServerInit {
 		serverGroupContext.setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
 		long end = SystemTimer.currentTimeMillis();
 		long iv = end - start;
-		log.info("tio Http Server初始化完毕,耗时:{}ms", iv);
+		log.info("t-im Http Server初始化完毕,耗时:{}ms", iv);
 	}
 	/**
 	 *

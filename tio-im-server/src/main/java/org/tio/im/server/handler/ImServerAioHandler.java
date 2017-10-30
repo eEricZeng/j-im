@@ -58,7 +58,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 * @param packet
 	 * @return
 	 * @throws Exception 
-	 * @author: tanyaowu
+	 * @author: Wchao
 	 * 2016年11月18日 上午9:37:44
 	 * 
 	 */
@@ -75,7 +75,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 * 
 	 * @param packet
 	 * @return
-	 * @author: tanyaowu
+	 * @author: Wchao
 	 * 2016年11月18日 上午9:37:44
 	 * 
 	 */
@@ -94,7 +94,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 * @param buffer
 	 * @return
 	 * @throws AioDecodeException
-	 * @author: tanyaowu
+	 * @author: Wchao
 	 * 2016年11月18日 上午9:37:44
 	 * 
 	 */

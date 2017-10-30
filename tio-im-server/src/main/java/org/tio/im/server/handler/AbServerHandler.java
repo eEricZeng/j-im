@@ -14,7 +14,6 @@ import org.tio.server.intf.ServerAioHandler;
  */
 public abstract class AbServerHandler implements ServerAioHandler{
 	public abstract String name();
-	public abstract AbServerHandler build();
 	public abstract void init(ServerGroupContext serverGroupContext)throws Exception;
 	public abstract boolean isProtocol(ByteBuffer byteBuffer,ChannelContext channelContext)throws Throwable;
 }

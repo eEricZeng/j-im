@@ -91,12 +91,6 @@ public class TcpServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public AbServerHandler build() {
-		
-		return new TcpServerHandler();
-	}
-
-	@Override
 	public String name() {
 		
 		return Protocol.TCP;

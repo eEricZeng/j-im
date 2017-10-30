@@ -30,7 +30,7 @@ public class WsProCmdHandler implements ProCmdHandlerIntf {
 	 * @param channelContext
 	 * @return
 	 * @throws Exception
-	 * @author: tanyaowu
+	 * @author: Wchao
 	 */
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
@@ -59,11 +59,4 @@ public class WsProCmdHandler implements ProCmdHandlerIntf {
 		return false;
 	}
 
-
-	@Override
-	public ImPacket chat(ImPacket packet, ChannelContext channelContext) throws Exception {
-		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-		ImPacket wsResponsePacket = wsMsgHandler.handler(wsRequestPacket, channelContext);
-		return wsResponsePacket;
-	}
 }

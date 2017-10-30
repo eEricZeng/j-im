@@ -54,7 +54,7 @@ public class HelloClientStarter {
 	private static void send() throws Exception {
 		byte[] loginBody = JSONObject.toJSONBytes(new LoginReqBody("test1","123"));
 		HelloPacket loginPacket = new HelloPacket(Command.COMMAND_LOGIN_REQ,loginBody);
-		Aio.bSend(clientChannelContext, loginPacket);//先登录;
+		Aio.send(clientChannelContext, loginPacket);//先登录;
 		ChatBody chatBody = new ChatBody()
 				.setFrom("hello_client")
 				.setTo("admin")
@@ -63,6 +63,6 @@ public class HelloClientStarter {
 				.setGroup_id("100")
 				.setContent("普通Socket客户端转Ws消息测试!");
 		HelloPacket chatPacket = new HelloPacket(Command.COMMAND_CHAT_REQ,chatBody.toString().getBytes("utf-8"));
-		Aio.bSend(clientChannelContext, chatPacket);
+		Aio.send(clientChannelContext, chatPacket);
 	}
 }
