@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author WChao
  *
  */
-public class WsDemoHandshakeProCmdHandler extends WsHandshakeProCmdHandler{
+public class WsHandshakeHandler extends WsHandshakeProCmdHandler{
 	
 	/**
 	 * WS握手方法，返回Null则业务层不同意握手，断开连接!

@@ -9,7 +9,7 @@ import org.tio.im.server.ImServerStarter;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.HandshakeReqHandler;
 import org.tio.im.server.command.handler.LoginReqHandler;
-import org.tio.im.server.demo.command.WsDemoHandshakeProCmdHandler;
+import org.tio.im.server.demo.command.WsHandshakeHandler;
 import org.tio.im.server.demo.init.HttpServerInit;
 import org.tio.im.server.demo.listener.ImDemoAioListener;
 import org.tio.im.server.demo.service.UserServiceHandler;
@@ -30,7 +30,7 @@ public class ImServerDemoStart {
 		HttpServerInit.init(imConfig);
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getInstance().getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
-		handshakeReqHandler.addProcCmdHandler(new WsDemoHandshakeProCmdHandler());//添加自定义握手处理器;
+		handshakeReqHandler.addProcCmdHandler(new WsHandshakeHandler());//添加自定义握手处理器;
 		LoginReqHandler loginReqHandler = CommandManager.getInstance().getCommand(Command.COMMAND_LOGIN_REQ,LoginReqHandler.class);
 		loginReqHandler.addProcCmdHandler(new UserServiceHandler());//添加登录业务处理器;
 		imServerStarter.start();
