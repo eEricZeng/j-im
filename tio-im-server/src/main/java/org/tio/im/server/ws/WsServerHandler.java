@@ -12,6 +12,7 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
@@ -28,6 +29,7 @@ import org.tio.im.common.utils.Resps;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
+import org.tio.im.common.ws.WsServerConfig;
 import org.tio.im.common.ws.WsServerDecoder;
 import org.tio.im.common.ws.WsServerEncoder;
 import org.tio.im.common.ws.WsSessionContext;
@@ -58,7 +60,7 @@ public class WsServerHandler extends AbServerHandler{
 		this.wsMsgHandler = wsMsgHandler;
 	}
 	@Override
-	public void init(ServerGroupContext serverGroupContext) {
+	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
 		this.wsServerConfig = new WsServerConfig(port);

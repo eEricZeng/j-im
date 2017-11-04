@@ -1,6 +1,5 @@
 package org.tio.im.server.command.handler;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
@@ -16,8 +15,8 @@ import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.CmdHandler;
-import org.tio.im.server.service.UserService;
-
+import org.tio.im.server.command.handler.proc.ProCmdIntf;
+import org.tio.im.server.command.handler.proc.login.LoginReqCmdIntf;
 import com.alibaba.fastjson.JSONObject;
 
 public class LoginReqHandler extends CmdHandler {
@@ -29,39 +28,29 @@ public class LoginReqHandler extends CmdHandler {
 			Aio.remove(channelContext, "body is null");
 			return null;
 		}
+		ProCmdIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
+		if(loginProCmdHandler == null){
+			log.info("登录失败,没有业务处理器!");
+			Aio.remove(channelContext, "no login serviceHandler processor!");
+			return null;
+		}
+		LoginReqCmdIntf loginServiceHandler = (LoginReqCmdIntf)loginProCmdHandler;
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		String handshakeToken = imSessionContext.getToken();
 		LoginReqBody loginReqBody = JSONObject.parseObject(packet.getBody(),LoginReqBody.class);
-		String token = loginReqBody.getToken();
-		String loginname = loginReqBody.getLoginname();
-		String password = loginReqBody.getPassword();
-
-		User user = null;
-		if (!StringUtils.isBlank(handshakeToken)) {
-			user = UserService.getUser(handshakeToken);
-		}
-		if (user == null) {
-			if (!StringUtils.isBlank(loginname)) {
-				user = UserService.getUser(loginname, password);
-			} else if (!StringUtils.isBlank(token)) {
-				user = UserService.getUser(token);
-			}
-		}
-		if (user == null) {
-			log.info("登录失败, loginname:{}, password:{}", loginname, password);
+		
+		User user = loginServiceHandler.getUser(loginReqBody,channelContext);
+		if (user == null ) {
+			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}
 		String userid = user.getId();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
 		Aio.bindUser(channelContext,userid);
-		if (StringUtils.isBlank(token)) {
-			token = UserService.newToken();
-		}
-		imSessionContext.setToken(token);
 		if(imSessionContext.getClient() == null){
 			ImUtils.setClient(channelContext);
 		}
+		String token = imSessionContext.getToken();
 		imSessionContext.getClient().setUser(user);
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);

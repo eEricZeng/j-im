@@ -10,6 +10,7 @@
   		<module>../tio-im-client</module>
 		<module>../tio-im-common</module>
 		<module>../tio-im-server</module>
+		<module>../tio-im-server-demo</module>
 	</modules>
 	<properties>
 		<tio-core.version>2.0.0.v20170824-RELEASE</tio-core.version>

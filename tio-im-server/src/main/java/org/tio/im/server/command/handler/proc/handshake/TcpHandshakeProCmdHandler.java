@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tio.im.server.command.handler.proc;
+package org.tio.im.server.command.handler.proc.handshake;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
@@ -16,7 +16,7 @@ import org.tio.im.common.utils.Resps;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月11日 下午8:11:34
  */
-public class TcpProCmdHandler implements ProCmdHandlerIntf {
+public class TcpHandshakeProCmdHandler implements HandshakeProCmdIntf {
 
 	@Override
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {
@@ -27,7 +27,7 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 
 	
 	@Override
-	public boolean isProtocol(ChannelContext channelContext) throws Exception {
+	public boolean isProtocol(ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext == null){
 			return false;
@@ -36,4 +36,12 @@ public class TcpProCmdHandler implements ProCmdHandlerIntf {
 		}
 		return false;
 	}
+
+
+	@Override
+	public String name() {
+		
+		return Protocol.TCP;
+	}
+	
 }

@@ -3,17 +3,10 @@
  */
 package org.tio.im.server.command;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
 import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-
 /**
  * 版本: [1.0]
  * 功能说明: 命令执行管理器;
@@ -21,9 +14,8 @@ import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
  */
 public class CommandManager{
 	
-	private Logger log = LoggerFactory.getLogger(CommandManager.class);
 	private  Map<Command, CmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
-	private List<ProCmdHandlerIntf> proCmdHandlers = new ArrayList<ProCmdHandlerIntf>();//不同协议cmd处理命令如(ws、socket、自定义协议)握手心跳命令等.
+	
 	private CommandManager(){};
 	private static CommandManager instance = null;
 	
@@ -53,9 +45,14 @@ public class CommandManager{
 		}
 		return this;
 	}
-	public CommandManager addProCmdHandler(ProCmdHandlerIntf proCmdHandler){
-		this.proCmdHandlers.add(proCmdHandler);
-		return this;
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getCommand(Command command,Class<T> clazz){
+		CmdHandler cmdHandler = this.getCommand(command);
+		if(cmdHandler != null){
+			return (T)cmdHandler;
+		}
+		return null;
 	}
 	
 	public CmdHandler getCommand(Command command){
@@ -63,18 +60,5 @@ public class CommandManager{
 			return null;
 		
 		return handlerMap.get(command);
-	}
-	
-	public ProCmdHandlerIntf getProCmdHandler(ChannelContext channelContext){
-		for(ProCmdHandlerIntf handler : proCmdHandlers){
-			try {
-				if(handler.isProtocol(channelContext)){
-					return handler;
-				}
-			} catch (Exception e) {
-				log.error(e.toString(),e);
-			}
-		}
-		return null;
 	}
 }

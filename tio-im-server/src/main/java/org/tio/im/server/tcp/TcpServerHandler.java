@@ -12,6 +12,7 @@ import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.im.common.Const;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
@@ -37,7 +38,7 @@ public class TcpServerHandler extends AbServerHandler{
 	Logger logger = Logger.getLogger(TcpServerHandler.class);
 	
 	@Override
-	public void init(ServerGroupContext serverGroupContext) {
+	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
 	}
 
 	@Override

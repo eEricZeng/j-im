@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
+import org.tio.im.common.ImConfig;
 import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
@@ -67,10 +68,10 @@ public class ServerHandlerManager{
 		return (T)serverHandler;
 	}
 	
-	public ServerHandlerManager init(ServerGroupContext serverGroupContext){
+	public ServerHandlerManager init(ServerGroupContext serverGroupContext,ImConfig imConfig){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
 			try {
-				entry.getValue().init(serverGroupContext);
+				entry.getValue().init(serverGroupContext,imConfig);
 			} catch (Exception e) {
 				logger.error(e);
 			}

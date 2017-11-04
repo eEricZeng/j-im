@@ -3,6 +3,7 @@
  */
 package org.tio.im.server;
 
+import org.tio.im.common.ImConfig;
 import org.tio.im.server.handler.ImServerAioHandler;
 import org.tio.im.server.listener.ImServerAioListener;
 import org.tio.server.ServerGroupContext;
@@ -13,9 +14,9 @@ import org.tio.server.ServerGroupContext;
  */
 public class ImServerGroupContext extends ServerGroupContext {
 
-	public ImServerGroupContext(ImServerAioHandler imServerAioHandler,ImServerAioListener imServerAioListener) {
+	public ImServerGroupContext(ImConfig imConfig , ImServerAioHandler imServerAioHandler,ImServerAioListener imServerAioListener) {
 		super(imServerAioHandler, imServerAioListener);
-		imServerAioHandler.init(this);
+		imServerAioHandler.init(this,imConfig);
 	}
 
 }

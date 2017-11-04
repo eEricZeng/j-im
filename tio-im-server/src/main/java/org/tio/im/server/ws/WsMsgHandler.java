@@ -1,6 +1,7 @@
 package org.tio.im.server.ws;
 
 import java.nio.ByteBuffer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
@@ -17,6 +18,7 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
+import org.tio.im.common.ws.WsServerConfig;
 import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.ChatReqHandler;

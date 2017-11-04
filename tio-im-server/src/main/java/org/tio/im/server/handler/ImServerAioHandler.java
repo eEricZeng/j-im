@@ -6,6 +6,7 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
+import org.tio.im.common.ImConfig;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.AuthReqHandler;
 import org.tio.im.server.command.handler.ChatReqHandler;
@@ -15,8 +16,8 @@ import org.tio.im.server.command.handler.HeartbeatReqHandler;
 import org.tio.im.server.command.handler.JoinGroupReqHandler;
 import org.tio.im.server.command.handler.LoginReqHandler;
 import org.tio.im.server.command.handler.UserReqHandler;
-import org.tio.im.server.command.handler.proc.TcpProCmdHandler;
-import org.tio.im.server.command.handler.proc.WsProCmdHandler;
+import org.tio.im.server.command.handler.proc.handshake.TcpHandshakeProCmdHandler;
+import org.tio.im.server.command.handler.proc.handshake.WsHandshakeProCmdHandler;
 import org.tio.im.server.http.HttpServerHandler;
 import org.tio.im.server.tcp.TcpServerHandler;
 import org.tio.im.server.ws.WsServerHandler;
@@ -32,25 +33,24 @@ public class ImServerAioHandler implements ServerAioHandler {
 	private  CommandManager commandManager = CommandManager.getInstance();
 	private  ServerHandlerManager serverHandlerManager = ServerHandlerManager.getInstance();
 	
-	public void init(ServerGroupContext serverGroupContext) {
+	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
 		commandManager
-		.registerCommand(new HandshakeReqHandler())
+		.registerCommand(new HandshakeReqHandler()
+		.addProcCmdHandler(new WsHandshakeProCmdHandler())
+		.addProcCmdHandler(new TcpHandshakeProCmdHandler()))
 		.registerCommand(new AuthReqHandler())
 		.registerCommand(new LoginReqHandler())
 		.registerCommand(new ChatReqHandler())
 		.registerCommand(new JoinGroupReqHandler())
 		.registerCommand(new HeartbeatReqHandler())
 		.registerCommand(new CloseReqHandler())
-		.registerCommand(new UserReqHandler())
-		//添加不同协议的Cmd命令处理器;
-		.addProCmdHandler(new WsProCmdHandler())
-		.addProCmdHandler(new TcpProCmdHandler());
+		.registerCommand(new UserReqHandler());
 		
 		serverHandlerManager
 		.addServerHandler(new HttpServerHandler())
 		.addServerHandler(new TcpServerHandler())
 		.addServerHandler(new WsServerHandler())
-		.init(serverGroupContext);
+		.init(serverGroupContext,imConfig);
 	}
 	/** 
 	 * @see org.tio.core.intf.AioHandler#handler(org.tio.core.intf.Packet)

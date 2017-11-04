@@ -102,6 +102,10 @@ public class HttpConfig {
 	 * 2、绝对路径：/page
 	 */
 	private String pageRoot = null;//FileUtil.getAbsolutePath("page");//"/page";
+	/**
+	 * mvc扫描包路径;
+	 */
+	private String[] scanPackages = null;
 
 	//	/**
 	//	 * @return the httpSessionManager
@@ -116,7 +120,9 @@ public class HttpConfig {
 	//	public void setHttpSessionManager(HttpSessionManager httpSessionManager) {
 	//		this.httpSessionManager = httpSessionManager;
 	//	}
-
+	
+	public HttpConfig() {}
+	
 	/**
 	 *
 	 * @author tanyaowu
@@ -127,7 +133,7 @@ public class HttpConfig {
 			this.sessionTimeout = sessionTimeout;
 		}
 	}
-
+	
 	//	private File rootFile = null;
 
 	/**
@@ -285,4 +291,13 @@ public class HttpConfig {
 	public void setHttpRequestHandler(IHttpRequestHandler httpRequestHandler) {
 		this.httpRequestHandler = httpRequestHandler;
 	}
+
+	public String[] getScanPackages() {
+		return scanPackages;
+	}
+
+	public void setScanPackages(String[] scanPackages) {
+		this.scanPackages = scanPackages;
+	}
+	
 }

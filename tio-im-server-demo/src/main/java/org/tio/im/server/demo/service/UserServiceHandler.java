@@ -1,4 +1,7 @@
-package org.tio.im.server.service;
+/**
+ * 
+ */
+package org.tio.im.server.demo.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,22 +9,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+import org.tio.core.ChannelContext;
 import org.tio.im.common.Const;
+import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.packets.Group;
+import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Md5;
-
+import org.tio.im.server.command.handler.proc.login.LoginReqCmdIntf;
 import com.xiaoleilu.hutool.util.RandomUtil;
 
 /**
- * 这个类是mock类，用户实际项目中需要用自己的代码替换现有的代码
- * @author tanyaowu 
- * 2017年5月8日 下午6:12:47
+ * @author WChao
+ *
  */
-public class UserService {
+public class UserServiceHandler implements LoginReqCmdIntf{
 
+	@Override
+	public boolean isProtocol(ChannelContext channelContext) {
+		 
+		return true;
+	}
+
+	@Override
+	public String name() {
+		
+		return "default";
+	}
+
+	@Override
+	public User getUser(LoginReqBody loginReqBody , ChannelContext channelContext) {
+		String loginname = loginReqBody.getLoginname();
+		String password = loginReqBody.getPassword();
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		String handshakeToken = imSessionContext.getToken();
+		if (!StringUtils.isBlank(handshakeToken)) {
+			return this.getUser(handshakeToken);
+		}
+		return this.getUser(loginname, password);
+	}
 	public static final Map<String, User> tokenMap = new HashMap<>();
 
 	private static String[] familyName = new String[] { "谭", "刘", "张", "李", "胡", "沈", "朱", "钱", "王", "伍", "赵", "孙", "吕", "马", "秦", "毛", "成", "梅", "黄", "郭", "杨", "季", "童", "习", "郑",
@@ -33,19 +62,13 @@ public class UserService {
 			"子家", "德利优视", "五方会谈", "来电话了", "T-IO", "Talent" ,"轨迹","超"};
 	
 	/**
-	 * 
-	 * @author: tanyaowu
-	 */
-	public UserService() {}
-
-	/**
 	 * 根据用户名和密码获取用户
 	 * @param loginname
 	 * @param password
 	 * @return
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
-	public static User getUser(String loginname, String password) {
+	public User getUser(String loginname, String password) {
 		String text = loginname+password;
 		String key = Const.authkey;
 		String token = Md5.sign(text, key, HttpConst.CHARSET_NAME);
@@ -57,9 +80,9 @@ public class UserService {
 	 * 根据token获取用户信息
 	 * @param token
 	 * @return
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
-	public static User getUser(String token) {
+	public User getUser(String token) {
 		//demo中用map，生产环境需要用cache
 		User user = tokenMap.get(token);
 		if (user == null) {
@@ -79,13 +102,13 @@ public class UserService {
 		return user;
 	}
 	
-	public static List<Group> initGroups(User user){
+	public List<Group> initGroups(User user){
 		//模拟的群组;正式根据业务去查数据库或者缓存;
 		List<Group> groups = new ArrayList<Group>();
 		groups.add(new Group("100","tio-im朋友圈"));
 		return groups;
 	}
-	public static List<Group> initFriends(User user){
+	public List<Group> initFriends(User user){
 		List<Group> friends = new ArrayList<Group>();
 		Group myFriend = new Group("1","我的好友");
 		List<User> myFriendGroupUsers = new ArrayList<User>();
@@ -99,11 +122,11 @@ public class UserService {
 		return friends;
 	}
 	
-	public static String nextImg() {
+	public String nextImg() {
 		return ImgMnService.nextImg();
 	}
 
-	public static String newToken() {
+	public String newToken() {
 		return UUID.randomUUID().toString();
 	}
 }

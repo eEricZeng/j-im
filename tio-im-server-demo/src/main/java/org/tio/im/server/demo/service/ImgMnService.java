@@ -1,4 +1,4 @@
-package org.tio.im.server.service;
+package org.tio.im.server.demo.service;
 
 import java.io.File;
 import java.io.IOException;

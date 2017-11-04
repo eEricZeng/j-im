@@ -1,4 +1,4 @@
-package org.tio.im.server.ws;
+package org.tio.im.common.ws;
 
 import org.tio.im.common.http.HttpConst;
 
