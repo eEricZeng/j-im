@@ -28,29 +28,6 @@ import com.xiaoleilu.hutool.util.RandomUtil;
  */
 public class UserServiceHandler implements LoginReqCmdIntf{
 
-	@Override
-	public boolean isProtocol(ChannelContext channelContext) {
-		 
-		return true;
-	}
-
-	@Override
-	public String name() {
-		
-		return "default";
-	}
-
-	@Override
-	public User getUser(LoginReqBody loginReqBody , ChannelContext channelContext) {
-		String loginname = loginReqBody.getLoginname();
-		String password = loginReqBody.getPassword();
-		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		String handshakeToken = imSessionContext.getToken();
-		if (!StringUtils.isBlank(handshakeToken)) {
-			return this.getUser(handshakeToken);
-		}
-		return this.getUser(loginname, password);
-	}
 	public static final Map<String, User> tokenMap = new HashMap<>();
 
 	private static String[] familyName = new String[] { "谭", "刘", "张", "李", "胡", "沈", "朱", "钱", "王", "伍", "赵", "孙", "吕", "马", "秦", "毛", "成", "梅", "黄", "郭", "杨", "季", "童", "习", "郑",
@@ -128,5 +105,29 @@ public class UserServiceHandler implements LoginReqCmdIntf{
 
 	public String newToken() {
 		return UUID.randomUUID().toString();
+	}
+	
+	@Override
+	public User getUser(LoginReqBody loginReqBody , ChannelContext channelContext) {
+		String loginname = loginReqBody.getLoginname();
+		String password = loginReqBody.getPassword();
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		String handshakeToken = imSessionContext.getToken();
+		if (!StringUtils.isBlank(handshakeToken)) {
+			return this.getUser(handshakeToken);
+		}
+		return this.getUser(loginname, password);
+	}
+	
+	@Override
+	public boolean isProtocol(ChannelContext channelContext) {
+		 
+		return true;
+	}
+
+	@Override
+	public String name() {
+		
+		return "default";
 	}
 }

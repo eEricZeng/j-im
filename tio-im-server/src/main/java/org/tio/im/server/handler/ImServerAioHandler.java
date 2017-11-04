@@ -25,7 +25,7 @@ import org.tio.server.ServerGroupContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
- * @author tanyaowu 
+ * @author WChao 
  *
  */
 public class ImServerAioHandler implements ServerAioHandler {
