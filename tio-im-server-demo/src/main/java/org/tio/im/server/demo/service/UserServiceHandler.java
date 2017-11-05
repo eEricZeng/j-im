@@ -19,14 +19,14 @@ import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Md5;
-import org.tio.im.server.command.handler.proc.login.LoginReqCmdIntf;
+import org.tio.im.server.command.handler.proc.login.LoginCmdHandlerIntf;
 import com.xiaoleilu.hutool.util.RandomUtil;
 
 /**
  * @author WChao
  *
  */
-public class UserServiceHandler implements LoginReqCmdIntf{
+public class UserServiceHandler implements LoginCmdHandlerIntf{
 
 	public static final Map<String, User> tokenMap = new HashMap<>();
 

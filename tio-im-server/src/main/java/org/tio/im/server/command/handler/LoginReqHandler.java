@@ -16,7 +16,7 @@ import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-import org.tio.im.server.command.handler.proc.login.LoginReqCmdIntf;
+import org.tio.im.server.command.handler.proc.login.LoginCmdHandlerIntf;
 import com.alibaba.fastjson.JSONObject;
 
 public class LoginReqHandler extends AbCmdHandler {
@@ -34,7 +34,7 @@ public class LoginReqHandler extends AbCmdHandler {
 			Aio.remove(channelContext, "no login serviceHandler processor!");
 			return null;
 		}
-		LoginReqCmdIntf loginServiceHandler = (LoginReqCmdIntf)loginProCmdHandler;
+		LoginCmdHandlerIntf loginServiceHandler = (LoginCmdHandlerIntf)loginProCmdHandler;
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		LoginReqBody loginReqBody = JSONObject.parseObject(packet.getBody(),LoginReqBody.class);
 		

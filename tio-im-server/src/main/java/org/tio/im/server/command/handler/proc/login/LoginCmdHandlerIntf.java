@@ -12,7 +12,7 @@ import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
  * @author mobo-pc
  *
  */
-public interface LoginReqCmdIntf extends ProCmdHandlerIntf{
+public interface LoginCmdHandlerIntf extends ProCmdHandlerIntf{
 	
 	public User getUser(LoginReqBody loginReqBody ,ChannelContext channelContext);
 }
