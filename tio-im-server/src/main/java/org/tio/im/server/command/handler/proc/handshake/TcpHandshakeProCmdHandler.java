@@ -16,7 +16,7 @@ import org.tio.im.common.utils.Resps;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月11日 下午8:11:34
  */
-public class TcpHandshakeProCmdHandler implements HandshakeProCmdIntf {
+public class TcpHandshakeProCmdHandler implements HandshakeProCmdHandlerIntf {
 
 	@Override
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {

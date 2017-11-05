@@ -9,24 +9,18 @@ import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.http.HttpConst;
-import org.tio.im.common.http.HttpRequest;
-import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
-import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.packets.RespBody;
+import org.tio.im.common.ws.IWsMsgHandler;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsServerConfig;
-import org.tio.im.common.ws.WsSessionContext;
-import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.ChatReqHandler;
-import org.tio.im.server.command.handler.LoginReqHandler;
-
 import com.alibaba.fastjson.JSONObject;
 /**
- * @author tanyaowu 
+ * @author WChao 
  * 2017年6月28日 下午5:32:38
  */
 public class WsMsgHandler implements IWsMsgHandler{
@@ -34,44 +28,13 @@ public class WsMsgHandler implements IWsMsgHandler{
 
 	private WsServerConfig wsServerConfig = null;
 
-	/** 
-	 * @param httpRequestPacket
-	 * @param httpResponsePacket
-	 * @param channelContext
-	 * @return
-	 * @throws Exception
-	 * @author: tanyaowu
-	 */
-	@Override
-	public WsResponsePacket handshake(HttpRequest request, HttpResponse response,ChannelContext channelContext) throws Exception {
-		if(request.getParams() == null)
-			return null;
-		WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();
-		LoginReqHandler loginHandler = (LoginReqHandler)CommandManager.getInstance().getCommand(Command.COMMAND_LOGIN_REQ);
-		String username = request.getParams().get("username") == null ? null : (String)request.getParams().get("username")[0];
-		String password = request.getParams().get("password") == null ? null : (String)request.getParams().get("password")[0];
-		String token = request.getParams().get("token") == null ? null : (String)request.getParams().get("token")[0];
-		LoginReqBody loginBody = new LoginReqBody(username,password,token);
-		byte[] loginBytes = JSONObject.toJSONBytes(loginBody);
-		request.setBody(loginBytes);
-		request.setBodyString(new String(loginBytes,HttpConst.CHARSET_NAME));
-		Object loginResponse = loginHandler.handler(request, channelContext);
-		if(loginResponse == null)
-			return null;
-		WsResponsePacket wsResponsePacket = new WsResponsePacket();
-		wsResponsePacket.setHandShake(true);
-		wsResponsePacket.setCommand(Command.COMMAND_HANDSHAKE_RESP);
-		wsSessionContext.setHandshaked(true);
-		return wsResponsePacket;
-	}
-
 	/**
 	 * 
 	 * @param websocketPacket
 	 * @param text
 	 * @param channelContext
 	 * @return 可以是WsResponsePacket、String、null
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	@Override
 	public Object onText(WsRequestPacket wsRequestPacket, String text, ChannelContext channelContext) throws Exception {
@@ -94,7 +57,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 * @param bytes
 	 * @param channelContext
 	 * @return 可以是WsResponsePacket、byte[]、ByteBuffer、null
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	@Override
 	public Object onBytes(WsRequestPacket websocketPacket, byte[] bytes, ChannelContext channelContext) throws Exception {
@@ -110,7 +73,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 	 * @param channelContext
 	 * @return
 	 * @throws Exception
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public WsResponsePacket handler(ImPacket imPacket, ChannelContext channelContext)throws Exception {
 		WsRequestPacket wsRequest = (WsRequestPacket)imPacket;
@@ -191,7 +154,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 
 	/**
 	 * 
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public WsMsgHandler(WsServerConfig wsServerConfig, String[] scanPackages) {
 		this.setWsServerConfig(wsServerConfig);

@@ -10,7 +10,7 @@ import org.tio.core.ChannelContext;
  * @author WChao
  *
  */
-public interface ProCmdIntf {
+public interface ProCmdHandlerIntf {
 	
 	public boolean isProtocol(ChannelContext channelContext);
 	public String name();

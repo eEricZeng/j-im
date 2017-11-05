@@ -9,7 +9,7 @@ import org.tio.im.common.packets.Command;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月8日 下午4:29:38
  */
-public interface BsCmdHandlerIntf
+public interface CmdHandlerIntf
 {
 	/**
 	 * 

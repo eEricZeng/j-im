@@ -26,6 +26,7 @@ import org.tio.im.common.packets.Message;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
+import org.tio.im.common.ws.IWsMsgHandler;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
@@ -33,13 +34,12 @@ import org.tio.im.common.ws.WsServerConfig;
 import org.tio.im.common.ws.WsServerDecoder;
 import org.tio.im.common.ws.WsServerEncoder;
 import org.tio.im.common.ws.WsSessionContext;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.server.ServerGroupContext;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.kit.PropKit;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -61,10 +61,10 @@ public class WsServerHandler extends AbServerHandler{
 	}
 	@Override
 	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
-		PropKit.use("app.properties");
-		int port = PropKit.getInt("port");//启动端口
-		this.wsServerConfig = new WsServerConfig(port);
+		this.wsServerConfig = new WsServerConfig();
+		imConfig.setWsServerConfig(wsServerConfig);
 		this.wsMsgHandler = new WsMsgHandler();
+		this.wsServerConfig.setWsMsgHandler(wsMsgHandler);
 		logger.info("wsServerHandler 初始化完毕...");
 	}
 
@@ -103,7 +103,7 @@ public class WsServerHandler extends AbServerHandler{
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
+		AbCmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
 			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText()).setCommand(Command.COMMAND_UNKNOW);
 			ImPacket responsePacket = Resps.convertRespPacket(respBody, channelContext);

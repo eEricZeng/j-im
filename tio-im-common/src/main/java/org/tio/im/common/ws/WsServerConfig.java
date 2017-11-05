@@ -10,31 +10,23 @@ import org.tio.im.common.http.HttpConst;
  */
 public class WsServerConfig {
 	
-	private String bindIp = null;//"127.0.0.1";
+	private String bindIp = null;
 	
 	private Integer bindPort = 9322;
 	
 	private String charset = HttpConst.CHARSET_NAME;
-
+	
+	private IWsMsgHandler wsMsgHandler;
+	
+	public WsServerConfig(){};
 	/**
 	 * 
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public WsServerConfig(Integer bindPort) {
 		
 		this.bindPort = bindPort;
 	}
-
-	/**
-	 * @param args
-	 * @author: tanyaowu
-	 */
-	public static void main(String[] args) {
-
-	}
-
-	
-
 	/**
 	 * @return the bindIp
 	 */
@@ -69,7 +61,13 @@ public class WsServerConfig {
 	public void setCharset(String charset) {
 		this.charset = charset;
 	}
-
-
-
+	public IWsMsgHandler getWsMsgHandler() {
+		return wsMsgHandler;
+	}
+	public void setWsMsgHandler(IWsMsgHandler wsMsgHandler) {
+		this.wsMsgHandler = wsMsgHandler;
+	}
+	public void setBindPort(Integer bindPort) {
+		this.bindPort = bindPort;
+	}
 }

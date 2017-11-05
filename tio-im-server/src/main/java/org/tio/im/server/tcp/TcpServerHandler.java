@@ -24,7 +24,7 @@ import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.server.ServerGroupContext;
@@ -72,7 +72,7 @@ public class TcpServerHandler extends AbServerHandler{
 		String message = new String(tcpPacket.getBody(),Const.CHARSET);
 		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
 		logger.info(onText);
-		CmdHandler cmdHandler = CommandManager.getInstance().getCommand(tcpPacket.getCommand());
+		AbCmdHandler cmdHandler = CommandManager.getInstance().getCommand(tcpPacket.getCommand());
 		if(cmdHandler == null){
 			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText()).setCommand(Command.COMMAND_UNKNOW);
 			ImPacket responsePacket = Resps.convertRespPacket(respBody, channelContext);

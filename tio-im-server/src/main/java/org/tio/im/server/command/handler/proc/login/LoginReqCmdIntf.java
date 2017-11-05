@@ -6,13 +6,13 @@ package org.tio.im.server.command.handler.proc.login;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.packets.LoginReqBody;
 import org.tio.im.common.packets.User;
-import org.tio.im.server.command.handler.proc.ProCmdIntf;
+import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 
 /**
  * @author mobo-pc
  *
  */
-public interface LoginReqCmdIntf extends ProCmdIntf{
+public interface LoginReqCmdIntf extends ProCmdHandlerIntf{
 	
 	public User getUser(LoginReqBody loginReqBody ,ChannelContext channelContext);
 }

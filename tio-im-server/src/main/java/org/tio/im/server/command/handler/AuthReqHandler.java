@@ -9,7 +9,7 @@ import org.tio.im.common.packets.AuthReqBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 
 import com.alibaba.fastjson.JSONObject;
 /**
@@ -18,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月13日 下午1:39:35
  */
-public class AuthReqHandler extends CmdHandler
+public class AuthReqHandler extends AbCmdHandler
 {
 	
 	private Logger logger = Logger.getLogger(AuthReqHandler.class);

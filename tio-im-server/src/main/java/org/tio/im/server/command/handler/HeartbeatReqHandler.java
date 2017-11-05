@@ -9,9 +9,9 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.HeartbeatBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 
-public class HeartbeatReqHandler extends CmdHandler
+public class HeartbeatReqHandler extends AbCmdHandler
 {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(HeartbeatReqHandler.class);

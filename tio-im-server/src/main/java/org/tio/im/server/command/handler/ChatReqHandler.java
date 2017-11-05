@@ -15,7 +15,7 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -24,7 +24,7 @@ import com.alibaba.fastjson.JSONObject;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月22日 下午2:58:59
  */
-public class ChatReqHandler extends CmdHandler {
+public class ChatReqHandler extends AbCmdHandler {
 
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {

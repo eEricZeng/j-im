@@ -14,7 +14,7 @@ import org.tio.im.common.packets.Command;
  */
 public class CommandManager{
 	
-	private  Map<Command, CmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
+	private  Map<Command, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
 	
 	private CommandManager(){};
 	private static CommandManager instance = null;
@@ -30,7 +30,7 @@ public class CommandManager{
 		return instance;
 	}
 	
-	public CommandManager registerCommand(CmdHandler imCommandHandler){
+	public CommandManager registerCommand(AbCmdHandler imCommandHandler){
 		if(handlerMap.get(imCommandHandler.command()) == null)
 		{
 			handlerMap.put(imCommandHandler.command(),imCommandHandler);
@@ -48,14 +48,14 @@ public class CommandManager{
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getCommand(Command command,Class<T> clazz){
-		CmdHandler cmdHandler = this.getCommand(command);
+		AbCmdHandler cmdHandler = this.getCommand(command);
 		if(cmdHandler != null){
 			return (T)cmdHandler;
 		}
 		return null;
 	}
 	
-	public CmdHandler getCommand(Command command){
+	public AbCmdHandler getCommand(Command command){
 		if(command == null)
 			return null;
 		

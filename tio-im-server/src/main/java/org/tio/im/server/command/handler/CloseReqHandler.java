@@ -6,9 +6,9 @@ import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 
-public class CloseReqHandler extends CmdHandler
+public class CloseReqHandler extends AbCmdHandler
 {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(CloseReqHandler.class);

@@ -15,7 +15,7 @@ import org.tio.im.common.ws.WsSessionContext;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月11日 下午4:22:36
  */
-public class WsHandshakeProCmdHandler implements HandshakeProCmdIntf {
+public class WsHandshakeProCmdHandler implements HandshakeProCmdHandlerIntf {
 
 	/**
 	 * 对httpResponsePacket参数进行补充并返回，如果返回null表示不想和对方建立连接，框架会断开连接，如果返回非null，框架会把这个对象发送给对方

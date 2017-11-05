@@ -14,12 +14,12 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
-import org.tio.im.server.command.handler.proc.ProCmdIntf;
+import org.tio.im.server.command.AbCmdHandler;
+import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 import org.tio.im.server.command.handler.proc.login.LoginReqCmdIntf;
 import com.alibaba.fastjson.JSONObject;
 
-public class LoginReqHandler extends CmdHandler {
+public class LoginReqHandler extends AbCmdHandler {
 	private static Logger log = LoggerFactory.getLogger(LoginReqHandler.class);
 
 	@Override
@@ -28,7 +28,7 @@ public class LoginReqHandler extends CmdHandler {
 			Aio.remove(channelContext, "body is null");
 			return null;
 		}
-		ProCmdIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
+		ProCmdHandlerIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
 		if(loginProCmdHandler == null){
 			log.info("登录失败,没有业务处理器!");
 			Aio.remove(channelContext, "no login serviceHandler processor!");

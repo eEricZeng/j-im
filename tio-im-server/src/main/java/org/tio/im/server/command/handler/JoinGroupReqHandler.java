@@ -17,7 +17,7 @@ import org.tio.im.common.packets.JoinGroupResult;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.Resps;
-import org.tio.im.server.command.CmdHandler;
+import org.tio.im.server.command.AbCmdHandler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoleilu.hutool.util.BeanUtil;
@@ -28,7 +28,7 @@ import com.xiaoleilu.hutool.util.BeanUtil;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月21日 下午3:33:23
  */
-public class JoinGroupReqHandler extends CmdHandler {
+public class JoinGroupReqHandler extends AbCmdHandler {
 	
 	private static Logger log = LoggerFactory.getLogger(JoinGroupReqHandler.class);
 	
