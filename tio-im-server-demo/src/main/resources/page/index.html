@@ -36,7 +36,7 @@ function connect(){
 	username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
 	logDiv = document.getElementById('logs');
-	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&passowrd="+password);
+	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&password="+password);
 	socket.onopen = function(e){
 		logDiv.innerHTML+="<font color='green' size='1'>登录成功...</font><br>";
 		var userCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+username+"\"}";
