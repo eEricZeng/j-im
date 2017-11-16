@@ -12,6 +12,7 @@ import org.tio.im.server.command.handler.LoginReqHandler;
 import org.tio.im.server.demo.command.WsHandshakeHandler;
 import org.tio.im.server.demo.init.HttpServerInit;
 import org.tio.im.server.demo.listener.ImDemoAioListener;
+import org.tio.im.server.demo.service.ImgMnService;
 import org.tio.im.server.demo.service.UserServiceHandler;
 
 import com.jfinal.kit.PropKit;
@@ -26,8 +27,9 @@ public class ImServerDemoStart {
 	public static void main(String[] args)throws Exception{
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
-		ImConfig imConfig = new ImConfig("127.0.0.1", port);
+		ImConfig imConfig = new ImConfig(null, port);
 		HttpServerInit.init(imConfig);
+		ImgMnService.start();//启动爬虫爬取模拟在线人头像;
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getInstance().getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
 		handshakeReqHandler.addProcCmdHandler(new WsHandshakeHandler());//添加自定义握手处理器;

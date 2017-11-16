@@ -18,6 +18,8 @@ public class TcpPacket extends ImPacket{
 	private byte version = 0;
 	private byte mask = 0;
 	
+	public TcpPacket(){}
+	
 	public TcpPacket(Command command, byte[] body){
 		super(command, body);
 	}

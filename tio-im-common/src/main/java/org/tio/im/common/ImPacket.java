@@ -32,8 +32,7 @@ public class ImPacket extends Packet
 	
 	public ImPacket(Command command)
 	{
-		this();
-		this.setCommand(command);
+		this(command,null);
 	}
 
 	public static byte encodeEncrypt(byte bs,boolean isEncrypt){

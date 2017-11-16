@@ -12,6 +12,7 @@ import org.tio.im.common.Const;
 import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.LoginReqBody;
+import org.tio.im.common.tcp.TcpPacket;
 
 import com.alibaba.fastjson.JSONObject;
 /**
@@ -52,8 +53,8 @@ public class HelloClientStarter {
 	}
 
 	private static void send() throws Exception {
-		byte[] loginBody = JSONObject.toJSONBytes(new LoginReqBody("test1","123"));
-		HelloPacket loginPacket = new HelloPacket(Command.COMMAND_LOGIN_REQ,loginBody);
+		byte[] loginBody = JSONObject.toJSONBytes(new LoginReqBody("test","123"));
+		TcpPacket loginPacket = new TcpPacket(Command.COMMAND_LOGIN_REQ,loginBody);
 		Aio.send(clientChannelContext, loginPacket);//先登录;
 		ChatBody chatBody = new ChatBody()
 				.setFrom("hello_client")
@@ -62,7 +63,7 @@ public class HelloClientStarter {
 				.setChatType(1)
 				.setGroup_id("100")
 				.setContent("普通Socket客户端转Ws消息测试!");
-		HelloPacket chatPacket = new HelloPacket(Command.COMMAND_CHAT_REQ,chatBody.toString().getBytes("utf-8"));
+		TcpPacket chatPacket = new TcpPacket(Command.COMMAND_CHAT_REQ,chatBody.toByte());
 		Aio.send(clientChannelContext, chatPacket);
 	}
 }

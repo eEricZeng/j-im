@@ -20,7 +20,9 @@ public enum ImStatus implements Status{
 	C300(300,"ok","鉴权成功!"),
 	C301(301,"auth failed!","鉴权失败!"),
 	C400(400,"join group ok!","加入群组成功!"),
-	C401(401,"join group failed!","加入群组失败!");
+	C401(401,"join group failed!","加入群组失败!"),
+	C1001(1001,"Protocol version number does not match","协议版本号不匹配!"),
+	C1002(1002,"unsupported cmd command","不支持的cmd命令!");
 	
 	private int status;
 	
