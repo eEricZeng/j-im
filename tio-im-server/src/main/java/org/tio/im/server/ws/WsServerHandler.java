@@ -137,6 +137,8 @@ public class WsServerHandler extends AbServerHandler{
 			return wsRequestPacket;
 		}else{
 			WsRequestPacket wsRequestPacket = WsServerDecoder.decode(buffer, channelContext);
+			if(wsRequestPacket == null)
+				return null;
 			Command command = null;
 			if(wsRequestPacket.getWsOpcode() == Opcode.CLOSE){
 				command = Command.COMMAND_CLOSE_REQ;
