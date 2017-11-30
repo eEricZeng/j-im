@@ -12,14 +12,15 @@ import java.util.List;
  */
 public class Group extends Message{
 	
+	private String group_id;
 	private String name;//群组名称;
 	private String avatar;//群组头像;
 	private Integer online;//在线人数;
 	private List<User> users;//组用户;
 
 	public Group(){}
-	public Group(String id , String name){
-		this.id = id;
+	public Group(String group_id , String name){
+		this.group_id = group_id;
 		this.name = name;
 	}
 	public String getName() {
@@ -46,5 +47,11 @@ public class Group extends Message{
 	}
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+	public String getGroup_id() {
+		return group_id;
+	}
+	public void setGroup_id(String group_id) {
+		this.group_id = group_id;
 	}
 }

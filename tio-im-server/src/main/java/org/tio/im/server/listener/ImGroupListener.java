@@ -5,13 +5,13 @@ import org.tio.core.intf.GroupListener;
 import org.tio.im.common.ImAio;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
+import org.tio.im.common.packets.Client;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.ExitGroupNotifyRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xiaoleilu.hutool.util.BeanUtil;
 /**
  * @author tanyaowu 
  * 2017年5月13日 下午10:38:36
@@ -55,11 +55,13 @@ public class ImGroupListener implements GroupListener{
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		ExitGroupNotifyRespBody exitGroupNotifyRespBody = new ExitGroupNotifyRespBody();
 		exitGroupNotifyRespBody.setGroup(group);
-		
-		User notifyUser = new User();
-		BeanUtil.copyProperties(imSessionContext.getClient().getUser(), notifyUser);
-		notifyUser.setGroups(null);
-		
+		Client client = imSessionContext.getClient();
+		if(client == null)
+			return;
+		User clientUser = client.getUser();
+		if(clientUser == null)
+			return;
+		User notifyUser = new User(clientUser.getId(),clientUser.getNick());
 		exitGroupNotifyRespBody.setUser(notifyUser);
 		
 		RespBody respBody = new RespBody(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP).setData(exitGroupNotifyRespBody.toString());

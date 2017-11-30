@@ -154,8 +154,8 @@ public class ImgMnService {
 				int count = 0;
 				int invalidCount = 0;
 				for (Element e : pages) {
+					String page = e.attr("href");
 					try {
-						String page = e.attr("href");
 						Document imgdoc = Jsoup.connect(page)
 								.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36").timeout(10000)
 								.get();
@@ -164,9 +164,9 @@ public class ImgMnService {
 						int totalpage = Integer.parseInt(totalpageStr);
 						if (totalpage > 0) {
 							for (int i = 1; i <= totalpage; i++) {
-
+								String url = page.substring(0, page.length() - 5) + "_" + i + ".html";
 								try {
-									Document imgpage = Jsoup.connect(page.substring(0, page.length() - 5) + "_" + i + ".html")
+									Document imgpage = Jsoup.connect(url)
 											.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36")
 											.timeout(10000).get();
 									Elements div2 = imgpage.select("#big-pic");
@@ -198,12 +198,12 @@ public class ImgMnService {
 									i++;
 									Thread.sleep(sleeptime);
 								} catch (Exception e1) {
-									log.error(e1.toString(), e1);
+									//log.error("【"+url+"】爬取异常!");
 								}
 							}
 						}
 					} catch (IOException e1) {
-						log.error(e1.toString(), e1);
+						//log.error("【"+page+"】爬取异常!");
 					}
 				}
 				if (!isfirst) {

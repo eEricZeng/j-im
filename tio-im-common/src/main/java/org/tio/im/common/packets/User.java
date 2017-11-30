@@ -20,6 +20,11 @@ public class User{
 	private List<Group> friends;//好友列表;
 	private List<Group> groups;//群组列表;
 	
+	public User(){}
+	public User(String id , String nick){
+		this.id = id;
+		this.nick = nick;
+	}
 	public String getNick() {
 		return nick;
 	}

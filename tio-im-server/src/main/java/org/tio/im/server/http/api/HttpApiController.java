@@ -19,7 +19,7 @@ import org.tio.im.server.http.annotation.RequestPath;
 public class HttpApiController {
 	
 	@RequestPath(value = "/message/send")
-	public HttpResponse json(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
+	public HttpResponse chat(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
 		HttpResponse response = new HttpResponse(request,httpConfig);
 		ImPacket chatPacket = new ChatReqHandler().handler(request, channelContext);
 		if(chatPacket != null){

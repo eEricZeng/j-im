@@ -20,8 +20,6 @@ import org.tio.im.common.utils.Resps;
 import org.tio.im.server.command.AbCmdHandler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xiaoleilu.hutool.util.BeanUtil;
-
 /**
  * 
  * 版本: [1.0]
@@ -34,20 +32,44 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
+		
+		ImPacket joinGroupRespPacket = bindGroup(packet, channelContext);//绑定群组;
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		
+		User clientUser = imSessionContext.getClient().getUser();
+		User notifyUser = new User(clientUser.getId(),clientUser.getNick());
+		
+		Group joinGroup = JSONObject.parseObject(packet.getBody(),Group.class);
+		String groupId = joinGroup.getGroup_id();
+		//发进房间通知  COMMAND_JOIN_GROUP_NOTIFY_RESP
+		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
+		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP).setData(joinGroupNotifyRespBody.toString());
+		
+		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(notifyRespBody));
+		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
+		
+		return joinGroupRespPacket;
+	}
+	/**
+	 * 绑定群组
+	 * @param packet
+	 * @param channelContext
+	 * @return
+	 * @throws Exception
+	 */
+	public ImPacket bindGroup(ImPacket packet, ChannelContext channelContext) throws Exception {
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}
-
 		Group joinGroup = JSONObject.parseObject(packet.getBody(),Group.class);
 
-		String groupId = joinGroup.getId();
+		String groupId = joinGroup.getGroup_id();
 		if (StringUtils.isBlank(groupId)) {
 			log.error("group is null,{}", channelContext);
 			Aio.close(channelContext, "group is null when join group");
 			return null;
 		}
 		
-		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		Aio.bindGroup(channelContext, groupId);
 
 		//回一条消息，告诉对方进群结果
@@ -59,23 +81,11 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		
 		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C400).setData(joinGroupRespBody.toString());
 		ImPacket respPacket = Resps.convertRespPacket(joinRespBody, channelContext);
-		
-		User notifyUser = new User();
-		BeanUtil.copyProperties(imSessionContext.getClient().getUser(), notifyUser);
-		notifyUser.setGroups(null);
-		
-		//发进房间通知  COMMAND_JOIN_GROUP_NOTIFY_RESP
-		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
-		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP).setData(joinGroupNotifyRespBody.toString());
-		
-		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP, JSONObject.toJSONBytes(notifyRespBody));
-		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
-		
 		return respPacket;
 	}
 	@Override
 	public Command command() {
-		// TODO Auto-generated method stub
+		
 		return Command.COMMAND_JOIN_GROUP_REQ;
 	}
 }
