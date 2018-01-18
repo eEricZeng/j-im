@@ -105,6 +105,7 @@ public class ImAio {
 		if(channels.size() > 0){
 			for(ChannelContext channelContext : channels){
 				ImPacket respPacket = Resps.convertRespPacket(packet.getBody(),packet.getCommand(),channelContext);
+				respPacket.setSynSeq(packet.getSynSeq());
 				Aio.sendToId(groupContext,channelContext.getId(), respPacket);
 			}
 		}

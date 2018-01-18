@@ -28,10 +28,12 @@ public class ChatReqHandler extends AbCmdHandler {
 
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		/*ProCmdHandlerIntf imHandler = cmdManager.getProCmdHandler(channelContext);
-		return imHandler.chat(packet, channelContext);*/
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
+		}
+		Integer synSeq = 0;
+		if(packet.getImSynSeq() > 0){//设置同步序列号;
+			synSeq = packet.getImSynSeq();
 		}
 		ChatBody chatBody = ChatReqHandler.parseChatBody(packet.getBody(), channelContext);
 		if(chatBody == null){
@@ -42,6 +44,7 @@ public class ChatReqHandler extends AbCmdHandler {
 			ImPacket respChatPacket = ChatReqHandler.convertChatResPacket(chatBody, channelContext);
 			ChannelContext toChannleContext = ChatReqHandler.getToChannel(chatBody, channelContext.getGroupContext());
 			if(toChannleContext != null){
+				respChatPacket.setSynSeq(synSeq);
 				Aio.send(toChannleContext, respChatPacket);
 				RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C1);
 				return Resps.convertRespPacket(chatStatusPacket, channelContext);
@@ -51,6 +54,7 @@ public class ChatReqHandler extends AbCmdHandler {
 		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
 			String group_id = chatBody.getGroup_id();
 			ImPacket imPacket = new ImPacket(Command.COMMAND_CHAT_RESP,JSONObject.toJSONBytes(new RespBody(Command.COMMAND_CHAT_RESP).setData(chatBody.toString())));
+			imPacket.setSynSeq(synSeq);
 			ImAio.sendToGroup(channelContext.getGroupContext(), group_id, imPacket);
 			RespBody chatStatusPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C1);
 			return Resps.convertRespPacket(chatStatusPacket, channelContext);

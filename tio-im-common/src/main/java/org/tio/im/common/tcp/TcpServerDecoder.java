@@ -4,10 +4,14 @@
 package org.tio.im.common.tcp;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.core.exception.AioDecodeException;
+import org.tio.core.intf.Packet;
+import org.tio.core.maintain.ChannelContextMapWithLock;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
 import org.tio.im.common.packets.Command;
@@ -29,7 +33,12 @@ public class TcpServerDecoder {
 		if(version != Protocol.VERSION){
 			throw new AioDecodeException(ImStatus.C1001.getText());
 		}
+		//标志位
 		byte maskByte = buffer.get();
+		Integer synSeq = 0;
+		if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+			synSeq = buffer.getInt();
+		}
 		//cmd命令码
 		byte cmdByte = buffer.get();
 		if(Command.forNumber(cmdByte) == null){
@@ -45,10 +54,36 @@ public class TcpServerDecoder {
 		byte[] body = new byte[bodyLen];
 		buffer.get(body,0,bodyLen);
 		logger.info("TCP解码成功...");
-		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+1byte命令码+4byte消息的长度+消息体的长度
+		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte同步序列号(如果是同步发送则多4byte同步序列号,否则无4byte序列号)+1byte命令码+4byte消息的长度+消息体的长度
 		TcpPacket tcpPacket = new TcpPacket(Command.forNumber(cmdByte), body);
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
+		if(synSeq > 0){//同步发送设置同步序列号
+			tcpPacket.setImSynSeq(synSeq);
+			ChannelContextMapWithLock syns = channelContext.getGroupContext().getWaitingResps();
+			Map<Integer,Packet> waitingsMap = syns.getMap().getObj();
+			if(waitingsMap.get(synSeq) != null){
+				tcpPacket.setSynSeq(synSeq);
+			}
+		}
+		return tcpPacket;
+	}
+	/**
+	 * 解码(同步发送时用到)
+	 * @param buffer
+	 * @param channelContext
+	 * @param isServer(是否服务端解码)
+	 * @return
+	 * @throws AioDecodeException
+	 */
+	public static TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext,boolean isServer) throws AioDecodeException{
+		TcpPacket tcpPacket = decode(buffer,channelContext);
+		if(tcpPacket != null)
+		{
+			if(isServer){//是否服务端解码
+				tcpPacket.setSynSeq(0);
+			}
+		}
 		return tcpPacket;
 	}
 	/**
@@ -58,26 +93,34 @@ public class TcpServerDecoder {
 	 * @throws AioDecodeException
 	 */
 	private static boolean isCompletePacket(ByteBuffer buffer)throws AioDecodeException{
+		//协议头索引;
+		int index = 0;
 		//获取第一个字节协议版本号;
-		byte version = buffer.get(0);
+		byte version = buffer.get(index);
 		if(version != Protocol.VERSION){
 			throw new AioDecodeException(ImStatus.C1001.getText());
 		}
+		index++;
 		//标志位
-		//byte maskByte = buffer.get(1);
+		byte maskByte = buffer.get(index);
+		if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+			index += 4;
+		}
+		index++;
 		//cmd命令码
-		byte cmdByte = buffer.get(2);
+		byte cmdByte = buffer.get(index);
 		if(Command.forNumber(cmdByte) == null){
 			throw new AioDecodeException(ImStatus.C1002.getText());
 		}
+		index++;
 		//消息体长度
-		int bodyLen = buffer.getInt(3);
-		int readableLength = buffer.limit() - 7;
+		int bodyLen = buffer.getInt(index);
+		index += 4;
+		int readableLength = buffer.limit() - index;
 		if (readableLength < bodyLen)
 		{
 			return false;
 		}
 		return true;
 	}
-	
 }

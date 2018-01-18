@@ -17,6 +17,10 @@ public class ImPacket extends Packet
 	protected byte[] body;//消息体;
 	
 	private Command command;//消息命令;
+	/**
+	 * 同步发送时，需要的同步序列号
+	 */
+	private Integer imSynSeq = 0;
 	
 	public ImPacket(){}
 	
@@ -59,9 +63,9 @@ public class ImPacket extends Packet
 		}
 	}
 
-	public static boolean decodeHasSynSeq(byte firstByte)
+	public static boolean decodeHasSynSeq(byte maskByte)
 	{
-		return (Protocol.FIRST_BYTE_MASK_HAS_SYNSEQ & firstByte) != 0;
+		return (Protocol.FIRST_BYTE_MASK_HAS_SYNSEQ & maskByte) != 0;
 	}
 
 	public static byte encodeHasSynSeq(byte bs, boolean hasSynSeq)
@@ -163,5 +167,13 @@ public class ImPacket extends Packet
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public Integer getImSynSeq() {
+		return imSynSeq;
+	}
+
+	public void setImSynSeq(Integer imSynSeq) {
+		this.imSynSeq = imSynSeq;
 	}
 }

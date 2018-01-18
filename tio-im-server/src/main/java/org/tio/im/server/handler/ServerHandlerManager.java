@@ -41,7 +41,12 @@ public class ServerHandlerManager{
 		serverHandlers.put(serverHandler.name(),serverHandler);
 		return this;
 	}
-	
+	public ServerHandlerManager removeServerHandler(String name){
+		if(name == null || "".equals(name))
+			return null;
+		serverHandlers.remove(name);
+		return this;
+	}
 	public AbServerHandler getServerHandler(ByteBuffer buffer,ChannelContext channelContext){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
 			ByteBuffer copyByteBuffer = null;
