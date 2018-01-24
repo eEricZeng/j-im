@@ -57,7 +57,7 @@ public class HelloClientStarter {
 		ChatBody chatBody = new ChatBody()
 				.setFrom("hello_client")
 				.setTo("admin")
-				.setMsgType("text")
+				.setMsgType(0)
 				.setChatType(1)
 				.setGroup_id("100")
 				.setContent("Socket普通客户端消息测试!");

@@ -12,11 +12,10 @@ public class ChatBody extends Message {
 	
 	private String from;//来自channel id;
 	private String to;//目标channel id;
-	private String msgType;//消息类型;(如：text、image、vedio、news)
+	private Integer msgType;//消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)
 	private Integer chatType;//聊天类型;(如公聊、私聊)
 	private String content;//消息内容;
 	private String group_id;//消息发到哪个群组;
-	
 	public String getFrom() {
 		return from;
 	}
@@ -31,10 +30,11 @@ public class ChatBody extends Message {
 		this.to = to;
 		return this;
 	}
-	public String getMsgType() {
+	
+	public Integer getMsgType() {
 		return msgType;
 	}
-	public ChatBody setMsgType(String msgType) {
+	public ChatBody setMsgType(Integer msgType) {
 		this.msgType = msgType;
 		return this;
 	}
