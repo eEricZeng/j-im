@@ -43,17 +43,8 @@ public class TestController {
 
 	@RequestPath(value = "/abtest")
 	public HttpResponse abtest(HttpRequest request) throws Exception {
-		HttpResponse ret = HttpResps.html(request, "OK");
-		return ret;
-	}
-
-	/**
-	 * 测试映射重复
-	 */
-	@RequestPath(value = "/abtest")
-	public HttpResponse abtest1(HttpRequest request) throws Exception {
 		log.info("");
-		HttpResponse ret = HttpResps.html(request, "OK---------1");
+		HttpResponse ret = HttpResps.html(request, "OK");
 		return ret;
 	}
 
