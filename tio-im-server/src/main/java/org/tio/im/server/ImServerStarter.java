@@ -40,9 +40,8 @@ public class ImServerStarter {
 		}
 		imGroupListener = new ImGroupListener();
 		imServerGroupContext = new ImServerGroupContext(imConfig,imAioHandler, imAioListener);
-		aioServer = new AioServer(imServerGroupContext);
 		imServerGroupContext.setGroupListener(imGroupListener);
-		imServerGroupContext.setHeartbeatTimeout(this.imConfig.getHeartbeatTimeout());
+		aioServer = new AioServer(imServerGroupContext);
 	}
 	
 	public void start() throws IOException {

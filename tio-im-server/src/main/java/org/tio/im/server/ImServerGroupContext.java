@@ -16,6 +16,7 @@ public class ImServerGroupContext extends ServerGroupContext {
 
 	public ImServerGroupContext(ImConfig imConfig , ImServerAioHandler imServerAioHandler,ImServerAioListener imServerAioListener) {
 		super(imServerAioHandler, imServerAioListener);
+		this.setHeartbeatTimeout(imConfig.getHeartbeatTimeout());
 		imServerAioHandler.init(this,imConfig);
 	}
 
