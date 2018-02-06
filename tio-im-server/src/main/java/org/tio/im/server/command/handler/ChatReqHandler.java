@@ -22,17 +22,13 @@ public class ChatReqHandler extends AbCmdHandler {
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}
-		Integer synSeq = 0;
 		ChatBody chatBody = ChatKit.toChatBody(packet.getBody(), channelContext);
 		if(chatBody == null){//聊天数据格式不正确
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
 		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody.toJsonString()).toByte());
-		if(packet.getImSynSeq() > 0){//设置同步序列号;
-			synSeq = packet.getImSynSeq();
-			chatPacket.setSynSeq(synSeq);
-		}
+		chatPacket.setSynSeq(packet.getSynSeq());//设置同步序列号;
 		if(chatBody.getChatType() == null || ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){//私聊
 			SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(channelContext.getGroupContext(),chatBody.getTo());
 			if(toChannleContexts != null && toChannleContexts.size() > 0){

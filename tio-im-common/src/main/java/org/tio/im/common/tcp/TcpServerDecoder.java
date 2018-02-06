@@ -4,13 +4,9 @@
 package org.tio.im.common.tcp;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.core.exception.AioDecodeException;
-import org.tio.core.intf.Packet;
-import org.tio.core.maintain.ChannelContextMapWithLock;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.Protocol;
@@ -59,29 +55,11 @@ public class TcpServerDecoder {
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
 		if(synSeq > 0){//同步发送设置同步序列号
-			tcpPacket.setImSynSeq(synSeq);
-			ChannelContextMapWithLock syns = channelContext.getGroupContext().getWaitingResps();
-			Map<Integer,Packet> waitingsMap = syns.getMap().getObj();
-			if(waitingsMap.get(synSeq) != null){
-				tcpPacket.setSynSeq(synSeq);
-			}
-		}
-		return tcpPacket;
-	}
-	/**
-	 * 解码(同步发送时用到)
-	 * @param buffer
-	 * @param channelContext
-	 * @param isServer(是否服务端解码)
-	 * @return
-	 * @throws AioDecodeException
-	 */
-	public static TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext,boolean isServer) throws AioDecodeException{
-		TcpPacket tcpPacket = decode(buffer,channelContext);
-		if(tcpPacket != null)
-		{
-			if(isServer){//是否服务端解码
-				tcpPacket.setSynSeq(0);
+			tcpPacket.setSynSeq(synSeq);
+			try {
+				channelContext.getGroupContext().getAioHandler().handler(tcpPacket, channelContext);
+			} catch (Exception e) {
+				logger.error("同步发送解码调用handler异常!"+e);
 			}
 		}
 		return tcpPacket;

@@ -81,14 +81,14 @@ public class TcpServerHandler extends AbServerHandler{
 			return;
 		}
 		Object response = cmdHandler.handler(tcpPacket, channelContext);
-		if(response != null && tcpPacket.getImSynSeq() < 1){
+		if(response != null && tcpPacket.getSynSeq() < 1){
 			ImAio.send(channelContext,(ImPacket)response);
 		}
 	}
 
 	@Override
 	public TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
-		TcpPacket tcpPacket = TcpServerDecoder.decode(buffer, channelContext,true);
+		TcpPacket tcpPacket = TcpServerDecoder.decode(buffer, channelContext);
 		return tcpPacket;
 	}
 
