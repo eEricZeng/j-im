@@ -47,10 +47,11 @@ public class ServerHandlerManager{
 		serverHandlers.remove(name);
 		return this;
 	}
+	
 	public AbServerHandler getServerHandler(ByteBuffer buffer,ChannelContext channelContext){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
 			ByteBuffer copyByteBuffer = null;
-			if(buffer != null){
+			if(buffer != null && channelContext.getAttribute() == null){
 				copyByteBuffer = ByteBuffer.wrap(buffer.array());
 			}
 			AbServerHandler serverHandler = entry.getValue();
