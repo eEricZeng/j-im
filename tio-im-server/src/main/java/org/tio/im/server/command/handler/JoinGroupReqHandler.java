@@ -43,7 +43,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		String groupId = joinGroup.getGroup_id();
 		//发进房间通知  COMMAND_JOIN_GROUP_NOTIFY_RESP
 		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
-		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,joinGroupNotifyRespBody.toJsonString());
+		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,joinGroupNotifyRespBody);
 		
 		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
 		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
@@ -79,7 +79,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		joinGroupRespBody.setGroup(groupId);
 		joinGroupRespBody.setResult(joinGroupResult);
 		
-		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C400).setData(joinGroupRespBody.toJsonString());
+		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C400).setData(joinGroupRespBody);
 		ImPacket respPacket = ImKit.ConvertRespPacket(joinRespBody, channelContext);
 		return respPacket;
 	}

@@ -75,13 +75,13 @@ function connect(){
 	};
 }
 function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
-	var exitGroupNotify = eval("("+data.data+")");
+	var exitGroupNotify = data.data;
 	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+exitGroupNotify.user.nick+"("+exitGroupNotify.user.id+")退出群聊...</font><br>";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
 //加入群组的消息通知处理;
 function COMMAND_JOIN_GROUP_NOTIFY_RESP(data){
-	var joinGroupNotify = eval("("+data.data+")");
+	var joinGroupNotify = data.data;
 	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+joinGroupNotify.user.nick+"("+joinGroupNotify.user.id+")加入群聊...</font><br>";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
@@ -95,7 +95,7 @@ function COMMAND_CHAT_RESP_SEND_STATUS(data){
 }
 //获取用户信息响应处理;
 function COMMAND_GET_USER_RESP(data){
-   	var onlineUsers = eval("("+data.data+")");
+   	var onlineUsers =  data.data;
    	if(data.code == 100){
    		curUser = onlineUsers[0];
    	}else if(data.code == 102){
@@ -108,7 +108,7 @@ function COMMAND_GET_USER_RESP(data){
 }
 //接收到聊天响应处理;
 function COMMAND_CHAT_RESP(data){
-    var chatObj = eval("("+data.data+")");
+    var chatObj = data.data;
    	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
 	var from = chatObj.from;
 	if(from == username)

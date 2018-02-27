@@ -47,7 +47,7 @@ public class UserReqHandler extends AbCmdHandler{
 		}
 		if(clients == null)
 			return ImKit.ConvertRespPacket(new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C101), channelContext);
-		resPacket.setData(JSONObject.toJSONString(clients));
+		resPacket.setData(clients);
 		return ImKit.ConvertRespPacket(resPacket, channelContext);
 	}
 

@@ -55,7 +55,7 @@ public class LoginReqHandler extends AbCmdHandler {
 		imSessionContext.getClient().setUser(user);
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
-		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C200).setData(loginRespBodyBuilder.toJsonString());
+		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C200).setData(loginRespBodyBuilder);
 		return ImKit.ConvertRespPacket(respBody, channelContext);
 	}
 	

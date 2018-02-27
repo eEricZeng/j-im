@@ -27,7 +27,7 @@ public class ChatReqHandler extends AbCmdHandler {
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
-		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody.toJsonString()).toByte());
+		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody).toByte());
 		chatPacket.setSynSeq(packet.getSynSeq());//设置同步序列号;
 		if(chatBody.getChatType() == null || ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){//私聊
 			SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(channelContext.getGroupContext(),chatBody.getTo());
