@@ -13,8 +13,8 @@ import org.tio.utils.json.Json;
 
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
-import com.xiaoleilu.hutool.util.ArrayUtil;
 
+import cn.hutool.core.util.ArrayUtil;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMatchProcessor;
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.MethodAnnotationMatchProcessor;

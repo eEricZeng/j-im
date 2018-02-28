@@ -7,11 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.xiaoleilu.hutool.util.ZipUtil;
-
+import cn.hutool.core.util.ZipUtil;
 /**
  *
- * @author tanyaowu
+ * @author WChao
  *
  */
 public class HttpResponse extends HttpPacket {
@@ -22,7 +21,7 @@ public class HttpResponse extends HttpPacket {
 	/**
 	 * @param args
 	 *
-	 * @author tanyaowu
+	 * @author WChao
 	 * 2017年2月22日 下午4:14:40
 	 *
 	 */

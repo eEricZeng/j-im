@@ -13,9 +13,9 @@
 		<module>../tio-im-server-demo</module>
 	</modules>
 	<properties>
-		<tio-core.version>2.0.5.v20180115-RELEASE</tio-core.version>
+		<tio-core.version>2.0.8.v20180205-RELEASE</tio-core.version>
 		<tio-im.version>0.0.2-tio-im</tio-im.version>
-		<tio-utils.version>2.0.5.v20180115-RELEASE</tio-utils.version>
+		<tio-utils.version>2.0.8.v20180205-RELEASE</tio-utils.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -95,18 +95,6 @@
 				<groupId>com.jfinal</groupId>
 				<artifactId>jfinal</artifactId>
 				<version>${jfinal.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.xiaoleilu</groupId>
-				<artifactId>hutool-core</artifactId>
-				<version>${hutool.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.xiaoleilu</groupId>
-				<artifactId>hutool-all</artifactId>
-				<version>${hutool.version}</version>
 			</dependency>
 
 			<dependency>

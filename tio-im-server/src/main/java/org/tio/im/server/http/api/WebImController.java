@@ -11,8 +11,7 @@ import org.tio.im.common.http.HttpResponse;
 import org.tio.im.server.http.annotation.RequestPath;
 import org.tio.im.server.util.HttpResps;
 
-import com.xiaoleilu.hutool.io.FileUtil;
-
+import cn.hutool.core.io.FileUtil;
 /**
  * 版本: [1.0]
  * 功能说明: 

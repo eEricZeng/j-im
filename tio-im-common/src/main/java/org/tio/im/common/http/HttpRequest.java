@@ -12,8 +12,7 @@ import org.tio.core.Node;
 import org.tio.im.common.http.HttpConst.RequestBodyFormat;
 import org.tio.im.common.http.session.HttpSession;
 
-import com.xiaoleilu.hutool.util.ArrayUtil;
-
+import cn.hutool.core.util.ArrayUtil;
 /**
  *
  * @author tanyaowu

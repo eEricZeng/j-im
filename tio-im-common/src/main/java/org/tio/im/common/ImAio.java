@@ -15,8 +15,7 @@ import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImKit;
 import org.tio.utils.lock.SetWithLock;
 
-import com.xiaoleilu.hutool.util.BeanUtil;
-
+import cn.hutool.core.bean.BeanUtil;
 /**
  * 版本: [1.0]
  * 功能说明: 

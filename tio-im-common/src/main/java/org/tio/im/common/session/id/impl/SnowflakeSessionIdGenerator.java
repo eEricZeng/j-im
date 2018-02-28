@@ -3,8 +3,8 @@ package org.tio.im.common.session.id.impl;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.session.id.ISessionIdGenerator;
 
-import com.xiaoleilu.hutool.lang.Snowflake;
-import com.xiaoleilu.hutool.util.RandomUtil;
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.RandomUtil;
 
 /**
  * @author tanyaowu

@@ -5,7 +5,7 @@ import org.tio.im.common.packets.Command;
 
 /**
  * 
- * @author tanyaowu 
+ * @author WChao 
  *
  */
 public class ImPacket extends Packet
@@ -17,10 +17,6 @@ public class ImPacket extends Packet
 	protected byte[] body;//消息体;
 	
 	private Command command;//消息命令;
-	/**
-	 * 同步发送时，需要的同步序列号
-	 */
-	private Integer imSynSeq = 0;
 	
 	public ImPacket(){}
 	
@@ -169,11 +165,4 @@ public class ImPacket extends Packet
 		this.status = status;
 	}
 
-	public Integer getImSynSeq() {
-		return imSynSeq;
-	}
-
-	public void setImSynSeq(Integer imSynSeq) {
-		this.imSynSeq = imSynSeq;
-	}
 }

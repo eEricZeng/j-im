@@ -28,10 +28,10 @@ import org.tio.im.server.util.ClassUtils;
 import org.tio.im.server.util.HttpResps;
 import org.tio.utils.cache.guava.GuavaCache;
 
-import com.xiaoleilu.hutool.convert.Convert;
-import com.xiaoleilu.hutool.io.FileUtil;
-import com.xiaoleilu.hutool.util.BeanUtil;
-import com.xiaoleilu.hutool.util.ClassUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ClassUtil;
 
 /**
  *

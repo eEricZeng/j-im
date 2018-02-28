@@ -20,7 +20,8 @@ import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.common.utils.Md5;
 import org.tio.im.server.command.handler.proc.login.LoginCmdHandlerIntf;
-import com.xiaoleilu.hutool.util.RandomUtil;
+
+import cn.hutool.core.util.RandomUtil;
 
 /**
  * @author WChao

@@ -17,11 +17,10 @@ import org.tio.core.utils.ByteBufferUtils;
 import org.tio.im.common.http.HttpConst.RequestBodyFormat;
 import org.tio.im.common.utils.HttpParseUtils;
 
-import com.xiaoleilu.hutool.util.StrUtil;
-
+import cn.hutool.core.util.StrUtil;
 /**
  *
- * @author tanyaowu
+ * @author WChao
  *
  */
 public class HttpRequestDecoder {

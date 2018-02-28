@@ -1,11 +1,10 @@
 package org.tio.im.common.utils;
 
-import com.xiaoleilu.hutool.lang.Singleton;
-
+import cn.hutool.core.lang.Singleton;
 import nl.basjes.parse.useragent.UserAgentAnalyzer;
 
 /**
- * @author tanyaowu 
+ * @author WChao 
  * 2017年5月16日 下午4:13:34
  */
 public abstract class UserAgentAnalyzerFactory {

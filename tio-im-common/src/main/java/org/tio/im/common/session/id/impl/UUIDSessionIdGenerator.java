@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.session.id.ISessionIdGenerator;
 
-import com.xiaoleilu.hutool.util.RandomUtil;
-
+import cn.hutool.core.util.RandomUtil;
 /**
  * @author tanyaowu
  * 2017年8月15日 上午10:53:39

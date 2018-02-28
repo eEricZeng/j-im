@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.tio.utils.lock.ListWithLock;
 
 import com.jfinal.kit.PropKit;
-import com.xiaoleilu.hutool.io.FileUtil;
+
+import cn.hutool.core.io.FileUtil;
 
 /**
  * 美女图

@@ -18,7 +18,7 @@ import org.tio.im.common.http.HttpResponseStatus;
 import org.tio.im.common.http.MimeType;
 import org.tio.utils.json.Json;
 
-import com.xiaoleilu.hutool.io.FileUtil;
+import cn.hutool.core.io.FileUtil;
 
 /**
  * @author tanyaowu
