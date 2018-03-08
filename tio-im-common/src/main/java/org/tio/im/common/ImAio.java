@@ -6,6 +6,7 @@ package org.tio.im.common;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
@@ -119,11 +120,17 @@ public class ImAio {
 		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
 		if(withLockChannels == null)
 			return;
-		Set<ChannelContext> channels = withLockChannels.getObj();
-		if(channels != null && channels.size() > 0){
-			for(ChannelContext channelContext : channels){
-				send(channelContext,packet);
+		ReadLock readLock = withLockChannels.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> channels = withLockChannels.getObj();
+			if(channels != null && channels.size() > 0){
+				for(ChannelContext channelContext : channels){
+					send(channelContext,packet);
+				}
 			}
+		}finally{
+			readLock.unlock();
 		}
 	}
 	/**
@@ -134,11 +141,17 @@ public class ImAio {
 	public static void send(SetWithLock<ChannelContext> toChannleContexts,ImPacket packet){
 		if(toChannleContexts == null || toChannleContexts.size() < 1)
 			return;
-		Set<ChannelContext> channels = toChannleContexts.getObj();
-		if(channels.size() > 0){
-			for(ChannelContext channelContext : channels){
-				send(channelContext, packet);
+		ReadLock readLock = toChannleContexts.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> channels = toChannleContexts.getObj();
+			if(channels.size() > 0){
+				for(ChannelContext channelContext : channels){
+					send(channelContext, packet);
+				}
 			}
+		}finally{
+			readLock.unlock();
 		}
 	}
 	/**
