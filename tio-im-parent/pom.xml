@@ -44,7 +44,8 @@
 		<protobuf-java-format.version>1.4</protobuf-java-format.version>
 
 		<protostuff.version>1.6.0</protostuff.version>
-		<redisson.version>3.5.0</redisson.version>
+		<jedis.version>2.7.3</jedis.version>
+		
 	</properties>
 	<developers>
 		<developer>
@@ -98,9 +99,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.redisson</groupId>
-				<artifactId>redisson</artifactId>
-				<version>${redisson.version}</version>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>${jedis.version}</version>
 			</dependency>
 
 			<dependency>
@@ -294,7 +295,7 @@
 
 					<!-- 过滤掉不希望包含在jar中的文件 -->
 					<excludes>
-						<exclude>**/*.properties</exclude>
+						<!-- <exclude>**/*.properties</exclude> -->
 						<exclude>**/*.conf</exclude>
 						<exclude>**/*.xml</exclude>
 					</excludes>

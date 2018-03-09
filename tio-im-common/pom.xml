@@ -13,6 +13,7 @@
 		<relativePath>../tio-im-parent/pom.xml</relativePath>
   </parent>
   <dependencies>
+  		
    		<dependency>
 			<groupId>org.t-io</groupId>
 			<artifactId>tio-core</artifactId>
@@ -66,6 +67,14 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal</artifactId>
 		</dependency>
     </dependencies>
     <build>
