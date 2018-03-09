@@ -1,16 +1,14 @@
 package org.tio.im.common.cache.redis;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.jfinal.kit.Prop;
-import com.jfinal.kit.PropKit;
-
-import cn.hutool.core.util.ClassLoaderUtil;
-
 /**
  * @author WChao
  * @date 2018年3月9日 上午1:06:33
@@ -35,38 +33,90 @@ public class RedisConfigurationFactory {
         if (file == null) {
             throw new Exception("Attempt to configure redis from null file.");
         }
-
         LOG.debug("Configuring redis from file: {}", file);
         RedisConfiguration configuration = null;
+        InputStream input = null;
         try {
-        	Prop prop = PropKit.use(file);
-        	configuration = new RedisConfiguration(prop);
+            input = new BufferedInputStream(new FileInputStream(file));
+            configuration = parseConfiguration(input);
         } catch (Exception e) {
             throw new Exception("Error configuring from " + file + ". Initial cause was " + e.getMessage(), e);
         } finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (IOException e) {
+                LOG.error("IOException while closing configuration input stream. Error was " + e.getMessage());
+            }
         }
         return configuration;
     }
-
+    /**
+     * Configures a bean from an property file available as an URL.
+     */
+    public static RedisConfiguration parseConfiguration(final URL url) throws Exception {
+        LOG.debug("Configuring redis from URL: {}", url);
+        RedisConfiguration configuration;
+        InputStream input = null;
+        try {
+            input = url.openStream();
+            configuration = parseConfiguration(input);
+        } catch (Exception e) {
+            throw new Exception("Error configuring from " + url + ". Initial cause was " + e.getMessage(), e);
+        } finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (IOException e) {
+                LOG.error("IOException while closing configuration input stream. Error was " + e.getMessage());
+            }
+        }
+        return configuration;
+    }
     /**
      * Configures a bean from an property file in the classpath.
      */
     public static RedisConfiguration parseConfiguration() throws Exception {
-        ClassLoader standardClassloader = ClassLoaderUtil.getContextClassLoader();
+        ClassLoader standardClassloader = Thread.currentThread().getContextClassLoader();
         URL url = null;
         if (standardClassloader != null) {
             url = standardClassloader.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
         }
         if (url == null) {
-            url = RedisConfigurationFactory.class.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
+        	url = RedisConfigurationFactory.class.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
         }
         if (url != null) {
             LOG.debug("Configuring redis from redis.properties found in the classpath: " + url);
         } else {
-        	LOG.warn("No configuration found. Configuring redis from current packet redis.properties"
+            LOG.warn("No configuration found. Configuring redis from redis.properties "
                     + " found in the classpath: {}", url);
+
         }
-        RedisConfiguration configuration = parseConfiguration(new File(url.getFile()));
+        RedisConfiguration configuration = parseConfiguration(url);
         return configuration;
     }
+    
+    /**
+     * Configures a bean from an property input stream.
+     */
+    public static RedisConfiguration parseConfiguration(final InputStream inputStream) throws Exception {
+
+        LOG.debug("Configuring redis from InputStream");
+
+        RedisConfiguration configuration = null;
+        try {
+            Properties prop = new Properties();
+            prop.load(inputStream);
+            configuration = new RedisConfiguration(prop);
+        } catch (Exception e) {
+            throw new Exception("Error configuring from input stream. Initial cause was " + e.getMessage(), e);
+        }
+        return configuration;
+    }
+    
+    public static void main(String[] args) throws Exception{
+		RedisConfigurationFactory.parseConfiguration();
+	}
 }

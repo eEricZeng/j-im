@@ -1,7 +1,6 @@
 package org.tio.im.common.cache.caffeine;
 
-import com.jfinal.kit.Prop;
-
+import java.util.Properties;
 /**
  * @author WChao
  * @date 2018年3月9日 上午1:09:03
@@ -17,9 +16,9 @@ public class CaffeineConfiguration {
 	
 	public CaffeineConfiguration(){}
 	
-	public CaffeineConfiguration(String cacheName,Prop prop){
+	public CaffeineConfiguration(String cacheName,Properties prop){
 		this.cacheName = cacheName;
-		String[] values = prop.get(cacheName,"5000000,1800").split(",");
+		String[] values = prop.getProperty(cacheName,"5000000,1800").split(",");
 		this.maximumSize = Integer.valueOf(values[0]);
 		if(values.length>1){
 			this.timeToLiveSeconds = Long.valueOf(values[1]);

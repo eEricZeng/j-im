@@ -1,7 +1,5 @@
 package org.tio.im.common.cache.redis;
-
-import com.jfinal.kit.Prop;
-
+import java.util.Properties;
 /**
  * @author WChao
  * @date 2018年3月9日 上午1:09:03
@@ -18,15 +16,15 @@ public class RedisConfiguration {
 	
 	public RedisConfiguration(){}
 	
-	public RedisConfiguration(Prop prop){
-		this.retryNum = prop.getInt("retrynum", 100);
-		this.maxActive = prop.getInt("maxactive",100);
-		this.maxIdle = prop.getInt("maxidle", 20);
-		this.maxWait = prop.getLong("maxwait",5000L);
-		this.timeout = prop.getInt("timeout", 2000);
-		this.auth = prop.get("auth","");
-		this.host = prop.get("host","");
-		this.port = prop.getInt("port",0);
+	public RedisConfiguration(Properties prop){
+		this.retryNum = Integer.valueOf(prop.getProperty("retrynum", "100"));
+		this.maxActive = Integer.valueOf(prop.getProperty("maxactive","100"));
+		this.maxIdle =  Integer.valueOf(prop.getProperty("maxidle", "20"));
+		this.maxWait =  Long.valueOf(prop.getProperty("maxwait","5000"));
+		this.timeout =  Integer.valueOf(prop.getProperty("timeout", "2000"));
+		this.auth =  prop.getProperty("auth","");
+		this.host = prop.getProperty("host","");
+		this.port =  Integer.valueOf(prop.getProperty("port","0"));
 	}
 	public int getRetryNum() {
 		return retryNum;
