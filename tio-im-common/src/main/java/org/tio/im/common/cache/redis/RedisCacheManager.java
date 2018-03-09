@@ -36,7 +36,7 @@ public class RedisCacheManager {
 
 		RedisCache redisCache = map.get(cacheName);
 		if (redisCache == null) {
-			synchronized (RedisCache.class) {
+			synchronized (RedisCacheManager.class) {
 				redisCache = map.get(cacheName);
 				if (redisCache == null) {
 					redisCache = new RedisCache(cacheName, timeToLiveSeconds, timeToIdleSeconds);

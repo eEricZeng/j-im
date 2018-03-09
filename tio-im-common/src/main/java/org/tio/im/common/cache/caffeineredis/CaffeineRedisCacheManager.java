@@ -1,12 +1,15 @@
 package org.tio.im.common.cache.caffeineredis;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.im.common.cache.caffeine.CaffeineCache;
 import org.tio.im.common.cache.caffeine.CaffeineCacheManager;
+import org.tio.im.common.cache.caffeine.CaffeineConfiguration;
+import org.tio.im.common.cache.caffeine.CaffeineConfigurationFactory;
 import org.tio.im.common.cache.redis.RedisCache;
 import org.tio.im.common.cache.redis.RedisCacheManager;
 import org.tio.im.common.cache.redis.SubRunnable;
@@ -30,6 +33,20 @@ public class CaffeineRedisCacheManager {
 	 * 在本地最大的过期时间，这样可以防止内存爆掉，单位：秒
 	 */
 	public static int MAX_EXPIRE_IN_LOCAL = 1800;
+	
+	private CaffeineRedisCacheManager(){}
+	
+	static{
+		try{
+			List<CaffeineConfiguration> configurations = CaffeineConfigurationFactory.parseConfiguration();
+			for(CaffeineConfiguration configuration : configurations){
+				 register(configuration.getCacheName(), configuration.getTimeToLiveSeconds(),configuration.getTimeToIdleSeconds());
+			}
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
 	public static CaffeineRedisCache getCache(String cacheName) {
 		CaffeineRedisCache caffeineRedisCache = map.get(cacheName);
 		if (caffeineRedisCache == null) {

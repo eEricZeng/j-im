@@ -64,7 +64,7 @@ public class CaffeineCacheManager {
 	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer maximumSize , RemovalListener<String, Serializable> removalListener) {
 		CaffeineCache caffeineCache = map.get(cacheName);
 		if (caffeineCache == null) {
-			synchronized (CaffeineCache.class) {
+			synchronized (CaffeineCacheManager.class) {
 				caffeineCache = map.get(cacheName);
 				if (caffeineCache == null) {
 					Integer initialCapacity = 10;

@@ -75,14 +75,14 @@ public class CaffeineRedisCache implements ICache {
 		}
 		
 		Serializable ret = caffeineCache.get(key);
-		log.info("Cache L1 (caffeine) :{}={}",key,ret);
 		if (ret == null) {
 			ret = redisCache.get(key);
-			log.info("Cache L2 (redis) :{}={}",key,ret);
 			if (ret != null) {
+				log.info("Cache L2 (redis) :{}={}",key,ret);
 				caffeineCache.put(key, ret);
 			}
 		} else {//在本地就取到数据了，那么需要在redis那定时更新一下过期时间
+			log.info("Cache L1 (caffeine) :{}={}",key,ret);
 			Long timeToIdleSeconds = redisCache.getTimeToIdleSeconds();
 			if (timeToIdleSeconds != null) {
 				RedisExpireUpdateTask.add(cacheName, key, timeToIdleSeconds);
