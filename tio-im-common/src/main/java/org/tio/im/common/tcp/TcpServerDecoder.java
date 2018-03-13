@@ -94,8 +94,8 @@ public class TcpServerDecoder {
 		//消息体长度
 		int bodyLen = buffer.getInt(index);
 		index += 4;
-		int readableLength = buffer.limit() - index;
-		if (readableLength < bodyLen)
+		int readableLength = buffer.limit() - buffer.position() ;
+		if (readableLength < bodyLen + index)
 		{
 			return false;
 		}
