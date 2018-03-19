@@ -24,7 +24,7 @@ public class SubRunnable implements Runnable {
 	}
 	
 	public void run() {
-		log.warn("订阅 redis , chanel {} , 线程将阻塞",subChannel);
+		log.debug("订阅 redis , chanel {} , 线程将阻塞",subChannel);
 		try {
 			jedis = JedisTemplate.me().getJedis();
 			if(jedis != null){

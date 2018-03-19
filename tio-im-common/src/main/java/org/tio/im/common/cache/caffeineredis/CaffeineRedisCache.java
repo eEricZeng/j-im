@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.im.common.cache.CacheChangeType;
 import org.tio.im.common.cache.CacheChangedVo;
 import org.tio.im.common.cache.ICache;
+import org.tio.im.common.cache.IL2Cache;
 import org.tio.im.common.cache.caffeine.CaffeineCache;
 import org.tio.im.common.cache.redis.JedisTemplate;
 import org.tio.im.common.cache.redis.RedisCache;
@@ -18,7 +19,7 @@ import org.tio.im.common.cache.redis.RedisExpireUpdateTask;
  * @author WChao
  * 2017年8月12日 下午9:13:54
  */
-public class CaffeineRedisCache implements ICache {
+public class CaffeineRedisCache implements ICache,IL2Cache {
 	
 	Logger log = LoggerFactory.getLogger(CaffeineRedisCache.class);
 	
@@ -78,14 +79,14 @@ public class CaffeineRedisCache implements ICache {
 		if (ret == null) {
 			ret = redisCache.get(key);
 			if (ret != null) {
-				log.info("Cache L2 (redis) :{}={}",key,ret);
+				log.debug("Cache L2 (redis) :{}={}",key,ret);
 				caffeineCache.put(key, ret);
 			}
 		} else {//在本地就取到数据了，那么需要在redis那定时更新一下过期时间
-			log.info("Cache L1 (caffeine) :{}={}",key,ret);
+			log.debug("Cache L1 (caffeine) :{}={}",key,ret);
 			Long timeToIdleSeconds = redisCache.getTimeToIdleSeconds();
 			if (timeToIdleSeconds != null) {
-				RedisExpireUpdateTask.add(cacheName, key, timeToIdleSeconds);
+				RedisExpireUpdateTask.add(cacheName, key, ret , timeToIdleSeconds);
 			}
 		}
 		return ret;
@@ -115,6 +116,12 @@ public class CaffeineRedisCache implements ICache {
 		} catch (Exception e) {
 			log.error(e.toString(),e);
 		}
+	}
+	
+	@Override
+	public void putL2Async(String key, Serializable value) {
+		caffeineCache.put(key, value);
+		CaffeineRedisCacheManager.getAsyncRedisQueue().add(new RedisL2Vo(redisCache, key, value));
 	}
 	
 	@Override
@@ -155,6 +162,5 @@ public class CaffeineRedisCache implements ICache {
 	public RedisCache getRedisCache() {
 		return redisCache;
 	}
-	
-	
+
 }

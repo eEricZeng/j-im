@@ -1,5 +1,6 @@
 package org.tio.im.common.cache.redis;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -31,15 +32,17 @@ public class ExpireVo {
 	private String cacheName;
 
 	private String key;
+	
+	private Serializable value ;
 
 	private long expire;
 
-	public ExpireVo(String cacheName, String key, long expire) {
+	public ExpireVo(String cacheName, String key, Serializable value , long expire) {
 		super();
 		this.cacheName = cacheName;
 		this.key = key;
 		this.expire = expire;
-		//		this.expirable = expirable;
+		this.value = value;
 	}
 
 	@Override
@@ -90,4 +93,13 @@ public class ExpireVo {
 	public void setKey(String key) {
 		this.key = key;
 	}
+
+	public Serializable getValue() {
+		return value;
+	}
+
+	public void setValue(Serializable value) {
+		this.value = value;
+	}
+	
 }

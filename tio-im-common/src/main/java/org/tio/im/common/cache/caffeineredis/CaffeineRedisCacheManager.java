@@ -27,15 +27,15 @@ public class CaffeineRedisCacheManager {
 	private static boolean inited = false;
 	
 	public static final String CACHE_CHANGE_TOPIC = "REDIS_CACHE_CHANGE_TOPIC_CAFFEINE";
-	
-	
+	//L2异步存储队列;
+	private static RedisAsyncRunnable asyncRedisQueue =  new RedisAsyncRunnable();
 	/**
 	 * 在本地最大的过期时间，这样可以防止内存爆掉，单位：秒
 	 */
 	public static int MAX_EXPIRE_IN_LOCAL = 1800;
 	
 	private CaffeineRedisCacheManager(){}
-	
+
 	static{
 		try{
 			List<CaffeineConfiguration> configurations = CaffeineConfigurationFactory.parseConfiguration();
@@ -60,6 +60,7 @@ public class CaffeineRedisCacheManager {
 			synchronized (CaffeineRedisCacheManager.class) {
 				if (!inited) {
 					new Thread(new SubRunnable(CACHE_CHANGE_TOPIC)).start();
+					new Thread(asyncRedisQueue).start();
 					inited = true;
 				}
 			}
@@ -94,4 +95,7 @@ public class CaffeineRedisCacheManager {
 		return caffeineRedisCache;
 	}
 
+	public static RedisAsyncRunnable getAsyncRedisQueue() {
+		return asyncRedisQueue;
+	}
 }

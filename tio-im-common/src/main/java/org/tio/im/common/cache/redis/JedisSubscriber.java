@@ -36,12 +36,12 @@ public class JedisSubscriber extends JedisPubSub {
 			return;
 		}
 		if (Objects.equals(CacheChangedVo.CLIENTID, clientid)) {
-			log.info("自己发布的消息,{}", clientid);
+			log.debug("自己发布的消息,{}", clientid);
 			return;
 		}
 		CaffeineRedisCache caffeineRedisCache = CaffeineRedisCacheManager.getCache(cacheName);
 		if (caffeineRedisCache == null) {
-			log.info("不能根据cacheName[{}]找到CaffeineRedisCache对象", cacheName);
+			log.debug("不能根据cacheName[{}]找到CaffeineRedisCache对象", cacheName);
 			return;
 		}
 		if (type == CacheChangeType.PUT  || type == CacheChangeType.UPDATE || type == CacheChangeType.REMOVE) {

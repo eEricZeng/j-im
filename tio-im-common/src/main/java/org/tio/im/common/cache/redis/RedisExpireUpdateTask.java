@@ -1,13 +1,12 @@
 package org.tio.im.common.cache.redis;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.utils.lock.SetWithLock;
 
 /**
  * 定时更新redis的过期时间
@@ -19,13 +18,11 @@ public class RedisExpireUpdateTask {
 
 	private static boolean started = false;
 
-	private static Set<ExpireVo> set = new HashSet<>();
+	private static LinkedBlockingQueue<ExpireVo> redisExpireVoQueue = new LinkedBlockingQueue<ExpireVo>();
 
-	private static SetWithLock<ExpireVo> setWithLock = new SetWithLock<ExpireVo>(set);
-
-	public static void add(String cacheName, String key, long expire) {
-		ExpireVo expireVo = new ExpireVo(cacheName, key, expire);
-		setWithLock.add(expireVo);
+	public static void add(String cacheName, String key, Serializable value, long expire) {
+		ExpireVo expireVo = new ExpireVo(cacheName, key, value, expire);
+		redisExpireVoQueue.offer(expireVo);
 	}
 
 	public static void start() {
@@ -42,27 +39,31 @@ public class RedisExpireUpdateTask {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				List<ExpireVo> l2Datas = new ArrayList<ExpireVo>();
 				while (true) {
-					WriteLock writeLock = setWithLock.getLock().writeLock();
-					writeLock.lock();
 					try {
-						Set<ExpireVo> set = setWithLock.getObj();
-						for (ExpireVo expireVo : set) {
-							log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getExpire());
-							Serializable value = RedisCacheManager.getCache(expireVo.getCacheName()).get(expireVo.getKey());
-							if(value != null)
-							JedisTemplate.me().set(expireVo.getCacheName()+":"+expireVo.getKey(), value, Integer.parseInt(expireVo.getExpire()+""));
+						if(l2Datas.size() == 2000 || redisExpireVoQueue.isEmpty()){//2000一提交(防止频繁访问Redis网络I/O消耗压力)
+							for (ExpireVo expireVo : l2Datas) {
+								log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getExpire());
+								Serializable value = expireVo.getValue();
+								if(value != null)
+								JedisTemplate.me().set(expireVo.getCacheName()+":"+expireVo.getKey(), value, Integer.parseInt(expireVo.getExpire()+""));
+							}
+							l2Datas.clear();
+							try {
+								Thread.sleep(1000 * 10);
+							} catch (InterruptedException e) {
+								log.error(e.toString(), e);
+							}
 						}
-						set.clear();
+						else{
+							ExpireVo expireVo = redisExpireVoQueue.poll();
+							if(expireVo != null){
+								l2Datas.add(expireVo);
+							}
+						}
 					} catch (Throwable e) {
 						log.error(e.getMessage(), e);
-					} finally {
-						writeLock.unlock();
-						try {
-							Thread.sleep(1000 * 10);
-						} catch (InterruptedException e) {
-							log.error(e.toString(), e);
-						}
 					}
 				}
 

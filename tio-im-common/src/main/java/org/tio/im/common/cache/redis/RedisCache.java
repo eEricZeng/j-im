@@ -68,7 +68,7 @@ public class RedisCache implements ICache {
 			value = JedisTemplate.me().get(cacheKey(cacheName, key), Serializable.class);
 			if (timeToIdleSeconds != null) {
 				if (value != null) {
-					RedisExpireUpdateTask.add(cacheName, key, timeout);
+					RedisExpireUpdateTask.add(cacheName, key, value ,timeout);
 				}
 			}
 		} catch (Exception e) {
