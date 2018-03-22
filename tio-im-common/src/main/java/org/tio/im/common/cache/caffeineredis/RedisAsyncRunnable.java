@@ -1,7 +1,5 @@
 package org.tio.im.common.cache.caffeineredis;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.slf4j.Logger;
@@ -33,27 +31,12 @@ public class RedisAsyncRunnable implements Runnable{
 			}
 			started = true;
 		}
-		List<RedisL2Vo> l2Datas = new ArrayList<RedisL2Vo>();
 		while(true){
 			try {
-				if(l2Datas.size() == 2000 || redisL2VoQueue.isEmpty()){//2000一提交(防止频繁访问Redis网络I/O消耗压力)
-					for(RedisL2Vo redisL2Vo : l2Datas){
-						redisL2Vo.getRedisCache().put(redisL2Vo.getKey(),redisL2Vo.getValue());
-						CacheChangedVo cacheChangedVo = new CacheChangedVo(redisL2Vo.getRedisCache().getCacheName(), redisL2Vo.getKey(), CacheChangeType.PUT);
-						JedisTemplate.me().publish(CaffeineRedisCacheManager.CACHE_CHANGE_TOPIC,cacheChangedVo.toString());
-					}
-					l2Datas.clear();
-					try {
-						Thread.sleep(1000 * 10);
-					} catch (InterruptedException e) {
-						LOG.error(e.toString(), e);
-					}
-				}else{
-					RedisL2Vo redisL2Vo = redisL2VoQueue.poll();
-					if(redisL2Vo != null){
-						l2Datas.add(redisL2Vo);
-					}
-				}
+				RedisL2Vo redisL2Vo = redisL2VoQueue.take();
+				redisL2Vo.getRedisCache().put(redisL2Vo.getKey(),redisL2Vo.getValue());
+				CacheChangedVo cacheChangedVo = new CacheChangedVo(redisL2Vo.getRedisCache().getCacheName(), redisL2Vo.getKey(), CacheChangeType.PUT);
+				JedisTemplate.me().publish(CaffeineRedisCacheManager.CACHE_CHANGE_TOPIC,cacheChangedVo.toString());
 			} catch (Exception e) {
 				LOG.error(e.toString(),e);
 			}

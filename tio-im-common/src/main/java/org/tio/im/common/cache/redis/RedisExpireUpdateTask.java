@@ -42,7 +42,7 @@ public class RedisExpireUpdateTask {
 				List<ExpireVo> l2Datas = new ArrayList<ExpireVo>();
 				while (true) {
 					try {
-						if(l2Datas.size() == 2000 || redisExpireVoQueue.isEmpty()){//2000一提交(防止频繁访问Redis网络I/O消耗压力)
+						if(l2Datas.size() == 5000 || redisExpireVoQueue.isEmpty()){//5000一更新(防止频繁访问Redis网络I/O消耗压力)
 							for (ExpireVo expireVo : l2Datas) {
 								log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getExpire());
 								Serializable value = expireVo.getValue();
@@ -66,7 +66,6 @@ public class RedisExpireUpdateTask {
 						log.error(e.getMessage(), e);
 					}
 				}
-
 			}
 		}, RedisExpireUpdateTask.class.getName()).start();
 	}
