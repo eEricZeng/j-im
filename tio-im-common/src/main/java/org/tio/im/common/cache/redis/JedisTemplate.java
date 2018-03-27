@@ -10,7 +10,9 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -93,7 +95,7 @@ public  class JedisTemplate implements  Serializable{
 			jedis = jedisPool.getResource();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			if(jedis!=null){
 				jedisPool.returnBrokenResource(jedis);
 			}
@@ -124,7 +126,7 @@ public  void close(Jedis jedis) {
  
        public Executor(JedisPool jedisPool) {  
            this.jedisPool = jedisPool;  
-           jedis = this.jedisPool.getResource();  
+           jedis = getJedis();  
        }  
  
        /** 
@@ -386,13 +388,29 @@ public  void close(Jedis jedis) {
            List<Object> execute() {  
                Pipeline pipeline = jedis.pipelined();  
                for (Pair<String, String> pair : pairs) {  
-                   pipeline.set(pair.getKey(), pair.getValue());  
+                   pipeline.set(pair.getKey(), pair.getValue());
                }  
                return pipeline.syncAndReturnAll();  
            }  
        }.getResult();  
    }  
- 
+   /** 
+    * 批量的 {@link #setString(String, String)} 
+    * @param pairs 键值对数组{数组第一个元素为key，第二个元素为value} 
+    * @return 操作状态的集合 
+    */  
+   public List<Object> batchSetStringEx(final List<PairEx<String,String,Integer>> pairs) {  
+       return new Executor<List<Object>>(jedisPool) {  
+           @Override  
+           List<Object> execute() {  
+               Pipeline pipeline = jedis.pipelined();  
+               for (PairEx<String, String,Integer> pair : pairs) {  
+                   pipeline.setex(pair.getKey(),pair.getExpire(), pair.getValue());
+               }  
+               return pipeline.syncAndReturnAll();  
+           }  
+       }.getResult();  
+   }  
    /** 
     * 批量的 {@link #getString(String)} 
     * @param keys key数组 
@@ -657,8 +675,26 @@ public  void close(Jedis jedis) {
                return jedis.hgetAll(key);  
            }  
        }.getResult();  
-   }  
- 
+   } 
+   /**
+    * 批量更新key的过期时间
+    * @param pairDatas
+    */
+   public void batchSetExpire(List<PairEx<String,Void,Integer>> pairDatas){
+	   if(pairDatas == null || pairDatas.size() == 0)
+		   return;
+       new Executor<Void>(jedisPool) {  
+           @Override
+           Void execute() {
+        	  Pipeline pipeline =  jedis.pipelined();
+        	  for(PairEx<String,Void,Integer> pairEx : pairDatas){
+        		  pipeline.expire(pairEx.getKey(),pairEx.getExpire());
+        	  }
+        	  pipeline.sync();
+              return null;  
+           }  
+	  }.getResult();  
+   }
    /** 
     * 返回哈希表 key 中，所有的域和值。在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。 
     * 同时设置这个 key 的生存时间 
@@ -671,7 +707,7 @@ public  void close(Jedis jedis) {
  
            @Override  
            Map<String, String> execute() {  
-               Pipeline pipeline = jedis.pipelined();  
+               Pipeline pipeline = jedis.pipelined();
                Response<Map<String, String>> result = pipeline.hgetAll(key);  
                pipeline.expire(key, expire);  
                pipeline.sync();  
@@ -679,7 +715,6 @@ public  void close(Jedis jedis) {
            }  
        }.getResult();  
    }  
- 
    /** 
     * 批量的{@link #hashGetAll(String)} 
     * @param keys key的数组 
@@ -966,8 +1001,28 @@ public  void close(Jedis jedis) {
            }  
              
        }.getResult();  
-   }  
- 
+   }
+   /** 
+    * 将信息 message 发送到指定的频道 channel。 
+    * 时间复杂度：O(N+M)，其中 N 是频道 channel 的订阅者数量，而 M 则是使用模式订阅(subscribed patterns)的客户端的数量。 
+    * @param channel 频道 
+    * @param List<message> 要发布的信息 
+    */  
+   public void publishAll(final String channel, final List<String> messages) {
+	   if(messages == null || messages.size() == 0)
+ 		  return;
+       new Executor<Void>(jedisPool) {  
+           @Override  
+           Void execute() {
+        	  Pipeline pipeline =  jedis.pipelined();
+        	  for(String message : messages){
+        		  pipeline.publish(channel, message);
+        	  }
+        	  pipeline.sync();
+              return null;  
+           }  
+       }.getResult();  
+   } 
    /** 
     * 订阅给定的一个频道的信息。 
     * @param jedisPubSub 监听器 
@@ -1055,7 +1110,16 @@ public  void close(Jedis jedis) {
    public <K, V> Pair<K, V> makePair(K key, V value) {  
        return new Pair<K, V>(key, value);  
    }  
- 
+   /** 
+    * 构造Pair键值对 
+    * @param key key 
+    * @param value value
+    * @param expire expire
+    * @return 键值对 
+    */  
+   public <K, V , E> PairEx<K, V , E> makePairEx(K key, V value , E expire) {  
+       return new PairEx<K, V , E>(key, value , expire);  
+   }  
    /** 
     * 键值对 
     * @version V1.0 
@@ -1063,7 +1127,7 @@ public  void close(Jedis jedis) {
     * @param <K> key 
     * @param <V> value 
     */  
-   public class Pair<K, V> {  
+   public class Pair<K,V> {  
  
        private K key;  
        private V value;  
@@ -1088,7 +1152,26 @@ public  void close(Jedis jedis) {
        public void setValue(V value) {  
            this.value = value;  
        }  
-   }  
+   }
+   public class PairEx<K,V,E> extends Pair<K, V>{
+	   
+		private E expire;
+		
+		public PairEx(K key, V value) {
+			super(key, value);
+		}
+		public PairEx(K key, V value,E expire) {
+			super(key, value);
+			this.expire = expire;
+		}
+		public E getExpire() {
+			return expire;
+		}
+		public void setExpire(E expire) {
+			this.expire = expire;
+		} 
+	
+   }
 
 	/**
 	 * @author dave

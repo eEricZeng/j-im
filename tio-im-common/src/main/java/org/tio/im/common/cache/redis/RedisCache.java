@@ -1,13 +1,19 @@
 package org.tio.im.common.cache.redis;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tio.im.common.cache.redis.JedisTemplate.Pair;
+import org.tio.im.common.cache.redis.JedisTemplate.PairEx;
 import org.tio.utils.SystemTimer;
 import org.tio.utils.cache.ICache;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  *
@@ -98,7 +104,21 @@ public class RedisCache implements ICache {
 			log.error(e.toString(),e);
 		}
 	}
-	
+	public void putAll(List<Pair<String,Serializable>> values) {
+		if (values == null || values.size() < 1) {
+			return;
+		}
+		int expire = Integer.parseInt(timeout+"");
+		try {
+			List<PairEx<String,String,Integer>> pairDatas = new ArrayList<PairEx<String,String,Integer>>();
+			for(Pair<String,Serializable> pair : values){
+				pairDatas.add(JedisTemplate.me().makePairEx(cacheKey(cacheName, pair.getKey()),JSONObject.toJSONString(pair.getValue()),expire));
+			}
+			JedisTemplate.me().batchSetStringEx(pairDatas);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+	}
 	@Override
 	public void putTemporary(String key, Serializable value) {
 		if (StringUtils.isBlank(key)) {
