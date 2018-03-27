@@ -25,18 +25,21 @@ public class SubRunnable implements Runnable {
 	
 	public void run() {
 		log.debug("订阅 redis , chanel {} , 线程将阻塞",subChannel);
-		try {
-			jedis = JedisTemplate.me().getJedis();
-			if(jedis != null){
-				 jedis.subscribe(subscriber, subChannel);
-			}
-		} catch (Exception e) {
-			log.error(e.toString(),e);
-		}finally {
+		while(true){
 			try {
-				JedisTemplate.me().close(jedis);
+				jedis = JedisTemplate.me().getJedis();
+				if(jedis != null){
+					 jedis.subscribe(subscriber, subChannel);
+				}
 			} catch (Exception e) {
 				log.error(e.toString(),e);
+				log.error("订阅线程异常,重新获取订阅客户端连接...");
+			}finally {
+				try {
+					JedisTemplate.me().close(jedis);
+				} catch (Exception e) {
+					log.error(e.toString(),e);
+				}
 			}
 		}
 	}
