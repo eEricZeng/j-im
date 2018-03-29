@@ -31,17 +31,25 @@ public class ImAio {
 	 * @return
 	 */
 	public static List<User> getUser(GroupContext groupContext,String userid){
-		SetWithLock<ChannelContext> channelContexts = ImAio.getChannelContextsByUserid(groupContext, userid);
-		if(channelContexts != null && !channelContexts.getObj().isEmpty()){
-			List<User> users = new ArrayList<User>();
-			for(ChannelContext channelContext : channelContexts.getObj()){
+		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(groupContext, userid);
+		List<User> users = new ArrayList<User>();
+		if(userChannelContexts == null)
+			return users;
+		ReadLock readLock = userChannelContexts.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> userChannels = userChannelContexts.getObj();
+			if(userChannels == null )
+				return users;
+			for(ChannelContext channelContext : userChannels){
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 				Client client = imSessionContext.getClient();
 				users.add(client.getUser());
 			}
 			return users;
+		}finally {
+			readLock.unlock();
 		}
-		return null;
 	}
 	/**
 	 * 
@@ -66,17 +74,26 @@ public class ImAio {
 	 */
 	public static List<User> getAllUser(GroupContext groupContext){
 		List<User> users = new ArrayList<User>();
-		Set<ChannelContext> userChannels = Aio.getAllChannelContexts(groupContext).getObj();
-		if(userChannels == null)
+		SetWithLock<ChannelContext> allChannels = Aio.getAllChannelContexts(groupContext);
+		if(allChannels == null)
 			return users;
-		for(ChannelContext channelContext : userChannels){
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			Client client = imSessionContext.getClient();
-			if(client != null && client.getUser() != null){
-				User user = new User();
-				BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
-				users.add(user);
+		ReadLock readLock = allChannels.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> userChannels = allChannels.getObj();
+			if(userChannels == null)
+				return users;
+			for(ChannelContext channelContext : userChannels){
+				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+				Client client = imSessionContext.getClient();
+				if(client != null && client.getUser() != null){
+					User user = new User();
+					BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
+					users.add(user);
+				}
 			}
+		}finally {
+			readLock.unlock();
 		}
 		return users;
 	}
@@ -90,19 +107,26 @@ public class ImAio {
 	 */
 	public static List<User> getAllOnlineUser(GroupContext groupContext){
 		List<User> users = new ArrayList<User>();
-		Set<ChannelContext> userChannels = Aio.getAllConnectedsChannelContexts(groupContext).getObj();
-		if(userChannels == null)
+		SetWithLock<ChannelContext> onlineChannels = Aio.getAllConnectedsChannelContexts(groupContext);
+		if(onlineChannels == null)
 			return users;
-		for(ChannelContext channelContext : userChannels){
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			if(imSessionContext != null){
-				Client client = imSessionContext.getClient();
-				if(client != null && client.getUser() != null){
-					User user = new User();
-					BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
-					users.add(user);
+		ReadLock readLock = onlineChannels.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> userChannels = onlineChannels.getObj();
+			for(ChannelContext channelContext : userChannels){
+				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+				if(imSessionContext != null){
+					Client client = imSessionContext.getClient();
+					if(client != null && client.getUser() != null){
+						User user = new User();
+						BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
+						users.add(user);
+					}
 				}
 			}
+		}finally {
+			readLock.unlock();
 		}
 		return users;
 	}

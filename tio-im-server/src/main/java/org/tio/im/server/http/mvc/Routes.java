@@ -20,7 +20,7 @@ import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMa
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.MethodAnnotationMatchProcessor;
 
 /**
- * @author tanyaowu 
+ * @author WChao 
  * 2017年7月1日 上午9:05:30
  */
 public class Routes {
@@ -81,7 +81,7 @@ public class Routes {
 
 	/**
 	 * 
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public Routes(String[] scanPackages) {
 //		this.scanPackages = scanPackages;
@@ -178,7 +178,7 @@ public class Routes {
 	 * 格式化成"/user","/"这样的路径
 	 * @param initPath
 	 * @return
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	private static String formateBeanPath(String initPath){
 		if (StringUtils.isBlank(initPath)) {
@@ -209,7 +209,7 @@ public class Routes {
 
 	/**
 	 * @param args
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public static void main(String[] args) {
 

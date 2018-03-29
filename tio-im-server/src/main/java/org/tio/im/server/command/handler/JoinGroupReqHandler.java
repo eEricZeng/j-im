@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
@@ -46,7 +47,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,joinGroupNotifyRespBody);
 		
 		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
-		ImAio.sendToGroup(channelContext.getGroupContext(), groupId, joinGroupNotifyrespPacket);
+		ImAio.sendToGroup(ImConfig.groupContext, groupId, joinGroupNotifyrespPacket);
 		
 		return joinGroupRespPacket;
 	}
@@ -79,7 +80,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		joinGroupRespBody.setGroup(groupId);
 		joinGroupRespBody.setResult(joinGroupResult);
 		
-		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C400).setData(joinGroupRespBody);
+		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C10011).setData(joinGroupRespBody);
 		ImPacket respPacket = ImKit.ConvertRespPacket(joinRespBody, channelContext);
 		return respPacket;
 	}

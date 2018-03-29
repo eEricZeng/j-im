@@ -5,7 +5,7 @@ import org.tio.im.common.http.GroupContextKey;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.http.HttpRequest;
 /**
- * @author tanyaowu
+ * @author WChao
  * 2017年8月18日 下午5:47:00
  */
 public class HttpServerUtils {
@@ -13,7 +13,7 @@ public class HttpServerUtils {
 	 *
 	 * @param request
 	 * @return
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public static HttpConfig getHttpConfig(HttpRequest request) {
 		ChannelContext channelContext = request.getChannelContext();
@@ -24,7 +24,7 @@ public class HttpServerUtils {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public static void main(String[] args) {
 
@@ -32,7 +32,7 @@ public class HttpServerUtils {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public HttpServerUtils() {
 	}

@@ -3,11 +3,12 @@
  */
 package org.tio.im.common;
 
+import org.tio.core.GroupContext;
 import org.tio.im.common.http.HttpConfig;
 import org.tio.im.common.ws.WsServerConfig;
 
 /**
- * @author mobo-pc
+ * @author WChao
  *
  */
 public class ImConfig {
@@ -26,8 +27,14 @@ public class ImConfig {
 	 * http相关配置;
 	 */
 	private HttpConfig httpConfig;
-	
+	/**
+	 * websocket相关配置;
+	 */
 	private WsServerConfig wsServerConfig;
+	/**
+	 * 全局群组上下文;
+	 */
+	public static GroupContext groupContext;
 	
 	
 	public ImConfig(String bindIp,Integer bindPort){
@@ -64,5 +71,4 @@ public class ImConfig {
 	public void setWsServerConfig(WsServerConfig wsServerConfig) {
 		this.wsServerConfig = wsServerConfig;
 	}
-	
 }

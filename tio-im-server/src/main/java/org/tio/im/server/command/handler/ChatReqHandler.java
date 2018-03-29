@@ -2,6 +2,7 @@ package org.tio.im.server.command.handler;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.ChatBody;
 import org.tio.im.common.packets.ChatType;
@@ -30,7 +31,7 @@ public class ChatReqHandler extends AbCmdHandler {
 		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody).toByte());
 		chatPacket.setSynSeq(packet.getSynSeq());//设置同步序列号;
 		if(chatBody.getChatType() == null || ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){//私聊
-			SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(channelContext.getGroupContext(),chatBody.getTo());
+			SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(ImConfig.groupContext,chatBody.getTo());
 			if(toChannleContexts != null && toChannleContexts.size() > 0){
 				ImAio.send(toChannleContexts, chatPacket);
 				return ChatKit.sendSuccessRespPacket(channelContext);//发送成功响应包
@@ -39,7 +40,7 @@ public class ChatReqHandler extends AbCmdHandler {
 			}
 		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){//群聊
 			String group_id = chatBody.getGroup_id();
-			ImAio.sendToGroup(channelContext.getGroupContext(), group_id, chatPacket);
+			ImAio.sendToGroup(ImConfig.groupContext, group_id, chatPacket);
 			return ChatKit.sendSuccessRespPacket(channelContext);//发送成功响应包
 		}
 		return null;

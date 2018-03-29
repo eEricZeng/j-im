@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.packets.ChatBody;
@@ -37,7 +38,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 	@Override
 	public Object onText(WsRequestPacket wsRequestPacket, String text, ChannelContext channelContext) throws Exception {
 		ChatBody chatBody = ChatKit.toChatBody(wsRequestPacket.getBody(), channelContext);
-		SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(channelContext.getGroupContext(),chatBody.getTo());
+		SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(ImConfig.groupContext,chatBody.getTo());
 		if(toChannleContexts != null && toChannleContexts.size() > 0){
 			ImAio.send(toChannleContexts, wsRequestPacket);
 			ImPacket sendSuccessPacket = ChatKit.sendSuccessRespPacket(channelContext);

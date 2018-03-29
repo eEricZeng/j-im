@@ -11,11 +11,17 @@ import org.tio.im.common.packets.Message;
  * 作者: WChao 创建时间: 2017年9月12日 下午3:13:22
  */
 public class LoginReqBody extends Message {
+	
 	private String loginname;
+	
 	private String password;
+	
 	private String token;
 	
+	private String reserved;//预留字段;
+	
 	public LoginReqBody(){}
+	
 	public LoginReqBody(String token){
 		this.token = token;
 	}
@@ -44,5 +50,13 @@ public class LoginReqBody extends Message {
 	}
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getReserved() {
+		return reserved;
+	}
+
+	public void setReserved(String reserved) {
+		this.reserved = reserved;
 	}
 }

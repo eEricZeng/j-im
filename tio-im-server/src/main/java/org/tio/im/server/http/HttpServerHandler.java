@@ -28,7 +28,6 @@ import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.im.server.ImServerStarter;
 import org.tio.im.server.handler.AbServerHandler;
 import org.tio.im.server.http.mvc.Routes;
-import org.tio.server.ServerGroupContext;
 import org.tio.utils.SystemTimer;
 import org.tio.utils.cache.guava.GuavaCache;
 /**
@@ -50,7 +49,7 @@ public class HttpServerHandler extends AbServerHandler{
 		this.httpConfig = httpServerConfig;
 	}
 	@Override
-	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig)throws Exception{
+	public void init(ImConfig imConfig)throws Exception{
 		long start = SystemTimer.currentTimeMillis();
 		this.httpConfig = imConfig.getHttpConfig();
 		if (httpConfig.getSessionStore() == null) {
@@ -75,7 +74,7 @@ public class HttpServerHandler extends AbServerHandler{
 		Routes routes = new Routes(httpConfig.getScanPackages());
 		httpRequestHandler = new DefaultHttpRequestHandler(httpConfig, routes);
 		httpConfig.setHttpRequestHandler(httpRequestHandler);
-		serverGroupContext.setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
+		ImConfig.groupContext.setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
 		long end = SystemTimer.currentTimeMillis();
 		long iv = end - start;
 		log.info("t-im Http Server初始化完毕,耗时:{}ms", iv);

@@ -2,7 +2,7 @@ package org.tio.im.server.http;
 
 import java.util.Map;
 /**
- * @author tanyaowu
+ * @author WChao
  * 2017年8月15日 下午5:44:52
  */
 public class FileCache implements java.io.Serializable {
@@ -11,7 +11,7 @@ public class FileCache implements java.io.Serializable {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public static void main(String[] args) {
 
@@ -25,7 +25,7 @@ public class FileCache implements java.io.Serializable {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public FileCache() {
 	}

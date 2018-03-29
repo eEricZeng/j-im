@@ -13,7 +13,7 @@ import org.tio.im.server.http.annotation.RequestPath;
 import org.tio.im.server.util.HttpResps;
 import org.tio.utils.json.Json;
 /**
- * @author tanyaowu
+ * @author WChao
  * 2017年6月29日 下午7:53:59
  */
 @RequestPath(value = "/test")
@@ -22,7 +22,7 @@ public class TestController {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public static void main(String[] args) {
 
@@ -36,7 +36,7 @@ public class TestController {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	public TestController() {
 	}
@@ -120,7 +120,7 @@ public class TestController {
 	 * @param channelContext
 	 * @return
 	 * @throws Exception
-	 * @author tanyaowu
+	 * @author WChao
 	 */
 	@RequestPath(value = "/upload")
 	public HttpResponse upload(UploadFile uploadFile, String before, String end, HttpRequest request) throws Exception {

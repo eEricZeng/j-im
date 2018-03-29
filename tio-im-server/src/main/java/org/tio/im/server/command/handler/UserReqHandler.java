@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.packets.Command;
@@ -36,17 +37,17 @@ public class UserReqHandler extends AbCmdHandler{
 		List<User> clients = null;
 		RespBody resPacket = null;
 		if(userReqBody.getType() == null || 0 == userReqBody.getType()){
-			clients = ImAio.getUser(channelContext.getGroupContext(), userReqBody.getUserid());
-			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C100);
+			clients = ImAio.getUser(ImConfig.groupContext, userReqBody.getUserid());
+			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10003);
 		}else if(1 == userReqBody.getType()){
-			clients = ImAio.getAllOnlineUser(channelContext.getGroupContext());
-			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C102);
+			clients = ImAio.getAllOnlineUser(ImConfig.groupContext);
+			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10005);
 		}else if(2 == userReqBody.getType()){
-			clients = ImAio.getAllUser(channelContext.getGroupContext());
-			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C103);
+			clients = ImAio.getAllUser(ImConfig.groupContext);
+			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10006);
 		}
 		if(clients == null)
-			return ImKit.ConvertRespPacket(new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C101), channelContext);
+			return ImKit.ConvertRespPacket(new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10004), channelContext);
 		resPacket.setData(clients);
 		return ImKit.ConvertRespPacket(resPacket, channelContext);
 	}

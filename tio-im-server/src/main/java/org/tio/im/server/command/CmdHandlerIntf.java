@@ -25,7 +25,7 @@ public interface CmdHandlerIntf
 	 * @param channelContext
 	 * @return
 	 *
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2016年11月18日 下午1:08:45
 	 *
 	 */

@@ -6,7 +6,7 @@ import org.tio.im.common.http.UploadFile;
 
 import cn.hutool.core.util.ClassUtil;
 /**
- * @author tanyaowu 
+ * @author WChao 
  * 2017年7月26日 下午6:46:11
  */
 public class ClassUtils {
@@ -14,7 +14,7 @@ public class ClassUtils {
 
 	/**
 	 * 
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public ClassUtils() {
 	}
@@ -27,7 +27,7 @@ public class ClassUtils {
 
 	/**
 	 * @param args
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public static void main(String[] args) {
 		log.info("");

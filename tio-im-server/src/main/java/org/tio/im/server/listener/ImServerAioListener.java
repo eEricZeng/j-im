@@ -7,7 +7,7 @@ import org.tio.server.intf.ServerAioListener;
 
 /**
  * 
- * @author tanyaowu 
+ * @author WChao 
  *
  */
 public class ImServerAioListener implements ServerAioListener {
@@ -17,7 +17,7 @@ public class ImServerAioListener implements ServerAioListener {
 	/**
 	 * 
 	 *
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2016年12月16日 下午5:52:06
 	 * 
 	 */
@@ -27,7 +27,7 @@ public class ImServerAioListener implements ServerAioListener {
 	/**
 	 * @param args
 	 *
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2016年12月16日 下午5:52:06
 	 * 
 	 */
@@ -36,20 +36,6 @@ public class ImServerAioListener implements ServerAioListener {
 
 	@Override
 	public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) {
-		/*ImSessionContext imSessionContext = new ImSessionContext();
-		channelContext.setAttribute(imSessionContext);
-		//GroupContext groupContext = channelContext.getGroupContext();
-		int permitsPerSecond = ImServerStarter.conf.getInt("request.permitsPerSecond");
-		int warnClearInterval = 1000 * ImServerStarter.conf.getInt("request.warnClearInterval");
-		int maxWarnCount = ImServerStarter.conf.getInt("request.maxWarnCount");
-		int maxAllWarnCount = ImServerStarter.conf.getInt("request.maxAllWarnCount");
-		RateLimiterWrap rateLimiterWrap = new RateLimiterWrap(permitsPerSecond, warnClearInterval, maxWarnCount, maxAllWarnCount);
-
-		imSessionContext.setRequestRateLimiter(rateLimiterWrap);*/
-
-		/*if (isConnected) {
-			Aio.bindUser(channelContext, channelContext.getId());
-		}*/
 		return;
 	}
 
@@ -58,7 +44,7 @@ public class ImServerAioListener implements ServerAioListener {
 	 * 
 	 * @param channelContext
 	 * @param packet
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2016年12月20日 上午11:08:44
 	 * 
 	 */
@@ -72,15 +58,12 @@ public class ImServerAioListener implements ServerAioListener {
 	 * @param channelContext
 	 * @param packet
 	 * @param packetSize
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2016年12月20日 上午11:08:44
 	 * 
 	 */
 	@Override
 	public void onAfterReceived(ChannelContext channelContext, Packet packet, int packetSize) {
-		/*if (packet.getBody() == null) {
-			Aio.remove(channelContext, "body is null");
-		}*/
 	}
 
 	/** 
@@ -89,7 +72,7 @@ public class ImServerAioListener implements ServerAioListener {
 	 * @param channelContext
 	 * @param throwable
 	 * @param remark
-	 * @author: tanyaowu
+	 * @author: WChao
 	 * 2017年2月1日 上午11:03:11
 	 * 
 	 */

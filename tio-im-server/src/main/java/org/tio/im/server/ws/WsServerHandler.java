@@ -36,7 +36,6 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import org.tio.server.ServerGroupContext;
 import com.alibaba.fastjson.JSONObject;
 /**
  * 版本: [1.0]
@@ -58,7 +57,7 @@ public class WsServerHandler extends AbServerHandler{
 		this.wsMsgHandler = wsMsgHandler;
 	}
 	@Override
-	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
+	public void init(ImConfig imConfig) {
 		this.wsServerConfig = new WsServerConfig();
 		imConfig.setWsServerConfig(wsServerConfig);
 		this.wsMsgHandler = new WsMsgHandler();
@@ -101,9 +100,9 @@ public class WsServerHandler extends AbServerHandler{
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-		AbCmdHandler cmdHandler = CommandManager.getInstance().getCommand(wsRequestPacket.getCommand());
+		AbCmdHandler cmdHandler = CommandManager.getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
-			RespBody respBody = new RespBody(Command.COMMAND_UNKNOW,ImStatus.C2);
+			RespBody respBody = new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10002);
 			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, respBody.toByte());
 			ImAio.send(channelContext, imPacket);
 			return;

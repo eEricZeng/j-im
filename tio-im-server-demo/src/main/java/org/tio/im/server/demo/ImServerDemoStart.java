@@ -30,9 +30,9 @@ public class ImServerDemoStart {
 		HttpServerInit.init(imConfig);
 		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
-		HandshakeReqHandler handshakeReqHandler = CommandManager.getInstance().getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
+		HandshakeReqHandler handshakeReqHandler = CommandManager.getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
 		handshakeReqHandler.addProcCmdHandler(new WsHandshakeHandler());//添加自定义握手处理器;
-		LoginReqHandler loginReqHandler = CommandManager.getInstance().getCommand(Command.COMMAND_LOGIN_REQ,LoginReqHandler.class);
+		LoginReqHandler loginReqHandler = CommandManager.getCommand(Command.COMMAND_LOGIN_REQ,LoginReqHandler.class);
 		loginReqHandler.addProcCmdHandler(new UserServiceHandler());//添加登录业务处理器;
 		imServerStarter.start();
 	}

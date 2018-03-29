@@ -4,58 +4,82 @@
 package org.tio.im.server.command;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tio.im.common.packets.Command;
+import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 /**
  * 版本: [1.0]
  * 功能说明: 命令执行管理器;
  * 作者: WChao 创建时间: 2017年7月17日 下午2:23:41
  */
+@SuppressWarnings("unchecked")
 public class CommandManager{
 	
-	private  Map<Command, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
+	private static  Map<Command, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
+	private static Logger LOG = LoggerFactory.getLogger(CommandManager.class);
 	
 	private CommandManager(){};
-	private static CommandManager instance = null;
 	
-	public static CommandManager getInstance(){
-		if(instance == null){
-			synchronized (CommandManager.class) {
-				if(instance == null){
-					instance = new CommandManager();
+	static{
+		 try {
+			List<CommandConfiguration> configurations = CommandConfigurationFactory.parseConfiguration();
+			init(configurations);
+		} catch (Exception e) {
+			LOG.error(e.toString(),e);
+		}
+	}
+	
+	private static void init(List<CommandConfiguration> configurations) throws Exception{
+		for(CommandConfiguration configuration : configurations){
+			Class<AbCmdHandler> cmdHandlerClazz = (Class<AbCmdHandler>)Class.forName(configuration.getCmdHandler());
+			AbCmdHandler cmdHandler = cmdHandlerClazz.newInstance();
+			List<String> proCmdHandlerList = configuration.getProCmdhandlers();
+			if(!proCmdHandlerList.isEmpty()){
+				for(String proCmdHandlerClass : proCmdHandlerList){
+					Class<ProCmdHandlerIntf> proCmdHandlerClazz = (Class<ProCmdHandlerIntf>)Class.forName(proCmdHandlerClass);
+					ProCmdHandlerIntf proCmdHandler = proCmdHandlerClazz.newInstance();
+					cmdHandler.addProcCmdHandler(proCmdHandler);
 				}
 			}
+			registerCommand(cmdHandler);
 		}
-		return instance;
 	}
-	
-	public CommandManager registerCommand(AbCmdHandler imCommandHandler){
+	public static AbCmdHandler registerCommand(AbCmdHandler imCommandHandler) throws Exception{
+		if(imCommandHandler == null || imCommandHandler.command() == null)
+			return null;
+		int cmd_number = imCommandHandler.command().getNumber();
+		if(Command.forNumber(cmd_number) == null)
+			throw new Exception("注册cmd处理器失败,不合法的cmd命令码:"+cmd_number+",请在Command枚举类中添加!");
 		if(handlerMap.get(imCommandHandler.command()) == null)
 		{
-			handlerMap.put(imCommandHandler.command(),imCommandHandler);
+			return handlerMap.put(imCommandHandler.command(),imCommandHandler);
 		}
-		return this;
+		return null;
 	}
 	
-	public CommandManager removeCommand(Command command){
+	public static AbCmdHandler removeCommand(Command command){
+		if(command == null)
+			return null;
 		if(handlerMap.get(command) != null)
 		{
-			handlerMap.remove(command);
+			return handlerMap.remove(command);
 		}
-		return this;
+		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> T getCommand(Command command,Class<T> clazz){
-		AbCmdHandler cmdHandler = this.getCommand(command);
+	public static <T> T getCommand(Command command,Class<T> clazz){
+		AbCmdHandler cmdHandler = getCommand(command);
 		if(cmdHandler != null){
 			return (T)cmdHandler;
 		}
 		return null;
 	}
 	
-	public AbCmdHandler getCommand(Command command){
+	public static AbCmdHandler getCommand(Command command){
 		if(command == null)
 			return null;
 		

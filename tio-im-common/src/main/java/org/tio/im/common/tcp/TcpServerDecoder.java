@@ -27,7 +27,7 @@ public class TcpServerDecoder {
 		//获取第一个字节协议版本号;
 		byte version = buffer.get();
 		if(version != Protocol.VERSION){
-			throw new AioDecodeException(ImStatus.C1001.getText());
+			throw new AioDecodeException(ImStatus.C10013.getText());
 		}
 		//标志位
 		byte maskByte = buffer.get();
@@ -38,7 +38,7 @@ public class TcpServerDecoder {
 		//cmd命令码
 		byte cmdByte = buffer.get();
 		if(Command.forNumber(cmdByte) == null){
-			throw new AioDecodeException(ImStatus.C1002.getText());
+			throw new AioDecodeException(ImStatus.C10014.getText());
 		}
 		int bodyLen = buffer.getInt();
 		int readableLength = buffer.limit() - buffer.position();
@@ -76,7 +76,7 @@ public class TcpServerDecoder {
 		//获取第一个字节协议版本号;
 		byte version = buffer.get(index);
 		if(version != Protocol.VERSION){
-			throw new AioDecodeException(ImStatus.C1001.getText());
+			throw new AioDecodeException(ImStatus.C10013.getText());
 		}
 		index++;
 		//标志位
@@ -88,7 +88,7 @@ public class TcpServerDecoder {
 		//cmd命令码
 		byte cmdByte = buffer.get(index);
 		if(Command.forNumber(cmdByte) == null){
-			throw new AioDecodeException(ImStatus.C1002.getText());
+			throw new AioDecodeException(ImStatus.C10014.getText());
 		}
 		index++;
 		//消息体长度

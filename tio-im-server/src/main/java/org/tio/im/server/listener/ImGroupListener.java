@@ -3,6 +3,7 @@ package org.tio.im.server.listener;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.GroupListener;
 import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Client;
@@ -11,21 +12,21 @@ import org.tio.im.common.packets.ExitGroupNotifyRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 /**
- * @author tanyaowu 
+ * @author WChao 
  * 2017年5月13日 下午10:38:36
  */
 public class ImGroupListener implements GroupListener{
 
 	/**
 	 * 
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public ImGroupListener() {
 	}
 
 	/**
 	 * @param args
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public static void main(String[] args) {
 
@@ -35,7 +36,7 @@ public class ImGroupListener implements GroupListener{
 	 * @param channelContext
 	 * @param group
 	 * @throws Exception
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	@Override
 	public void onAfterBind(ChannelContext channelContext, String group) throws Exception {
@@ -45,7 +46,7 @@ public class ImGroupListener implements GroupListener{
 	 * @param channelContext
 	 * @param group
 	 * @throws Exception
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	@Override
 	public void onAfterUnbind(ChannelContext channelContext, String group) throws Exception {
@@ -64,7 +65,7 @@ public class ImGroupListener implements GroupListener{
 		
 		RespBody respBody = new RespBody(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP,exitGroupNotifyRespBody);
 		ImPacket imPacket = new ImPacket(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP, respBody.toByte());
-		ImAio.sendToGroup(channelContext.getGroupContext(), group, imPacket);
+		ImAio.sendToGroup(ImConfig.groupContext, group, imPacket);
 		
 	}
 }

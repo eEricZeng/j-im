@@ -90,9 +90,9 @@ public class ChatKit {
    * @throws Exception
    */
    public static ImPacket  dataInCorrectRespPacket(ChannelContext channelContext) throws Exception{
-	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C2);
+	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C10002);
 	   ImPacket respPacket = ImKit.ConvertRespPacket(chatDataInCorrectRespPacket, channelContext);
-	   respPacket.setStatus(ImStatus.C2);
+	   respPacket.setStatus(ImStatus.C10002);
 	   return respPacket;
    }
    /**
@@ -103,9 +103,9 @@ public class ChatKit {
     * @throws Exception
     */
     public static ImPacket  sendSuccessRespPacket(ChannelContext channelContext) throws Exception{
- 	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C1);
+ 	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C10000);
  	   ImPacket respPacket = ImKit.ConvertRespPacket(chatDataInCorrectRespPacket, channelContext);
- 	   respPacket.setStatus(ImStatus.C1);
+ 	   respPacket.setStatus(ImStatus.C10000);
  	   return respPacket;
     }
     /**
@@ -116,9 +116,9 @@ public class ChatKit {
      * @throws Exception
      */
      public static ImPacket  offlineRespPacket(ChannelContext channelContext) throws Exception{
-  	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C0);
+  	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C10001);
   	   ImPacket respPacket = ImKit.ConvertRespPacket(chatDataInCorrectRespPacket, channelContext);
-  	   respPacket.setStatus(ImStatus.C0);
+  	   respPacket.setStatus(ImStatus.C10001);
   	   return respPacket;
      }
 }

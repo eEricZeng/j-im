@@ -9,7 +9,7 @@ import org.tio.im.common.packets.User;
 import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 
 /**
- * @author mobo-pc
+ * @author WChao
  *
  */
 public interface LoginCmdHandlerIntf extends ProCmdHandlerIntf{

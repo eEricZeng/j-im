@@ -60,9 +60,9 @@ function connect(){
 		   COMMAND_CHAT_RESP(dataObj);
 	   }else if(dataObj.command == "COMMAND_GET_USER_RESP"){//获取用户信息响应处理;
 		   COMMAND_GET_USER_RESP(dataObj);
-	   }else if(0 == dataObj.code && dataObj.command == "COMMAND_CHAT_RESP"){//聊天发送状态;
+	   }else if(10000 == dataObj.code && dataObj.command == "COMMAND_CHAT_RESP"){//聊天发送状态;
 		   COMMAND_CHAT_RESP_SEND_STATUS(data);
-	   }else if("400" == dataObj.code && dataObj.command == "COMMAND_JOIN_GROUP_RESP"){//加入群组响应状态处理;
+	   }else if("10011" == dataObj.code && dataObj.command == "COMMAND_JOIN_GROUP_RESP"){//加入群组响应状态处理;
 		   COMMAND_JOIN_GROUP_RESP(dataObj);
 	   }else if(dataObj.command == "COMMAND_JOIN_GROUP_NOTIFY_RESP"){//加入群组的消息通知处理;
 		   COMMAND_JOIN_GROUP_NOTIFY_RESP(dataObj);
@@ -96,9 +96,9 @@ function COMMAND_CHAT_RESP_SEND_STATUS(data){
 //获取用户信息响应处理;
 function COMMAND_GET_USER_RESP(data){
    	var onlineUsers =  data.data;
-   	if(data.code == 100){
+   	if(data.code == 10003){
    		curUser = onlineUsers[0];
-   	}else if(data.code == 102){
+   	}else if(data.code == 10005){
    		onlineUserArray = [];
    	   	for(var i = 0 ; i < onlineUsers.length ; i++){
    	   		onlineUserArray.push(onlineUsers[i]);

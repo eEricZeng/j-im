@@ -28,7 +28,6 @@ import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import org.tio.server.ServerGroupContext;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -39,7 +38,7 @@ public class TcpServerHandler extends AbServerHandler{
 	Logger logger = Logger.getLogger(TcpServerHandler.class);
 	
 	@Override
-	public void init(ServerGroupContext serverGroupContext,ImConfig imConfig) {
+	public void init(ImConfig imConfig) {
 	}
 
 	@Override
@@ -73,9 +72,9 @@ public class TcpServerHandler extends AbServerHandler{
 		String message = new String(tcpPacket.getBody(),Const.CHARSET);
 		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
 		logger.info(onText);
-		AbCmdHandler cmdHandler = CommandManager.getInstance().getCommand(tcpPacket.getCommand());
+		AbCmdHandler cmdHandler = CommandManager.getCommand(tcpPacket.getCommand());
 		if(cmdHandler == null){
-			RespBody respBody = new RespBody().setCode(ImStatus.C2.getCode()).setMsg(ImStatus.C2.getText()).setCommand(Command.COMMAND_UNKNOW);
+			RespBody respBody = new RespBody().setCode(ImStatus.C10002.getCode()).setMsg(ImStatus.C10002.getText()).setCommand(Command.COMMAND_UNKNOW);
 			ImPacket responsePacket = ImKit.ConvertRespPacket(respBody, channelContext);
 			Aio.send(channelContext, responsePacket);
 			return;

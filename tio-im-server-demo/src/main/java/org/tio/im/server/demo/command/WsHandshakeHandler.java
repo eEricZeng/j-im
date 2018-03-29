@@ -32,7 +32,7 @@ public class WsHandshakeHandler extends WsHandshakeProCmdHandler{
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
 		if (wsRequestPacket.isHandShake()) {
-			LoginReqHandler loginHandler = (LoginReqHandler)CommandManager.getInstance().getCommand(Command.COMMAND_LOGIN_REQ);
+			LoginReqHandler loginHandler = (LoginReqHandler)CommandManager.getCommand(Command.COMMAND_LOGIN_REQ);
 			HttpRequest request = wsSessionContext.getHandshakeRequestPacket();
 			String username = request.getParams().get("username") == null ? null : (String)request.getParams().get("username")[0];
 			String password = request.getParams().get("password") == null ? null : (String)request.getParams().get("password")[0];

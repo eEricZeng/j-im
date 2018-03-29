@@ -10,21 +10,21 @@ package org.tio.im.common;
  */
 public enum ImStatus implements Status{
 	
-	C0(1,"offline","用户不在线"),
-	C1(0,"ok","发送成功"),
-	C2(2,"send failed","消息发送失败,数据格式不正确,请参考:{'from':来源ID,'to':目标ID,'cmd':'消息命令码','createTime':消息创建时间(Long型),'msgType':消息类型,'content':内容}"),
-	C100(100,"ok","获取用户信息成功!"),
-	C101(101,"get user failed !","获取用户信息失败!"),
-	C102(102,"ok","获取在线用户信息成功!"),
-	C103(103,"ok","获取所有用户信息成功!"),
-	C200(200,"ok","登录成功!"),
-	C201(201,"login failed !","登录失败!"),
-	C300(300,"ok","鉴权成功!"),
-	C301(301,"auth failed!","鉴权失败!"),
-	C400(400,"join group ok!","加入群组成功!"),
-	C401(401,"join group failed!","加入群组失败!"),
-	C1001(1001,"Protocol version number does not match","协议版本号不匹配!"),
-	C1002(1002,"unsupported cmd command","不支持的cmd命令!");
+	C10000(10000,"ok","发送成功"),
+	C10001(10001,"offline","用户不在线"),
+	C10002(10002,"send failed","消息发送失败,数据格式不正确,请参考:{'from':来源ID,'to':目标ID,'cmd':'消息命令码','createTime':消息创建时间(Long型),'msgType':Integer消息类型,'content':内容}"),
+	C10003(10003,"ok","获取用户信息成功!"),
+	C10004(10004,"get user failed !","获取用户信息失败!"),
+	C10005(10005,"ok","获取在线用户信息成功!"),
+	C10006(10006,"ok","获取所有用户信息成功!"),
+	C10007(10007,"ok","登录成功!"),
+	C10008(10008,"login failed !","登录失败!"),
+	C10009(10009,"ok","鉴权成功!"),
+	C10010(10010,"auth failed!","鉴权失败!"),
+	C10011(10011,"join group ok!","加入群组成功!"),
+	C10012(10012,"join group failed!","加入群组失败!"),
+	C10013(10013,"Protocol version number does not match","协议版本号不匹配!"),
+	C10014(10014,"unsupported cmd command","不支持的cmd命令!");
 	
 	private int status;
 	
