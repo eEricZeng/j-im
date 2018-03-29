@@ -235,6 +235,20 @@ function keyDown(e) {
 		sendGroup();
 	}
 }
+function authCmd(){
+	if(!curUser){
+		alert("demo中模拟命令需要先登录，请先登录!");
+	}
+	var authCmd = "{\"cmd\":3,\"token\":\"校验码\"}";
+	socket.send(authCmd);
+}
+function heartbeatCmd(){
+	if(!curUser){
+		alert("demo中模拟命令需要先登录，请先登录!");
+	}
+	var heartbeatCmd = "{\"cmd\":13,\"hbbyte\":\"-127\"}";
+	socket.send(heartbeatCmd);
+}
 </script>
 <body onload="setUserName();">
    <div id="wrap" style="height:600px;">
@@ -256,6 +270,8 @@ function keyDown(e) {
 		<div class="unit">
 			<label>聊天记录:</label>
 			<input type="button" value="清空记录" onclick="clearLogs();"/>
+			<input type="button" value="鉴权命令" onclick="authCmd();"/>
+			<input type="button" value="心跳命令" onclick="heartbeatCmd();"/>
 		</div>
 		<div class="content">
 				<div id="logs" class="unit log">

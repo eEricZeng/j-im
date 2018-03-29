@@ -35,7 +35,7 @@ public class AuthReqHandler extends AbCmdHandler
 		String data = token +  Const.authkey;
 		logger.info(data);
 		authReqBody.setToken(data);
-		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C10009).setData(JSONObject.toJSONString(authReqBody));
+		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C10009).setData(authReqBody);
 		return ImKit.ConvertRespPacket(respBody, channelContext);
 	}
 
