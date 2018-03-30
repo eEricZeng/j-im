@@ -1,6 +1,5 @@
 package org.tio.im.server.command.handler;
 
-import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
 import org.tio.im.common.Const;
 import org.tio.im.common.ImPacket;
@@ -20,9 +19,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class AuthReqHandler extends AbCmdHandler
 {
-	
-	private Logger logger = Logger.getLogger(AuthReqHandler.class);
-	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{
@@ -33,8 +29,8 @@ public class AuthReqHandler extends AbCmdHandler
 		AuthReqBody authReqBody = JSONObject.parseObject(packet.getBody(), AuthReqBody.class);
 		String token = authReqBody.getToken() == null ? "" : authReqBody.getToken();
 		String data = token +  Const.authkey;
-		logger.info(data);
 		authReqBody.setToken(data);
+		authReqBody.setCmd(null);
 		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C10009).setData(authReqBody);
 		return ImKit.ConvertRespPacket(respBody, channelContext);
 	}

@@ -16,6 +16,7 @@ public class ChatBody extends Message {
 	private Integer chatType;//聊天类型;(如公聊、私聊)
 	private String content;//消息内容;
 	private String group_id;//消息发到哪个群组;
+	
 	public String getFrom() {
 		return from;
 	}

@@ -1,10 +1,6 @@
 package org.tio.im.common;
 
-import org.tio.im.common.packets.Command;
-
 public interface Protocol{
-	
-	//===================================[1] TCP Byte Command==================================================
 	/**
 	 * 心跳字节
 	 */
@@ -18,7 +14,7 @@ public interface Protocol{
 	/**
 	 * 协议版本号
 	 */
-	public final static byte VERSION = 1;
+	public final static byte VERSION = 0x01;
 	
 	public final static String WEBSOCKET = "ws";
 	
@@ -26,12 +22,7 @@ public interface Protocol{
 	
 	public final static String TCP = "tcp";
 	
-	public static final String COOKIE_NAME_FOR_SESSION = "tio-s";
-	/**
-	 * 聊天字节
-	 */
-	public final static byte CHAT_BYTE = Command.COMMAND_CHAT_REQ_VALUE;
-	
+	public static final String COOKIE_NAME_FOR_SESSION = "tim-s";
 	/**
 	 * 消息体最多为多少
 	 */
@@ -66,7 +57,4 @@ public interface Protocol{
 	 * 版本号mask
 	 */
 	public static final byte FIRST_BYTE_MASK_VERSION = 0B00001111;
-
-	//==========================================[2] Http Paramter=======================================
-	public final static String COMMAND = "cmd";
 }

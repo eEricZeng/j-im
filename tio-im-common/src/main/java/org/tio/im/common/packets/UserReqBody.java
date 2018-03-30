@@ -9,8 +9,10 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年9月26日 上午11:44:10
  */
 public class UserReqBody extends Message{
+	
 	private String userid;//用户id;
 	private Integer type;//0:单个,1:所有在线用户,2:所有用户(在线+离线);
+	
 	public String getUserid() {
 		return userid;
 	}

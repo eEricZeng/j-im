@@ -13,7 +13,6 @@ import org.tio.im.common.packets.LoginRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImKit;
-import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 import org.tio.im.server.command.handler.proc.login.LoginCmdHandlerIntf;
@@ -47,9 +46,6 @@ public class LoginReqHandler extends AbCmdHandler {
 		String userid = user.getId();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
 		Aio.bindUser(channelContext,userid);
-		if(imSessionContext.getClient() == null){
-			ImUtils.setClient(channelContext);
-		}
 		String token = imSessionContext.getToken();
 		user.setTerminal(ImKit.getTerminal(channelContext));
 		imSessionContext.getClient().setUser(user);
