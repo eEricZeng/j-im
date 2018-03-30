@@ -11,7 +11,6 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
-import org.tio.im.common.Const;
 import org.tio.im.common.ImAio;
 import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
@@ -43,19 +42,14 @@ public class TcpServerHandler extends AbServerHandler{
 
 	@Override
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext){
-		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext == null){
-			if(buffer != null){
-				//获取第一个字节协议版本号;
-				byte version = buffer.get();
-				if(version == Protocol.VERSION){//TCP协议;
-					channelContext.setAttribute(new TcpSessionContext());
-					ImUtils.setClient(channelContext);
-					return true;
-				}
+		if(buffer != null){
+			//获取第一个字节协议版本号;
+			byte version = buffer.get();
+			if(version == Protocol.VERSION){//TCP协议;
+				channelContext.setAttribute(new TcpSessionContext().setServerHandler(this));
+				ImUtils.setClient(channelContext);
+				return true;
 			}
-		}else if(sessionContext instanceof TcpSessionContext){
-			return true;
 		}
 		return false;
 	}
@@ -69,9 +63,6 @@ public class TcpServerHandler extends AbServerHandler{
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext)throws Exception {
 		TcpPacket tcpPacket = (TcpPacket)packet;
-		String message = new String(tcpPacket.getBody(),Const.CHARSET);
-		String onText = new String("服务器收到来自->"+channelContext.getId()+"的消息:"+message);
-		logger.info(onText);
 		AbCmdHandler cmdHandler = CommandManager.getCommand(tcpPacket.getCommand());
 		if(cmdHandler == null){
 			RespBody respBody = new RespBody().setCode(ImStatus.C10002.getCode()).setMsg(ImStatus.C10002.getText()).setCommand(Command.COMMAND_UNKNOW);

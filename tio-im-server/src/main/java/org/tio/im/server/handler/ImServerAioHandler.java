@@ -6,6 +6,7 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
+import org.tio.im.common.ImSessionContext;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
@@ -26,7 +27,8 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-		AbServerHandler handler = ServerHandlerManager.getServerHandler(null,channelContext);
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		AbServerHandler handler = (AbServerHandler)imSessionContext.getServerHandler();
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -43,7 +45,8 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-		AbServerHandler handler = ServerHandlerManager.getServerHandler(null,channelContext);
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		AbServerHandler handler = (AbServerHandler)imSessionContext.getServerHandler();
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -62,10 +65,17 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 */
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
-		AbServerHandler handler = ServerHandlerManager.getServerHandler(buffer,channelContext);
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		AbServerHandler handler = null;
+		if(imSessionContext == null){
+			handler = ServerHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
+		}else{
+			handler = (AbServerHandler)imSessionContext.getServerHandler();
+		}
 		if(handler != null){
 			return handler.decode(buffer, channelContext);
+		}else{
+			throw new AioDecodeException("不支持的协议类型,无法找到对应的协议解码器!");
 		}
-		return null;
 	}
 }

@@ -2,6 +2,7 @@ package org.tio.im.common.ws;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.utils.ByteBufferUtils;
@@ -52,22 +52,18 @@ public class WsServerDecoder {
 		int rsv = (first & 0x70) >>> 4;//得到5、6、7 为01110000 然后右移四位为00000111
 		byte opCodeByte = (byte) (first & 0x0F);//后四位为opCode 00001111
 		Opcode opcode = Opcode.valueOf(opCodeByte);
-		if (opcode == Opcode.CLOSE) {
-			//			Aio.remove(channelContext, "收到opcode:" + opcode);
-			//			return null;
-		}
-		if (!fin) {
+		/*if (!fin) {
 			log.error("{} 暂时不支持fin为false的请求", channelContext);
 			Aio.remove(channelContext, "暂时不支持fin为false的请求");
 			return null;
 			//下面这段代码不要删除，以后若支持fin，则需要的
-			//			if (lastParts == null) {
-			//				lastParts = new ArrayList<>();
-			//				imSessionContext.setLastParts(lastParts);
-			//			}
+			if (lastParts == null) {
+				lastParts = new ArrayList<byte[]>();
+				imSessionContext.setLastParts(lastParts);
+			}
 		} else {
 			imSessionContext.setLastParts(null);
-		}
+		}*/
 
 		byte second = buf.get(); //向后读取一个字节
 		boolean hasMask = (second & 0xFF) >> 7 == 1; //用于标识PayloadData是否经过掩码处理。如果是1，Masking-key域的数据即是掩码密钥，用于解码PayloadData。客户端发出的数据帧需要进行掩码处理，所以此位是1。
@@ -129,9 +125,12 @@ public class WsServerDecoder {
 				array[i] = (byte) (array[i] ^ mask[i % 4]);
 			}
 		}
-
 		if (!fin) {
-			//lastParts.add(array);
+			if (lastParts == null) {
+				lastParts = new ArrayList<byte[]>();
+				imSessionContext.setLastParts(lastParts);
+			}
+			lastParts.add(array);
 			log.error("payloadLength {}, lastParts size {}, array length {}", payloadLength, lastParts.size(), array.length);
 			return websocketPacket;
 		} else {
@@ -164,6 +163,7 @@ public class WsServerDecoder {
 					log.error(e.toString(), e);
 				}
 			}
+			imSessionContext.setLastParts(null);
 		}
 		return websocketPacket;
 

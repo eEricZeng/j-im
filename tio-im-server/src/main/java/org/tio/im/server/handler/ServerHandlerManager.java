@@ -53,7 +53,7 @@ public class ServerHandlerManager{
 		return serverHandlers.remove(name);
 	}
 	
-	public static AbServerHandler getServerHandler(ByteBuffer buffer,ChannelContext channelContext){
+	public static AbServerHandler initServerHandlerToChannelContext(ByteBuffer buffer,ChannelContext channelContext){
 		for(Entry<String,AbServerHandler> entry : serverHandlers.entrySet()){
 			ByteBuffer copyByteBuffer = null;
 			if(buffer != null && channelContext.getAttribute() == null){

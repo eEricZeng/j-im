@@ -67,19 +67,14 @@ public class WsServerHandler extends AbServerHandler{
 
 	@Override
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
-		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext == null){//第一次连接;
-			if(buffer != null){
-				HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
-				if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
-				{
-					channelContext.setAttribute(new WsSessionContext());
-					ImUtils.setClient(channelContext);
-					return true;
-				}
+		if(buffer != null){//第一次连接;
+			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
+			{
+				channelContext.setAttribute(new WsSessionContext().setServerHandler(this));
+				ImUtils.setClient(channelContext);
+				return true;
 			}
-		}else if(sessionContext instanceof WsSessionContext){
-			return true;
 		}
 		return false;
 	}
@@ -102,8 +97,9 @@ public class WsServerHandler extends AbServerHandler{
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		AbCmdHandler cmdHandler = CommandManager.getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
-			RespBody respBody = new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10002);
-			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, respBody.toByte());
+			if(!wsRequestPacket.isWsEof())//是否ws分片发包尾帧包
+				return;
+			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10002).toByte());
 			ImAio.send(channelContext, imPacket);
 			return;
 		}

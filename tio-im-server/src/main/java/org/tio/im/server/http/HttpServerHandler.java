@@ -82,18 +82,13 @@ public class HttpServerHandler extends AbServerHandler{
 	
 	@Override
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
-		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext == null){
-			if(buffer != null){
-				HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
-				if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
-				{
-					channelContext.setAttribute(new HttpSession());
-					return true;
-				}
+		if(buffer != null){
+			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
+			{
+				channelContext.setAttribute(new HttpSession().setServerHandler(this));
+				return true;
 			}
-		}else if(sessionContext instanceof HttpSession){
-			return true;
 		}
 		return false;
 	}

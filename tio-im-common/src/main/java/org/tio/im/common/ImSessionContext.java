@@ -2,6 +2,7 @@ package org.tio.im.common;
 
 import org.tio.im.common.packets.Client;
 import org.tio.monitor.RateLimiterWrap;
+import org.tio.server.intf.ServerAioHandler;
 
 /**
  * 
@@ -18,6 +19,10 @@ public class ImSessionContext extends SessionContext
 	private Client client = null;
 	
 	private String token = null;
+	/**
+	 * 通道所属协议处理器;
+	 */
+	private ServerAioHandler serverHandler;
 	
 	/**
 	 * 
@@ -88,4 +93,14 @@ public class ImSessionContext extends SessionContext
 	public void setRequestRateLimiter(RateLimiterWrap requestRateLimiter) {
 		this.requestRateLimiter = requestRateLimiter;
 	}
+
+	public ServerAioHandler getServerHandler() {
+		return serverHandler;
+	}
+
+	public ImSessionContext setServerHandler(ServerAioHandler serverHandler) {
+		this.serverHandler = serverHandler;
+		return this;
+	}
+	
 }
