@@ -27,14 +27,14 @@ public class ChatReqHandler extends AbCmdHandler {
 			throw new Exception("body is null");
 		}
 		ChatBody chatBody = ChatKit.toChatBody(packet.getBody(), channelContext);
-		if(chatBody == null){//聊天数据格式不正确
+		if(chatBody == null || chatBody.getChatType() == null){//聊天数据格式不正确
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
 		if(ChatType.forNumber(chatBody.getChatType()) != null){//异步调用业务处理消息接口
 			MsgQueueRunnable msgQueueRunnable = (MsgQueueRunnable)channelContext.getAttribute(Const.CHAT_QUEUE);
 			ImServerGroupContext imServerGroupContext = (ImServerGroupContext)ImConfig.groupContext;
-			msgQueueRunnable.addMsg(chatBody);
+			msgQueueRunnable.addMsg(packet);
 			imServerGroupContext.getTimExecutor().execute(msgQueueRunnable);
 		}
 		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody).toByte());

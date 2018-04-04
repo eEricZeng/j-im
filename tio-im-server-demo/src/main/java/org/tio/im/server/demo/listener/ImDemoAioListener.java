@@ -12,11 +12,9 @@ import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.Group;
 import org.tio.im.common.packets.User;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.server.command.handler.JoinGroupReqHandler;
 import org.tio.im.server.listener.ImServerAioListener;
-
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author WChao
  *
@@ -33,7 +31,7 @@ public class ImDemoAioListener extends ImServerAioListener{
 			User user = imSessionContext.getClient().getUser();
 			if(user.getGroups() != null){
 				for(Group group : user.getGroups()){//绑定群组并发送加入群组通知
-					ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JSONObject.toJSONBytes(group));
+					ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
 					try {
 						new JoinGroupReqHandler().handler(groupPacket, channelContext);
 					} catch (Exception e) {

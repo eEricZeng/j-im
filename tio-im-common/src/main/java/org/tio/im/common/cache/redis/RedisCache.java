@@ -10,11 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.im.common.cache.redis.JedisTemplate.Pair;
 import org.tio.im.common.cache.redis.JedisTemplate.PairEx;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.utils.SystemTimer;
 import org.tio.utils.cache.ICache;
-
-import com.alibaba.fastjson.JSONObject;
-
 /**
  *
  * @author wchao
@@ -112,7 +110,7 @@ public class RedisCache implements ICache {
 		try {
 			List<PairEx<String,String,Integer>> pairDatas = new ArrayList<PairEx<String,String,Integer>>();
 			for(Pair<String,Serializable> pair : values){
-				pairDatas.add(JedisTemplate.me().makePairEx(cacheKey(cacheName, pair.getKey()),JSONObject.toJSONString(pair.getValue()),expire));
+				pairDatas.add(JedisTemplate.me().makePairEx(cacheKey(cacheName, pair.getKey()),JsonKit.toJSONString(pair.getValue()),expire));
 			}
 			JedisTemplate.me().batchSetStringEx(pairDatas);
 		}catch (Exception e) {

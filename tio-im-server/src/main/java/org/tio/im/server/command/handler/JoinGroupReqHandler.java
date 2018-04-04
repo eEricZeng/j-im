@@ -18,9 +18,8 @@ import org.tio.im.common.packets.JoinGroupResult;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImKit;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.server.command.AbCmdHandler;
-
-import com.alibaba.fastjson.JSONObject;
 /**
  * 
  * 版本: [1.0]
@@ -40,7 +39,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		User clientUser = imSessionContext.getClient().getUser();
 		User notifyUser = new User(clientUser.getId(),clientUser.getNick());
 		
-		Group joinGroup = JSONObject.parseObject(packet.getBody(),Group.class);
+		Group joinGroup = JsonKit.toBean(packet.getBody(),Group.class);
 		String groupId = joinGroup.getGroup_id();
 		//发进房间通知  COMMAND_JOIN_GROUP_NOTIFY_RESP
 		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
@@ -62,7 +61,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}
-		Group joinGroup = JSONObject.parseObject(packet.getBody(),Group.class);
+		Group joinGroup = JsonKit.toBean(packet.getBody(),Group.class);
 
 		String groupId = joinGroup.getGroup_id();
 		if (StringUtils.isBlank(groupId)) {

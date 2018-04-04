@@ -8,9 +8,8 @@ import org.tio.im.common.packets.AuthReqBody;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.ImKit;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.server.command.AbCmdHandler;
-
-import com.alibaba.fastjson.JSONObject;
 /**
  * 
  * 版本: [1.0]
@@ -26,7 +25,7 @@ public class AuthReqHandler extends AbCmdHandler
 			RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C10010);
 			return ImKit.ConvertRespPacket(respBody, channelContext);
 		}
-		AuthReqBody authReqBody = JSONObject.parseObject(packet.getBody(), AuthReqBody.class);
+		AuthReqBody authReqBody = JsonKit.toBean(packet.getBody(), AuthReqBody.class);
 		String token = authReqBody.getToken() == null ? "" : authReqBody.getToken();
 		String data = token +  Const.authkey;
 		authReqBody.setToken(data);

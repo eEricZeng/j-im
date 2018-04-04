@@ -22,9 +22,6 @@ import org.tio.im.common.tcp.TcpSessionContext;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
-
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author WChao
  *
@@ -106,6 +103,6 @@ public class ImKit {
 	 * @return
 	 */
 	public static byte[] toImStatusBody(ImStatus status){
-		return JSONObject.toJSONBytes(new RespBody().setCode(status.getCode()).setMsg(status.getDescription()+" "+status.getText()));
+		return JsonKit.toJsonBytes(new RespBody().setCode(status.getCode()).setMsg(status.getDescription()+" "+status.getText()));
 	}
 }

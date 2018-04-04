@@ -13,11 +13,10 @@ import org.tio.im.common.packets.LoginRespBody;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImKit;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.handler.processor.ProcessorIntf;
 import org.tio.im.server.command.handler.processor.login.LoginProcessorIntf;
-
-import com.alibaba.fastjson.JSONObject;
 
 public class LoginReqHandler extends AbCmdHandler {
 	private static Logger log = LoggerFactory.getLogger(LoginReqHandler.class);
@@ -36,7 +35,7 @@ public class LoginReqHandler extends AbCmdHandler {
 		}
 		LoginProcessorIntf loginServiceHandler = (LoginProcessorIntf)loginProcessor;
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		LoginReqBody loginReqBody = JSONObject.parseObject(packet.getBody(),LoginReqBody.class);
+		LoginReqBody loginReqBody = JsonKit.toBean(packet.getBody(),LoginReqBody.class);
 		
 		User user = loginServiceHandler.getUser(loginReqBody,channelContext);
 		if (user == null ) {

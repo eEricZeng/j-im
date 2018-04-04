@@ -25,6 +25,7 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.Message;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.utils.ImUtils;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.common.ws.IWsMsgHandler;
 import org.tio.im.common.ws.Opcode;
 import org.tio.im.common.ws.WsRequestPacket;
@@ -36,7 +37,6 @@ import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.handler.AbServerHandler;
-import com.alibaba.fastjson.JSONObject;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -137,7 +137,7 @@ public class WsServerHandler extends AbServerHandler{
 				command = Command.COMMAND_CLOSE_REQ;
 			}else{
 				try{
-					Message message = JSONObject.parseObject(wsRequestPacket.getBody(),Message.class);
+					Message message = JsonKit.toBean(wsRequestPacket.getBody(),Message.class);
 					command = Command.forNumber(message.getCmd());
 				}catch(Exception e){
 					return wsRequestPacket;

@@ -5,7 +5,7 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.tio.im.common.packets.ChatBody;
+import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.ChatReqHandler;
@@ -15,7 +15,7 @@ import org.tio.utils.thread.pool.AbstractQueueRunnable;
  * @author WChao
  * @date 2018年4月3日 上午10:47:40
  */
-public class MsgQueueRunnable extends AbstractQueueRunnable<ChatBody> {
+public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 	
 	private Logger log = LoggerFactory.getLogger(MsgQueueRunnable.class);
 	
@@ -24,7 +24,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ChatBody> {
 	private AbstractChatProcessor chatProCmdHandler;
 	
 	@Override
-	public boolean addMsg(ChatBody msg) {
+	public boolean addMsg(ImPacket msg) {
 		if (this.isCanceled()) {
 			log.error("{}, 任务已经取消，{}添加到消息队列失败", channelContext, msg);
 			return false;
@@ -45,11 +45,11 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ChatBody> {
 		if (queueSize == 0) {
 			return;
 		}
-		ChatBody chatBody = null;
-		while ((chatBody = msgQueue.poll()) != null) {
+		ImPacket packet = null;
+		while ((packet = msgQueue.poll()) != null) {
 			if(chatProCmdHandler != null){
 				try {
-					chatProCmdHandler.handler(chatBody, channelContext);
+					chatProCmdHandler.handler(packet, channelContext);
 				} catch (Exception e) {
 					log.error(e.toString(),e);
 				}

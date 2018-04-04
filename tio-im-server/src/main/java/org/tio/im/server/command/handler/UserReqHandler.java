@@ -15,10 +15,8 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.packets.UserReqBody;
 import org.tio.im.common.utils.ImKit;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.server.command.AbCmdHandler;
-
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -33,7 +31,7 @@ public class UserReqHandler extends AbCmdHandler{
 
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		UserReqBody userReqBody = JSONObject.parseObject(packet.getBody(),UserReqBody.class);
+		UserReqBody userReqBody = JsonKit.toBean(packet.getBody(),UserReqBody.class);
 		List<User> clients = null;
 		RespBody resPacket = null;
 		if(userReqBody.getType() == null || 0 == userReqBody.getType()){

@@ -17,8 +17,6 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.utils.lock.SetWithLock;
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author WChao
  *
@@ -58,7 +56,7 @@ public class ChatKit {
 		ChatBody chatReqBody = null;
 		try{
 			String text = new String(body,HttpConst.CHARSET_NAME);
-		    chatReqBody = JSONObject.parseObject(text,ChatBody.class);
+		    chatReqBody = JsonKit.toBean(text,ChatBody.class);
 			if(chatReqBody != null){
 				if(chatReqBody.getCreateTime() == null || "".equals(chatReqBody.getCreateTime()))
 					chatReqBody.setCreateTime(System.currentTimeMillis());

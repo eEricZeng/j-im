@@ -4,9 +4,7 @@
 package org.tio.im.common.packets;
 
 import org.tio.im.common.ImStatus;
-
-import com.alibaba.fastjson.JSONObject;
-
+import org.tio.im.common.utils.JsonKit;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -70,11 +68,11 @@ public class RespBody{
 	}
 	@Override
 	public String toString() {
-		return JSONObject.toJSONString(this);
+		return JsonKit.toJSONEnumNoUsingName(this);
 	}
 	
 	public byte[] toByte(){
-		return JSONObject.toJSONBytes(this);
+		return JsonKit.toJSONBytesEnumNoUsingName(this);
 	}
 	
 }

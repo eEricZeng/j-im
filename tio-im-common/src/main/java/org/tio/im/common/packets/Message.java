@@ -3,8 +3,7 @@
  */
 package org.tio.im.common.packets;
 
-import com.alibaba.fastjson.JSONObject;
-
+import org.tio.im.common.utils.JsonKit;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -41,10 +40,10 @@ public class Message {
 	}
 
 	public String toJsonString() {
-		return JSONObject.toJSONString(this);
+		return JsonKit.toJSONString(this);
 	}
 	
 	public byte[] toByte(){
-		return JSONObject.toJSONBytes(this);
+		return JsonKit.toJsonBytes(this);
 	}
 }

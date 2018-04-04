@@ -9,15 +9,13 @@ import org.tio.im.common.http.HttpConst;
 import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.LoginReqBody;
+import org.tio.im.common.utils.JsonKit;
 import org.tio.im.common.ws.WsRequestPacket;
 import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.LoginReqHandler;
 import org.tio.im.server.command.handler.processor.handshake.WsHandshakeProcessor;
-
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author WChao
  *
@@ -38,7 +36,7 @@ public class DemoWsHandshakeProcessor extends WsHandshakeProcessor{
 			String password = request.getParams().get("password") == null ? null : (String)request.getParams().get("password")[0];
 			String token = request.getParams().get("token") == null ? null : (String)request.getParams().get("token")[0];
 			LoginReqBody loginBody = new LoginReqBody(username,password,token);
-			byte[] loginBytes = JSONObject.toJSONBytes(loginBody);
+			byte[] loginBytes = JsonKit.toJsonBytes(loginBody);
 			request.setBody(loginBytes);
 			request.setBodyString(new String(loginBytes,HttpConst.CHARSET_NAME));
 			Object loginResponse = loginHandler.handler(request, channelContext);
