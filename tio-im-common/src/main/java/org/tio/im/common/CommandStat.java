@@ -8,7 +8,7 @@ import org.tio.im.common.packets.Command;
 
 /**
  * 
- * @author tanyaowu 
+ * @author wchao 
  *
  */
 public class CommandStat
@@ -48,7 +48,7 @@ public class CommandStat
 	/**
 	 * 
 	 *
-	 * @author: tanyaowu
+	 * @author: wchao
 	 * 2016年12月6日 下午5:32:31
 	 * 
 	 */
@@ -59,7 +59,7 @@ public class CommandStat
 	/**
 	 * @param args
 	 *
-	 * @author: tanyaowu
+	 * @author: wchao
 	 * 2016年12月6日 下午5:32:31
 	 * 
 	 */

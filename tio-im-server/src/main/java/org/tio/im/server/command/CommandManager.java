@@ -10,7 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.im.common.packets.Command;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
+import org.tio.im.server.command.handler.processor.ProcessorIntf;
 /**
  * 版本: [1.0]
  * 功能说明: 命令执行管理器;
@@ -40,8 +40,8 @@ public class CommandManager{
 			List<String> proCmdHandlerList = configuration.getProCmdhandlers();
 			if(!proCmdHandlerList.isEmpty()){
 				for(String proCmdHandlerClass : proCmdHandlerList){
-					Class<ProCmdHandlerIntf> proCmdHandlerClazz = (Class<ProCmdHandlerIntf>)Class.forName(proCmdHandlerClass);
-					ProCmdHandlerIntf proCmdHandler = proCmdHandlerClazz.newInstance();
+					Class<ProcessorIntf> proCmdHandlerClazz = (Class<ProcessorIntf>)Class.forName(proCmdHandlerClass);
+					ProcessorIntf proCmdHandler = proCmdHandlerClazz.newInstance();
 					cmdHandler.addProcCmdHandler(proCmdHandler);
 				}
 			}

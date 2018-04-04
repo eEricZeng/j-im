@@ -3,7 +3,7 @@ package org.tio.im.common.http;
 import org.tio.core.intf.TioUuid;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年6月5日 上午10:44:26
  */
 public class HttpUuid implements TioUuid {
@@ -13,7 +13,7 @@ public class HttpUuid implements TioUuid {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void main(String[] args) {
 
@@ -21,14 +21,14 @@ public class HttpUuid implements TioUuid {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpUuid() {
 	}
 
 	/**
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	@Override
 	public String uuid() {

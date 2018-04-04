@@ -5,7 +5,7 @@ import org.tio.im.common.session.id.ISessionIdGenerator;
 import org.tio.utils.cache.ICache;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年8月15日 下午1:21:14
  */
 public class HttpConfig {
@@ -49,7 +49,7 @@ public class HttpConfig {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void main(String[] args) {
 
@@ -125,7 +125,7 @@ public class HttpConfig {
 	
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpConfig(Integer bindPort, Long sessionTimeout) {
 		this.bindPort = bindPort;
@@ -245,7 +245,7 @@ public class HttpConfig {
 	/**
 	 * 
 	 * @param pageRoot
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public void setPageRoot(String pageRoot) {
 		this.pageRoot = pageRoot;//FileUtil.getAbsolutePath(root);//"/page";;

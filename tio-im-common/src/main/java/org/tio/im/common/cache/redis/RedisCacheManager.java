@@ -29,7 +29,7 @@ public class RedisCacheManager {
 	 * @param timeToLiveSeconds
 	 * @param timeToIdleSeconds
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static RedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		RedisExpireUpdateTask.start();

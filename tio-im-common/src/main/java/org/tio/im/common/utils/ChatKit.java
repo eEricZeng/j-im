@@ -5,6 +5,8 @@ package org.tio.im.common.utils;
 
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
+import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
@@ -14,6 +16,7 @@ import org.tio.im.common.packets.Command;
 import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.session.id.impl.UUIDSessionIdGenerator;
+import org.tio.utils.lock.SetWithLock;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -120,5 +123,19 @@ public class ChatKit {
   	   ImPacket respPacket = ImKit.ConvertRespPacket(chatDataInCorrectRespPacket, channelContext);
   	   respPacket.setStatus(ImStatus.C10001);
   	   return respPacket;
+     }
+     /**
+      * 判断用户是否在线;
+      * @param userid
+      * @return
+      */
+     public static boolean isOnline(String userid){
+    	 if(ImConfig.groupContext == null)
+    		 return false;
+    	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(ImConfig.groupContext,userid);
+    	 if(toChannleContexts != null && toChannleContexts.size() > 0){
+    		 return true;
+    	 }
+    	 return false;
      }
 }

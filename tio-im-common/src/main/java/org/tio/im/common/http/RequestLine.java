@@ -1,7 +1,7 @@
 package org.tio.im.common.http;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年6月28日 下午2:20:32
  */
 public class RequestLine {

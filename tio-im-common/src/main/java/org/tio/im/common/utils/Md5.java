@@ -7,7 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * 
- * @author tanyaowu 
+ * @author wchao 
  *
  */
 public class Md5

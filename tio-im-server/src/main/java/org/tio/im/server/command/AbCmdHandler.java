@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.tio.core.ChannelContext;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-
+import org.tio.im.server.command.handler.processor.ProcessorIntf;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -18,16 +17,16 @@ import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
 public abstract class AbCmdHandler implements CmdHandlerIntf {
 	
 	//不同协议cmd处理命令如(ws、socket、自定义协议)握手、心跳命令等.
-	protected Map<String,ProCmdHandlerIntf> proCmdHandlers = new HashMap<String,ProCmdHandlerIntf>();
+	protected Map<String,ProcessorIntf> proCmdHandlers = new HashMap<String,ProcessorIntf>();
 	
-	public AbCmdHandler addProcCmdHandler(ProCmdHandlerIntf proCmdHandler){
+	public AbCmdHandler addProcCmdHandler(ProcessorIntf proCmdHandler){
 		this.proCmdHandlers.put(proCmdHandler.name(), proCmdHandler);
 		return this;
 	}
 	
-	public ProCmdHandlerIntf getProcCmdHandler(ChannelContext channelContext){
-		for(Entry<String,ProCmdHandlerIntf> proCmdEntry : proCmdHandlers.entrySet()){
-			ProCmdHandlerIntf proCmd = proCmdEntry.getValue();
+	public ProcessorIntf getProcCmdHandler(ChannelContext channelContext){
+		for(Entry<String,ProcessorIntf> proCmdEntry : proCmdHandlers.entrySet()){
+			ProcessorIntf proCmd = proCmdEntry.getValue();
 			if(proCmd.isProtocol(channelContext)){
 				return proCmd;
 			}
@@ -35,13 +34,18 @@ public abstract class AbCmdHandler implements CmdHandlerIntf {
 		return null;
 	}
 	
-	public ProCmdHandlerIntf getProcCmdHandler(String name){
-		for(Entry<String,ProCmdHandlerIntf> proCmdEntry : proCmdHandlers.entrySet()){
-			ProCmdHandlerIntf proCmd = proCmdEntry.getValue();
+	public ProcessorIntf getProcCmdHandler(String name){
+		for(Entry<String,ProcessorIntf> proCmdEntry : proCmdHandlers.entrySet()){
+			ProcessorIntf proCmd = proCmdEntry.getValue();
 			if(name.equals(proCmd.name())){
 				return proCmd;
 			}
 		}
 		return null;
+	}
+	
+	public ProcessorIntf removeProcCmdHandler(String name){
+		
+		return proCmdHandlers.remove(name);
 	}
 }

@@ -49,7 +49,7 @@ public class WsSessionContext extends ImSessionContext {
 	/**
 	 *
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月21日 上午10:27:54
 	 *
 	 */

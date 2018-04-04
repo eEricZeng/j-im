@@ -2,7 +2,7 @@ package org.tio.im.common.http;
 
 /**
  * 本类大部分摘自github的一个项目（当时找过后，忘记记录地址，后面工到后补充进来），部分为tio作者补充，感谢作者的贡献
- * @author tanyaowu
+ * @author wchao
  * 2017年8月5日 上午10:36:37
  */
 public enum MimeType {

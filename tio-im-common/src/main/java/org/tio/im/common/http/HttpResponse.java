@@ -52,7 +52,7 @@ public class HttpResponse extends HttpPacket {
 	 *
 	 * @param request
 	 * @param httpConfig 可以为null
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpResponse(HttpRequest request, HttpConfig httpConfig) {
 		this.request = request;

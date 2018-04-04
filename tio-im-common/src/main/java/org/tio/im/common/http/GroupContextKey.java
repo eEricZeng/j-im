@@ -1,7 +1,7 @@
 package org.tio.im.common.http;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年8月18日 下午5:43:54
  */
 public interface GroupContextKey {

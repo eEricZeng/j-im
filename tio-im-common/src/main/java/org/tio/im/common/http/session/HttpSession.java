@@ -9,7 +9,7 @@ import org.tio.im.common.http.HttpConfig;
 
 /**
  *
- * @author tanyaowu
+ * @author wchao
  * 2017年8月5日 上午10:16:26
  */
 public class HttpSession extends ImSessionContext implements java.io.Serializable {
@@ -24,7 +24,7 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 	}
 
 	/**
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpSession(String id) {
 		this.id = id;
@@ -33,7 +33,7 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 	/**
 	 * 清空所有属性
 	 * @param httpConfig
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public void clear(HttpConfig httpConfig) {
 		data.clear();
@@ -44,7 +44,7 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 	 * 获取会话属性
 	 * @param key
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public Object getAttribute(String key) {
 		return data.get(key);
@@ -62,7 +62,7 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 	 *
 	 * @param key
 	 * @param httpConfig
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public void removeAttribute(String key, HttpConfig httpConfig) {
 		data.remove(key);
@@ -74,7 +74,7 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 	 * @param key
 	 * @param value
 	 * @param httpConfig
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public void setAttribute(String key, Serializable value, HttpConfig httpConfig) {
 		data.put(key, value);

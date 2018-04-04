@@ -4,7 +4,7 @@ import org.tio.im.common.http.HttpRequest;
 import org.tio.im.common.http.HttpResponse;
 import org.tio.im.common.http.RequestLine;
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年7月25日 下午2:16:06
  */
 public interface IHttpServerListener {
@@ -17,7 +17,7 @@ public interface IHttpServerListener {
 	 * @param httpResponse
 	 * @return
 	 * @throws Exception
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public void doAfterHandler(HttpRequest packet, RequestLine requestLine, HttpResponse httpResponse) throws Exception;
 
@@ -30,7 +30,7 @@ public interface IHttpServerListener {
 	 * @param httpResponseFromCache 从缓存中获取到的HttpResponse对象
 	 * @return
 	 * @throws Exception
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpResponse doBeforeHandler(HttpRequest packet, RequestLine requestLine, HttpResponse httpResponseFromCache) throws Exception;
 

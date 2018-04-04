@@ -3,7 +3,7 @@ package org.tio.im.common.http;
 import java.util.Objects;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年6月28日 下午2:23:16
  */
 public enum Method {

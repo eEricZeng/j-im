@@ -100,7 +100,7 @@ public class ImPacket extends Packet
 	 * 计算消息头占用了多少字节数
 	 * @return
 	 *
-	 * @author: tanyaowu
+	 * @author: wchao
 	 * 2017年1月31日 下午5:32:26
 	 *
 	 */
@@ -147,7 +147,7 @@ public class ImPacket extends Packet
 	 * @see org.tio.core.intf.Packet#logstr()
 	 * 
 	 * @return
-	 * @author: tanyaowu
+	 * @author: wchao
 	 * 2017年2月22日 下午3:15:18
 	 * 
 	 */

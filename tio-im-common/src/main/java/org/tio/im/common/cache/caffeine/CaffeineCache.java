@@ -81,7 +81,7 @@ public class CaffeineCache  implements ICache {
 	/**
 	 * 
 	 * @return
-	 * @author: tanyaowu
+	 * @author: wchao
 	 */
 	public ConcurrentMap<String, Serializable> asMap() {
 		return loadingCache.asMap();
@@ -90,7 +90,7 @@ public class CaffeineCache  implements ICache {
 	/**
 	 * 
 	 * @return
-	 * @author: tanyaowu
+	 * @author: wchao
 	 */
 	public long size() {
 		return loadingCache.estimatedSize();//.size();

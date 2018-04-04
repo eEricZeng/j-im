@@ -7,7 +7,7 @@ import org.tio.core.ChannelContext;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Client;
 /**
- * @author tanyaowu 
+ * @author wchao 
  * 2017年5月5日 下午5:35:02
  */
 public class ImUtils {
@@ -16,7 +16,7 @@ public class ImUtils {
 	 * 设置Client对象到ImSessionContext中
 	 * @param channelContext
 	 * @return
-	 * @author: tanyaowu
+	 * @author: wchao
 	 */
 	public static Client setClient(ChannelContext channelContext) {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
@@ -76,7 +76,7 @@ public class ImUtils {
 	}
 	/**
 	 * @param args
-	 * @author: tanyaowu
+	 * @author: wchao
 	 */
 	public static void main(String[] args) {
 		String region = "中国|杭州|铁通";

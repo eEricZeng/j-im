@@ -22,7 +22,7 @@ public class WsTioUuid implements TioUuid {
 
 	/**
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	@Override
 	public String uuid() {

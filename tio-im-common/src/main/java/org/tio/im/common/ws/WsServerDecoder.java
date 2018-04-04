@@ -21,7 +21,7 @@ import org.tio.im.common.utils.BASE64Util;
 import org.tio.im.common.utils.SHA1Util;
 /**
  *
- * @author tanyaowu
+ * @author wchao
  * 2017年7月30日 上午10:10:50
  */
 public class WsServerDecoder {
@@ -175,7 +175,7 @@ public class WsServerDecoder {
 	 * @param request
 	 * @param channelContext
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static HttpResponse updateWebSocketProtocol(HttpRequest request, ChannelContext channelContext) {
 		Map<String, String> headers = request.getHeaders();
@@ -203,7 +203,7 @@ public class WsServerDecoder {
 	/**
 	 *
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:06:42
 	 *
 	 */

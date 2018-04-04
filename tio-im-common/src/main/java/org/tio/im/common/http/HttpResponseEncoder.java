@@ -13,7 +13,7 @@ import org.tio.core.GroupContext;
 
 /**
  *
- * @author tanyaowu
+ * @author wchao
  * 2017年8月4日 上午9:41:12
  */
 public class HttpResponseEncoder {
@@ -32,7 +32,7 @@ public class HttpResponseEncoder {
 	 * @param channelContext
 	 * @param skipCookie true: 忽略掉cookie部分的编码
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static ByteBuffer encode(HttpResponse httpResponse, GroupContext groupContext, ChannelContext channelContext, boolean skipCookie) {
 		byte[] encodedBytes = httpResponse.getEncodedBytes();
@@ -101,7 +101,7 @@ public class HttpResponseEncoder {
 	/**
 	 * @param args
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:06:42
 	 *
 	 */
@@ -114,7 +114,7 @@ public class HttpResponseEncoder {
 	 * @param line
 	 * @return
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月23日 下午1:37:58
 	 *
 	 */
@@ -138,7 +138,7 @@ public class HttpResponseEncoder {
 	/**
 	 *
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpResponseEncoder() {
 

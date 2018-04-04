@@ -14,7 +14,7 @@ import org.tio.im.common.ws.WsResponsePacket;
 import org.tio.im.common.ws.WsSessionContext;
 import org.tio.im.server.command.CommandManager;
 import org.tio.im.server.command.handler.LoginReqHandler;
-import org.tio.im.server.command.handler.proc.handshake.WsHandshakeProCmdHandler;
+import org.tio.im.server.command.handler.processor.handshake.WsHandshakeProcessor;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author WChao
  *
  */
-public class WsHandshakeHandler extends WsHandshakeProCmdHandler{
+public class DemoWsHandshakeProcessor extends WsHandshakeProcessor{
 	
 	/**
 	 * WS握手方法，返回Null则业务层不同意握手，断开连接!

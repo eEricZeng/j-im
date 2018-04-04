@@ -14,8 +14,9 @@ import org.tio.im.common.packets.RespBody;
 import org.tio.im.common.packets.User;
 import org.tio.im.common.utils.ImKit;
 import org.tio.im.server.command.AbCmdHandler;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-import org.tio.im.server.command.handler.proc.login.LoginCmdHandlerIntf;
+import org.tio.im.server.command.handler.processor.ProcessorIntf;
+import org.tio.im.server.command.handler.processor.login.LoginProcessorIntf;
+
 import com.alibaba.fastjson.JSONObject;
 
 public class LoginReqHandler extends AbCmdHandler {
@@ -27,13 +28,13 @@ public class LoginReqHandler extends AbCmdHandler {
 			Aio.remove(channelContext, "body is null");
 			return null;
 		}
-		ProCmdHandlerIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
+		ProcessorIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
 		if(loginProCmdHandler == null){
 			log.info("登录失败,没有业务处理器!");
 			Aio.remove(channelContext, "no login serviceHandler processor!");
 			return null;
 		}
-		LoginCmdHandlerIntf loginServiceHandler = (LoginCmdHandlerIntf)loginProCmdHandler;
+		LoginProcessorIntf loginServiceHandler = (LoginProcessorIntf)loginProCmdHandler;
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		LoginReqBody loginReqBody = JSONObject.parseObject(packet.getBody(),LoginReqBody.class);
 		

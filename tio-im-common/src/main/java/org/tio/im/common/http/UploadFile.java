@@ -2,7 +2,7 @@ package org.tio.im.common.http;
 
 /**
  *
- * @author tanyaowu
+ * @author wchao
  * 2017年7月26日 下午3:12:56
  */
 public class UploadFile {

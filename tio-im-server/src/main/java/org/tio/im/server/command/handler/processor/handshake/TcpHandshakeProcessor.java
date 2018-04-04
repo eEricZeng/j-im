@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tio.im.server.command.handler.proc.handshake;
+package org.tio.im.server.command.handler.processor.handshake;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
@@ -16,7 +16,7 @@ import org.tio.im.common.utils.ImKit;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月11日 下午8:11:34
  */
-public class TcpHandshakeProCmdHandler implements HandshakeProCmdHandlerIntf {
+public class TcpHandshakeProcessor implements HandshakeProcessorIntf {
 
 	@Override
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {

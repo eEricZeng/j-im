@@ -6,7 +6,11 @@ import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
+import org.tio.im.common.Const;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImSessionContext;
+import org.tio.im.server.ImServerGroupContext;
+import org.tio.im.server.command.handler.processor.chat.MsgQueueRunnable;
 import org.tio.server.intf.ServerAioHandler;
 /**
  * 
@@ -69,6 +73,8 @@ public class ImServerAioHandler implements ServerAioHandler {
 		AbServerHandler handler = null;
 		if(imSessionContext == null){
 			handler = ServerHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
+			ImServerGroupContext imGroupContext = (ImServerGroupContext)ImConfig.groupContext;
+			channelContext.setAttribute(Const.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
 		}else{
 			handler = (AbServerHandler)imSessionContext.getServerHandler();
 		}

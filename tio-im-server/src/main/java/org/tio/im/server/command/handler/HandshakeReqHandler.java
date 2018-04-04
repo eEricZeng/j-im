@@ -5,19 +5,19 @@ import org.tio.core.ChannelContext;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.packets.Command;
 import org.tio.im.server.command.AbCmdHandler;
-import org.tio.im.server.command.handler.proc.ProCmdHandlerIntf;
-import org.tio.im.server.command.handler.proc.handshake.HandshakeProCmdHandlerIntf;
+import org.tio.im.server.command.handler.processor.ProcessorIntf;
+import org.tio.im.server.command.handler.processor.handshake.HandshakeProcessorIntf;
 
 public class HandshakeReqHandler extends AbCmdHandler {
 	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		ProCmdHandlerIntf proCmdHandler = this.getProcCmdHandler(channelContext);
+		ProcessorIntf proCmdHandler = this.getProcCmdHandler(channelContext);
 		if(proCmdHandler == null){
 			Aio.remove(channelContext, "没有对应的握手协议处理器HandshakeProCmd...");
 			return null;
 		}
-		HandshakeProCmdHandlerIntf handShakeProCmdHandler = (HandshakeProCmdHandlerIntf)proCmdHandler;
+		HandshakeProcessorIntf handShakeProCmdHandler = (HandshakeProcessorIntf)proCmdHandler;
 		ImPacket handShakePacket = handShakeProCmdHandler.handshake(packet, channelContext);
 		if (handShakePacket == null) {
 			Aio.remove(channelContext, "业务层不同意握手");

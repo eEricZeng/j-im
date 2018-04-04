@@ -15,7 +15,7 @@ import org.tio.im.common.http.session.HttpSession;
 import cn.hutool.core.util.ArrayUtil;
 /**
  *
- * @author tanyaowu
+ * @author wchao
  *
  */
 public class HttpRequest extends HttpPacket {
@@ -27,7 +27,7 @@ public class HttpRequest extends HttpPacket {
 	/**
 	 * @param args
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:14:40
 	 *
 	 */
@@ -59,7 +59,7 @@ public class HttpRequest extends HttpPacket {
 	/**
 	 *
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:14:40
 	 *
 	 */
@@ -238,7 +238,7 @@ public class HttpRequest extends HttpPacket {
 
 	/**
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	@Override
 	public String logstr() {

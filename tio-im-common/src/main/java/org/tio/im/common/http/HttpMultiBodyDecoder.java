@@ -18,7 +18,7 @@ import org.tio.im.common.utils.HttpParseUtils;
 import org.tio.utils.SystemTimer;
 
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年7月26日 下午2:20:43
  */
 public class HttpMultiBodyDecoder {
@@ -80,7 +80,7 @@ public class HttpMultiBodyDecoder {
 	 * 【
 	 * Content-Disposition: form-data; name="end"
 	 * 】
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年7月27日 上午10:18:01
 	 */
 	public static interface MultiBodyHeaderKey {
@@ -232,7 +232,7 @@ public class HttpMultiBodyDecoder {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 * @throws LengthOverflowException
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static Step parseBody(Header header, HttpRequest request, ByteBuffer buffer, String boundary, String endBoundary, ChannelContext channelContext)
 			throws UnsupportedEncodingException, LengthOverflowException {
@@ -283,7 +283,7 @@ public class HttpMultiBodyDecoder {
 	 * 】
 	 * @param lines
 	 * @param header
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void parseHeader(List<String> lines, Header header, ChannelContext channelContext) throws AioDecodeException {
 		if (lines == null || lines.size() == 0) {

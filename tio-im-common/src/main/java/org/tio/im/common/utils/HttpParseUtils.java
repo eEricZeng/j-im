@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * 本类部分代码参考了voovan项目，不过为了适应需要，作了部分改动，感谢作者的贡献
  * 项目地址： http://www.voovan.org/
- * @author tanyaowu
+ * @author wchao
  * 2017年7月27日 上午10:09:19
  */
 public class HttpParseUtils {
@@ -91,7 +91,7 @@ public class HttpParseUtils {
 	 */
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void main(String[] args) {
 
@@ -119,7 +119,7 @@ public class HttpParseUtils {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public HttpParseUtils() {
 	}

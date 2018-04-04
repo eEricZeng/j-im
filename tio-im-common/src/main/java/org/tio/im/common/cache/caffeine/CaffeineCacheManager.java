@@ -54,7 +54,7 @@ public class CaffeineCacheManager {
 	 * @param timeToLiveSeconds
 	 * @param timeToIdleSeconds
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		CaffeineCache CaffeineCache = register(cacheName, timeToLiveSeconds, timeToIdleSeconds,5000000, null);

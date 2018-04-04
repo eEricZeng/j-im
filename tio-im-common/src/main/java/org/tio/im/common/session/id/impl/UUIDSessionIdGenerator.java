@@ -7,7 +7,7 @@ import org.tio.im.common.session.id.ISessionIdGenerator;
 
 import cn.hutool.core.util.RandomUtil;
 /**
- * @author tanyaowu
+ * @author wchao
  * 2017年8月15日 上午10:53:39
  */
 public class UUIDSessionIdGenerator implements ISessionIdGenerator {
@@ -17,7 +17,7 @@ public class UUIDSessionIdGenerator implements ISessionIdGenerator {
 
 	/**
 	 * @param args
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void main(String[] args) {
 		UUIDSessionIdGenerator uuidSessionIdGenerator = new UUIDSessionIdGenerator();
@@ -28,14 +28,14 @@ public class UUIDSessionIdGenerator implements ISessionIdGenerator {
 
 	/**
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	private UUIDSessionIdGenerator() {
 	}
 
 	/**
 	 * @return
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	@Override
 	public String sessionId(HttpConfig httpConfig) {

@@ -7,7 +7,7 @@ import org.tio.im.common.ImPacket;
 
 /**
  *
- * @author tanyaowu
+ * @author wchao
  *
  */
 public class HttpPacket extends ImPacket {

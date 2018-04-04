@@ -6,7 +6,7 @@ import org.tio.server.intf.ServerAioHandler;
 
 /**
  * 
- * @author tanyaowu 
+ * @author wchao 
  *
  */
 public class ImSessionContext extends SessionContext
@@ -27,7 +27,7 @@ public class ImSessionContext extends SessionContext
 	/**
 	 * 
 	 *
-	 * @author: tanyaowu
+	 * @author: wchao
 	 * 2017年2月21日 上午10:27:54
 	 * 
 	 */
@@ -35,19 +35,6 @@ public class ImSessionContext extends SessionContext
 	{
 		
 	}
-
-	/**
-	 * @param args
-	 *
-	 * @author: tanyaowu
-	 * 2017年2月21日 上午10:27:54
-	 * 
-	 */
-	public static void main(String[] args)
-	{
-		
-	}
-
 	/**
 	 * @return the client
 	 */
@@ -102,5 +89,4 @@ public class ImSessionContext extends SessionContext
 		this.serverHandler = serverHandler;
 		return this;
 	}
-	
 }

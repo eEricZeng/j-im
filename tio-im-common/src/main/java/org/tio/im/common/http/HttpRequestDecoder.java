@@ -191,7 +191,7 @@ public class HttpRequestDecoder {
 	/**
 	 * @param args
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:06:42
 	 *
 	 */
@@ -206,7 +206,7 @@ public class HttpRequestDecoder {
 	 * @param bodyBytes
 	 * @param channelContext
 	 * @throws AioDecodeException
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	private static void parseBody(HttpRequest httpRequest, RequestLine firstLine, byte[] bodyBytes, ChannelContext channelContext) throws AioDecodeException {
 		parseBodyFormat(httpRequest, httpRequest.getHeaders());
@@ -276,7 +276,7 @@ public class HttpRequestDecoder {
 	 * Content-Type : application/x-www-form-urlencoded; charset=UTF-8
 	 * @param httpRequest
 	 * @param headers
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	public static void parseBodyFormat(HttpRequest httpRequest, Map<String, String> headers) {
 		String Content_Type = StringUtils.lowerCase(headers.get(HttpConst.RequestHeaderKey.Content_Type));
@@ -303,7 +303,7 @@ public class HttpRequestDecoder {
 	 * @param line
 	 * @return
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月23日 下午1:37:58
 	 *
 	 */
@@ -330,7 +330,7 @@ public class HttpRequestDecoder {
 	 * @param channelContext
 	 * @return
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月23日 下午1:37:51
 	 *
 	 */
@@ -376,7 +376,7 @@ public class HttpRequestDecoder {
 	/**
 	 * 解析URLENCODED格式的消息体
 	 * 形如： 【Content-Type : application/x-www-form-urlencoded; charset=UTF-8】
-	 * @author tanyaowu
+	 * @author wchao
 	 */
 	private static void parseUrlencoded(HttpRequest httpRequest, RequestLine firstLine, byte[] bodyBytes, String bodyString, ChannelContext channelContext) {
 		String paramStr = "";
@@ -401,7 +401,7 @@ public class HttpRequestDecoder {
 	/**
 	 *
 	 *
-	 * @author tanyaowu
+	 * @author wchao
 	 * 2017年2月22日 下午4:06:42
 	 *
 	 */
