@@ -17,35 +17,35 @@ import org.tio.im.server.command.handler.processor.ProcessorIntf;
 public abstract class AbCmdHandler implements CmdHandlerIntf {
 	
 	//不同协议cmd处理命令如(ws、socket、自定义协议)握手、心跳命令等.
-	protected Map<String,ProcessorIntf> proCmdHandlers = new HashMap<String,ProcessorIntf>();
+	protected Map<String,ProcessorIntf> processors = new HashMap<String,ProcessorIntf>();
 	
-	public AbCmdHandler addProcCmdHandler(ProcessorIntf proCmdHandler){
-		this.proCmdHandlers.put(proCmdHandler.name(), proCmdHandler);
+	public AbCmdHandler addProcessor(ProcessorIntf processor){
+		this.processors.put(processor.name(), processor);
 		return this;
 	}
 	
-	public ProcessorIntf getProcCmdHandler(ChannelContext channelContext){
-		for(Entry<String,ProcessorIntf> proCmdEntry : proCmdHandlers.entrySet()){
-			ProcessorIntf proCmd = proCmdEntry.getValue();
-			if(proCmd.isProtocol(channelContext)){
-				return proCmd;
+	public ProcessorIntf getProcessor(ChannelContext channelContext){
+		for(Entry<String,ProcessorIntf> processorEntry : processors.entrySet()){
+			ProcessorIntf processor = processorEntry.getValue();
+			if(processor.isProtocol(channelContext)){
+				return processor;
 			}
 		}
 		return null;
 	}
 	
-	public ProcessorIntf getProcCmdHandler(String name){
-		for(Entry<String,ProcessorIntf> proCmdEntry : proCmdHandlers.entrySet()){
-			ProcessorIntf proCmd = proCmdEntry.getValue();
-			if(name.equals(proCmd.name())){
-				return proCmd;
+	public ProcessorIntf getProcessor(String name){
+		for(Entry<String,ProcessorIntf> processorEntry : processors.entrySet()){
+			ProcessorIntf processor = processorEntry.getValue();
+			if(name.equals(processor.name())){
+				return processor;
 			}
 		}
 		return null;
 	}
 	
-	public ProcessorIntf removeProcCmdHandler(String name){
+	public ProcessorIntf removeProcessor(String name){
 		
-		return proCmdHandlers.remove(name);
+		return processors.remove(name);
 	}
 }

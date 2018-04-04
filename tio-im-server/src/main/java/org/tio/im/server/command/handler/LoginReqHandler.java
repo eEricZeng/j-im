@@ -28,13 +28,13 @@ public class LoginReqHandler extends AbCmdHandler {
 			Aio.remove(channelContext, "body is null");
 			return null;
 		}
-		ProcessorIntf loginProCmdHandler = this.getProcCmdHandler(channelContext);
-		if(loginProCmdHandler == null){
+		ProcessorIntf loginProcessor = this.getProcessor(channelContext);
+		if(loginProcessor == null){
 			log.info("登录失败,没有业务处理器!");
 			Aio.remove(channelContext, "no login serviceHandler processor!");
 			return null;
 		}
-		LoginProcessorIntf loginServiceHandler = (LoginProcessorIntf)loginProCmdHandler;
+		LoginProcessorIntf loginServiceHandler = (LoginProcessorIntf)loginProcessor;
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		LoginReqBody loginReqBody = JSONObject.parseObject(packet.getBody(),LoginReqBody.class);
 		

@@ -36,7 +36,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ChatBody> {
 		super(executor);
 		this.channelContext = channelContext;
 		ChatReqHandler chatReqHandler = CommandManager.getCommand(Command.COMMAND_CHAT_REQ,ChatReqHandler.class);
-		chatProCmdHandler = (AbstractChatProcessor)chatReqHandler.getProcCmdHandler(channelContext);
+		chatProCmdHandler = (AbstractChatProcessor)chatReqHandler.getProcessor(channelContext);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class CommandManager{
 				for(String proCmdHandlerClass : proCmdHandlerList){
 					Class<ProcessorIntf> proCmdHandlerClazz = (Class<ProcessorIntf>)Class.forName(proCmdHandlerClass);
 					ProcessorIntf proCmdHandler = proCmdHandlerClazz.newInstance();
-					cmdHandler.addProcCmdHandler(proCmdHandler);
+					cmdHandler.addProcessor(proCmdHandler);
 				}
 			}
 			registerCommand(cmdHandler);

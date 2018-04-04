@@ -32,9 +32,9 @@ public class ImServerDemoStart {
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
 		/*****************start 以下处理器根据业务需要自行添加与扩展，每个Command都可以添加扩展,此处为demo中处理**********************************/
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
-		handshakeReqHandler.addProcCmdHandler(new DemoWsHandshakeProcessor());//添加自定义握手处理器;
+		handshakeReqHandler.addProcessor(new DemoWsHandshakeProcessor());//添加自定义握手处理器;
 		LoginReqHandler loginReqHandler = CommandManager.getCommand(Command.COMMAND_LOGIN_REQ,LoginReqHandler.class);
-		loginReqHandler.addProcCmdHandler(new LoginServiceProcessor());//添加登录业务处理器;
+		loginReqHandler.addProcessor(new LoginServiceProcessor());//添加登录业务处理器;
 		/*****************end *******************************************************************************************/
 		imServerStarter.start();
 	}

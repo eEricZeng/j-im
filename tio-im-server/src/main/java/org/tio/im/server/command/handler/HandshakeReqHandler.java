@@ -12,7 +12,7 @@ public class HandshakeReqHandler extends AbCmdHandler {
 	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		ProcessorIntf proCmdHandler = this.getProcCmdHandler(channelContext);
+		ProcessorIntf proCmdHandler = this.getProcessor(channelContext);
 		if(proCmdHandler == null){
 			Aio.remove(channelContext, "没有对应的握手协议处理器HandshakeProCmd...");
 			return null;
