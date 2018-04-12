@@ -14,6 +14,6 @@ public class DefaultChatProcessor extends AbstractChatProcessor{
 	
 	@Override
 	public void doHandler(ChatBody chatBody, ChannelContext channelContext){
-		log.info("聊天消息业务处理....");
+		
 	}
 }
