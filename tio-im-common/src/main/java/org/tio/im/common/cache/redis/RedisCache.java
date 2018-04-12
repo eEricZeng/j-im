@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -148,6 +149,59 @@ public class RedisCache implements ICache {
 			log.error(e.toString(),e);
 		}
 		return 0L;
+	}
+	public void sortSetPush(String key ,double score , Serializable value){
+		if (StringUtils.isBlank(key)) {
+			return;
+		}
+		try {
+			String jsonValue = value instanceof String? (String)value:JsonKit.toJSONString(value);
+			JedisTemplate.me().sortSetPush(cacheKey(cacheName, key),score,jsonValue);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+	}
+	public List<String> sortSetGetAll(String key){
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		try {
+			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),Double.MIN_VALUE,Double.MAX_VALUE);
+			if(datas == null)
+				return null;
+			return new ArrayList<String>(datas);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return null;
+	}
+	public List<String> sortSetGetAll(String key,double min,double max){
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		try {
+			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max);
+			if(datas == null)
+				return null;
+			return new ArrayList<String>(datas);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return null;
+	}
+	public List<String> sortSetGetAll(String key,double min,double max,int offset ,int count){
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		try {
+			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max,offset,count);
+			if(datas == null)
+				return null;
+			return new ArrayList<String>(datas);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return null;
 	}
 	@Override
 	public void putTemporary(String key, Serializable value) {

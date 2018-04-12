@@ -41,6 +41,10 @@ public class MessageReqHandler extends AbCmdHandler {
 		String groupId = messageReqBody.getGroupId();//群组ID;
 		String userId = messageReqBody.getUserId();//当前用户ID;
 		String fromUserId = messageReqBody.getFromUserId();//消息来源用户ID;
+		Double beginTime = messageReqBody.getBeginTime();//消息区间开始时间;
+		Double endTime = messageReqBody.getEndTime();//消息区间结束时间;
+		Integer offset = messageReqBody.getOffset();//分页偏移量;
+		Integer count = messageReqBody.getCount();//分页数量;
 		int type = messageReqBody.getType();//消息类型;
 		if(StringUtils.isEmpty(userId) || (0 != type && 1 != type)){//如果用户ID为空或者type格式不正确，获取消息失败;
 			return getMessageFailedPacket(channelContext);
@@ -54,7 +58,7 @@ public class MessageReqHandler extends AbCmdHandler {
 			if(0 == type){//离线消息;
 				messageData = messageHelper.getGroupOfflineMessage(userId,groupId);
 			}else if(1 == type){//历史消息;
-				messageData = messageHelper.getGroupHistoryMessage(userId, groupId);
+				messageData = messageHelper.getGroupHistoryMessage(userId, groupId,beginTime,endTime,offset,count);
 			}
 		}else if(StringUtils.isEmpty(fromUserId)){
 			if(0 == type){//获取用户所有离线消息(好友+群组);
@@ -66,7 +70,7 @@ public class MessageReqHandler extends AbCmdHandler {
 			if(0 == type){//获取与指定用户离线消息;
 				messageData = messageHelper.getFriendsOfflineMessage(userId, fromUserId);
 			}else if(1 == type){//获取与指定用户历史消息;
-				messageData = messageHelper.getFriendHistoryMessage(userId, fromUserId);
+				messageData = messageHelper.getFriendHistoryMessage(userId, fromUserId,beginTime,endTime,offset,count);
 			}
 		}
 		resPacket.setData(messageData);

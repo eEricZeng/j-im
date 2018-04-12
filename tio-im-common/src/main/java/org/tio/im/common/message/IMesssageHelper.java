@@ -63,16 +63,24 @@ public interface IMesssageHelper {
 	/**
 	 * 获取与指定用户历史消息;
 	 * @param userid
-	 * @param groupid
+	 * @param fromUerId
+	 * @param beginTime 消息区间开始时间
+	 * @param endTime 消息区间结束时间
+	 * @param offset 分页偏移量
+	 * @param count 数量
 	 * @return
 	 */
-	public UserMessageData getFriendHistoryMessage(String userid, String fromUerId);
+	public UserMessageData getFriendHistoryMessage(String userid, String fromUerId,Double beginTime,Double endTime,Integer offset,Integer count);
 	
 	/**
 	 * 获取与指定群组历史消息;
 	 * @param userid
 	 * @param groupid
+	 * @param beginTime 消息区间开始时间
+	 * @param endTime 消息区间结束时间
+	 * @param offset 分页偏移量
+	 * @param count 数量
 	 * @return
 	 */
-	public UserMessageData getGroupHistoryMessage(String userid, String groupid);
+	public UserMessageData getGroupHistoryMessage(String userid, String groupid,Double beginTime,Double endTime,Integer offset,Integer count);
 }

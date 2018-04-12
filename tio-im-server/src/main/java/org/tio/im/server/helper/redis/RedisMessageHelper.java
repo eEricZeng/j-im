@@ -62,7 +62,8 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	
 	@Override
 	public void writeMessage(String timelineTable, String timelineId, ChatBody chatBody) {
-		RedisCacheManager.getCache(timelineTable).listPushTail(timelineId, chatBody);
+		double score = chatBody.getCreateTime();
+		RedisCacheManager.getCache(timelineTable).sortSetPush(timelineId, score, chatBody);
 	}
 
 
@@ -82,7 +83,7 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	@Override
 	public UserMessageData getFriendsOfflineMessage(String userid, String from_userid) {
 		String key = USER+SUBFIX+userid+SUBFIX+from_userid;
-		List<String> messageList = pushCache.listGetAll(key);
+		List<String> messageList = pushCache.sortSetGetAll(key);
 		List<ChatBody> datas = JsonKit.toArray(messageList, ChatBody.class);
 		pushCache.remove(key);
 		return putFriendsMessage(new UserMessageData(userid), datas);
@@ -99,7 +100,7 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 				while(keyitr.hasNext()){//获取好友离线消息;
 					String key = keyitr.next();
 					key = key.substring(key.indexOf(USER+SUBFIX));
-					List<String> messages = pushCache.listGetAll(key);
+					List<String> messages = pushCache.sortSetGetAll(key);
 					pushCache.remove(key);
 					results.addAll(JsonKit.toArray(messages, ChatBody.class));
 				}
@@ -124,7 +125,7 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	@Override
 	public UserMessageData getGroupOfflineMessage(String userid, String groupid) {
 		String key = GROUP+SUBFIX+groupid+SUBFIX+userid;
-		List<String> messages = pushCache.listGetAll(key);
+		List<String> messages = pushCache.sortSetGetAll(key);
 		if(messages == null || messages.size() == 0)
 			return null;
 		UserMessageData messageData = new UserMessageData(userid);
@@ -134,9 +135,21 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	}
 
 	@Override
-	public UserMessageData getFriendHistoryMessage(String userid, String from_userid) {
+	public UserMessageData getFriendHistoryMessage(String userid, String from_userid,Double beginTime,Double endTime,Integer offset,Integer count) {
 		String sessionId = ChatKit.sessionId(userid, from_userid);
-		List<String> messages = storeCache.listGetAll(USER+SUBFIX+sessionId);
+		List<String> messages = null;
+		String key = USER+SUBFIX+sessionId;
+		boolean isTimeBetween = (beginTime != null && endTime != null);
+		boolean isPage = (offset != null && count != null);
+		if(isTimeBetween && !isPage){//消息区间，不分页
+			messages = storeCache.sortSetGetAll(key, beginTime, endTime);
+		}else if(isTimeBetween && isPage){//消息区间，并且分页;
+			messages = storeCache.sortSetGetAll(key, beginTime, endTime,offset,count);
+		}else if(!isTimeBetween &&  isPage){//所有消息，并且分页;
+			messages = storeCache.sortSetGetAll(key, 0, Double.MAX_VALUE,offset,count);
+		}else{//所有消息，不分页;
+			messages = storeCache.sortSetGetAll(key);
+		}
 		if(messages == null || messages.size() == 0)
 			return null;
 		UserMessageData messageData = new UserMessageData(userid);
@@ -145,8 +158,20 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	}
 
 	@Override
-	public UserMessageData getGroupHistoryMessage(String userid, String groupid) {
-		List<String> messages = storeCache.listGetAll(GROUP+SUBFIX+groupid);
+	public UserMessageData getGroupHistoryMessage(String userid, String groupid,Double beginTime,Double endTime,Integer offset,Integer count) {
+		String key = GROUP+SUBFIX+groupid;
+		List<String> messages = null;
+		boolean isTimeBetween = (beginTime != null && endTime != null);
+		boolean isPage = (offset != null && count != null);
+		if(isTimeBetween && !isPage){//消息区间，不分页
+			messages = storeCache.sortSetGetAll(key, beginTime, endTime);
+		}else if(isTimeBetween && isPage){//消息区间，并且分页;
+			messages = storeCache.sortSetGetAll(key, beginTime, endTime,offset,count);
+		}else if(!isTimeBetween &&  isPage){//所有消息，并且分页;
+			messages = storeCache.sortSetGetAll(key, 0, Double.MAX_VALUE,offset,count);
+		}else{//所有消息，不分页;
+			messages = storeCache.sortSetGetAll(key);
+		}
 		if(messages == null || messages.size() == 0)
 			return null;
 		UserMessageData messageData = new UserMessageData(userid);

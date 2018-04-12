@@ -63,13 +63,13 @@ public class MysqlMessageHelper implements IMesssageHelper {
 	}
 
 	@Override
-	public UserMessageData getFriendHistoryMessage(String userid, String from_userid) {
+	public UserMessageData getFriendHistoryMessage(String userid, String from_userid,Double beginTime,Double endTime,Integer offset,Integer count) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public UserMessageData getGroupHistoryMessage(String userid, String groupid) {
+	public UserMessageData getGroupHistoryMessage(String userid, String groupid,Double beginTime,Double endTime,Integer offset,Integer count) {
 		// TODO Auto-generated method stub
 		return null;
 	}

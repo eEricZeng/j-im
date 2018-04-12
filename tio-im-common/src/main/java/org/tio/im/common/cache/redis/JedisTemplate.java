@@ -997,8 +997,57 @@ public  class JedisTemplate implements  Serializable{
                return result;  
            }  
        }.getResult();  
-   }  
+   }
+   /**
+    * 往有序集合sortSet中添加数据;
+    * @param key
+    * @param score要排序的值
+    * @param value
+    * @return
+    */
+   public Long sortSetPush(final String key ,final double score, final String value){
+	   return new Executor<Long>(jedisPool) {  
+		   
+           @Override  
+           Long execute() {  
+               return jedis.zadd(key, score, value);  
+           }  
+       }.getResult(); 
+   }
+   /**
+    * 根据Score获取集合区间数据;
+    * @param key
+    * @param min score区间最小值
+    * @param max scroe区间最大值
+    * @return
+    */
+   public Set<String> sorSetRangeByScore(final String key, final double min, final double max) {  
+       return new Executor<Set<String>>(jedisPool) {  
  
+           @Override  
+           Set<String> execute() {
+               return jedis.zrangeByScore(key, min, max);  
+           }  
+       }.getResult();  
+   }
+   /**
+    * 根据Score获取集合区间数据;
+    * @param key
+    * @param min score区间最小值
+    * @param max scroe区间最大值
+    * @param offet 偏移量（类似LIMIT 0,10）
+    * @param count 数量
+    * @return
+    */
+   public Set<String> sorSetRangeByScore(final String key, final double min, final double max , final int offset , final int count) {  
+       return new Executor<Set<String>>(jedisPool) {  
+ 
+           @Override  
+           Set<String> execute() {
+               return jedis.zrangeByScore(key, min, max,offset,count);  
+           }  
+       }.getResult();  
+   }
    /* ======================================Pub/Sub====================================== */  
  
    /** 
@@ -1018,6 +1067,7 @@ public  class JedisTemplate implements  Serializable{
              
        }.getResult();  
    }
+   
    /** 
     * 将信息 message 发送到指定的频道 channel。 
     * 时间复杂度：O(N+M)，其中 N 是频道 channel 的订阅者数量，而 M 则是使用模式订阅(subscribed patterns)的客户端的数量。 
