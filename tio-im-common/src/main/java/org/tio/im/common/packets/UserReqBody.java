@@ -10,6 +10,7 @@ package org.tio.im.common.packets;
  */
 public class UserReqBody extends Message{
 	
+	private static final long serialVersionUID = 1861307516710578262L;
 	private String userid;//用户id;
 	private Integer type;//0:单个,1:所有在线用户,2:所有用户(在线+离线);
 	

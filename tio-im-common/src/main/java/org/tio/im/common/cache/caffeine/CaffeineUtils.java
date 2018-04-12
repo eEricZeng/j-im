@@ -30,7 +30,7 @@ public class CaffeineUtils {
 	 * @param recordStats
 	 * @return
 	 */
-	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer initialCapacity,
+	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds, Integer initialCapacity,
 			Integer maximumSize, boolean recordStats) {
 		return createLoadingCache(cacheName, timeToLiveSeconds, timeToIdleSeconds, initialCapacity, maximumSize, recordStats, null);
 	}
@@ -45,7 +45,7 @@ public class CaffeineUtils {
 	 * @param removalListener
 	 * @return
 	 */
-	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer initialCapacity,
+	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds, Integer initialCapacity,
 			Integer maximumSize, boolean recordStats, RemovalListener<K, V> removalListener) {
 
 		if (removalListener == null) {
@@ -85,8 +85,8 @@ public class CaffeineUtils {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Long timeToLiveSeconds = 1L;
-		Long timeToIdleSeconds = null;
+		Integer timeToLiveSeconds = 1;
+		Integer timeToIdleSeconds = null;
 		Integer initialCapacity = 10;
 		Integer maximumSize = 1000;
 		boolean recordStats = false;

@@ -40,5 +40,4 @@ public class ImServerGroupContext extends ServerGroupContext {
 	public SynThreadPoolExecutor getTimExecutor() {
 		return timExecutor;
 	}
-	
 }

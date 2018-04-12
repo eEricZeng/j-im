@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.tio.core.ChannelContext;
 import org.tio.im.common.ImAio;
-import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImStatus;
 import org.tio.im.common.packets.Command;
@@ -35,13 +34,13 @@ public class UserReqHandler extends AbCmdHandler{
 		List<User> clients = null;
 		RespBody resPacket = null;
 		if(userReqBody.getType() == null || 0 == userReqBody.getType()){
-			clients = ImAio.getUser(ImConfig.groupContext, userReqBody.getUserid());
+			clients = ImAio.getUser(userReqBody.getUserid());
 			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10003);
 		}else if(1 == userReqBody.getType()){
-			clients = ImAio.getAllOnlineUser(ImConfig.groupContext);
+			clients = ImAio.getAllOnlineUser();
 			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10005);
 		}else if(2 == userReqBody.getType()){
-			clients = ImAio.getAllUser(ImConfig.groupContext);
+			clients = ImAio.getAllUser();
 			resPacket = new RespBody(Command.COMMAND_GET_USER_RESP,ImStatus.C10006);
 		}
 		if(clients == null)

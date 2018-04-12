@@ -13,7 +13,6 @@ import org.tio.im.server.demo.command.DemoWsHandshakeProcessor;
 import org.tio.im.server.demo.init.HttpServerInit;
 import org.tio.im.server.demo.listener.ImDemoAioListener;
 import org.tio.im.server.demo.service.LoginServiceProcessor;
-
 import com.jfinal.kit.PropKit;
 
 /**
@@ -26,6 +25,7 @@ public class ImServerDemoStart {
 	public static void main(String[] args)throws Exception{
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
+		ImConfig.isStore =  PropKit.get("isStore");//是否开启持久化;(on:开启,off:不开启)
 		ImConfig imConfig = new ImConfig(null, port);
 		HttpServerInit.init(imConfig);
 		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;

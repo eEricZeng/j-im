@@ -99,6 +99,7 @@ public  class JedisTemplate implements  Serializable{
 			if(jedis!=null){
 				jedisPool.returnBrokenResource(jedis);
 			}
+		}finally {
 		}
 		if(jedis!=null){
 			return jedis;
@@ -113,7 +114,7 @@ public  class JedisTemplate implements  Serializable{
 	}
 
 	
-public  void close(Jedis jedis) {
+	public  void close(Jedis jedis) {
 		if (jedis != null) {
 			jedisPool.returnResource(jedis);
 		}
@@ -819,8 +820,23 @@ public  void close(Jedis jedis) {
                return jedis.lpush(key, value);  
            }  
        }.getResult();  
-   }  
- 
+   }
+   /**
+    * 从集合中删除值为value的指定元素;
+    * @param key
+    * @param count
+    * @param value
+    * @return
+    */
+   public Long listRemove(final String key , int count , final String value){
+	   return new Executor<Long>(jedisPool) {  
+		   
+           @Override  
+           Long execute() {  
+               return jedis.lrem(key, count, value);
+           }  
+       }.getResult();  
+   }
    /** 
     * 将一个或多个值 value 插入到列表 key 的表头, 当列表大于指定长度是就对列表进行修剪(trim) 
     * @param key key 

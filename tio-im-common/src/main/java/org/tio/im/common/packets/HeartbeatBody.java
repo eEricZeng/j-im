@@ -9,6 +9,7 @@ package org.tio.im.common.packets;
  */
 public class HeartbeatBody extends Message{
 	
+	private static final long serialVersionUID = -1773817279179288833L;
 	private byte hbbyte;
 	
 	public HeartbeatBody(){}

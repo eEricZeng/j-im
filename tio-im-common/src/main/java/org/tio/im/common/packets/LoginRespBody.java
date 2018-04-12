@@ -12,6 +12,8 @@ import org.tio.im.common.packets.User;
  * 作者: WChao 创建时间: 2017年9月12日 下午3:15:28
  */
 public class LoginRespBody extends Message {
+	
+	private static final long serialVersionUID = 2712935588211143034L;
 	private String token;
 	private User user;
 

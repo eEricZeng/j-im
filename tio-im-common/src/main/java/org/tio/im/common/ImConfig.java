@@ -5,8 +5,8 @@ package org.tio.im.common;
 
 import org.tio.core.GroupContext;
 import org.tio.im.common.http.HttpConfig;
+import org.tio.im.common.message.IMesssageHelper;
 import org.tio.im.common.ws.WsServerConfig;
-
 /**
  * @author WChao
  *
@@ -35,6 +35,14 @@ public class ImConfig {
 	 * 全局群组上下文;
 	 */
 	public static GroupContext groupContext;
+	/**
+	 * 用户消息持久化助手;
+	 */
+	private static IMesssageHelper messageHelper;
+	/**
+	 * 是否开启持久化;
+	 */
+	public static String isStore;
 	
 	
 	public ImConfig(String bindIp,Integer bindPort){
@@ -70,5 +78,11 @@ public class ImConfig {
 	}
 	public void setWsServerConfig(WsServerConfig wsServerConfig) {
 		this.wsServerConfig = wsServerConfig;
+	}
+	public static IMesssageHelper getMessageHelper() {
+		return messageHelper;
+	}
+	public static void setMessageHelper(IMesssageHelper helper) {
+		messageHelper = helper;
 	}
 }

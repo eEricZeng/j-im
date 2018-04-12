@@ -99,7 +99,7 @@ public class WsServerHandler extends AbServerHandler{
 		if(cmdHandler == null){
 			if(!wsRequestPacket.isWsEof())//是否ws分片发包尾帧包
 				return;
-			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10002).toByte());
+			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10017).toByte());
 			ImAio.send(channelContext, imPacket);
 			return;
 		}

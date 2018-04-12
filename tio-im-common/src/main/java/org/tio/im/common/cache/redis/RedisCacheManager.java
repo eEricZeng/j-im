@@ -31,7 +31,7 @@ public class RedisCacheManager {
 	 * @return
 	 * @author wchao
 	 */
-	public static RedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static RedisCache register(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds) {
 		RedisExpireUpdateTask.start();
 
 		RedisCache redisCache = map.get(cacheName);

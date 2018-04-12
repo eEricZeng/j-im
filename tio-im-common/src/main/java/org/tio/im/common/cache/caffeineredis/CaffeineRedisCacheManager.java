@@ -67,7 +67,7 @@ public class CaffeineRedisCacheManager {
 		}
 	}
 	
-	public static CaffeineRedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static CaffeineRedisCache register(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds) {
 		init();
 		CaffeineRedisCache caffeineRedisCache = map.get(cacheName);
 		if (caffeineRedisCache == null) {
@@ -76,8 +76,8 @@ public class CaffeineRedisCacheManager {
 				if (caffeineRedisCache == null) {
 					RedisCache redisCache = RedisCacheManager.register(cacheName, timeToLiveSeconds, timeToIdleSeconds);
 					
-					Long timeToLiveSecondsForCaffeine = timeToLiveSeconds;
-					Long timeToIdleSecondsForCaffeine = timeToIdleSeconds;
+					Integer timeToLiveSecondsForCaffeine = timeToLiveSeconds;
+					Integer timeToIdleSecondsForCaffeine = timeToIdleSeconds;
 					
 					if (timeToLiveSecondsForCaffeine != null) {
 						timeToLiveSecondsForCaffeine = Math.min(timeToLiveSecondsForCaffeine, MAX_EXPIRE_IN_LOCAL);

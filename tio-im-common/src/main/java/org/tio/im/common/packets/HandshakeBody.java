@@ -9,6 +9,7 @@ package org.tio.im.common.packets;
  */
 public class HandshakeBody extends Message{
 
+	private static final long serialVersionUID = 4493254915372077140L;
 	private byte hbyte;
 	
 	public HandshakeBody(){}

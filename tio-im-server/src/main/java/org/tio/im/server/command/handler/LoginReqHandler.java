@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.tio.im.common.ImAio;
+import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
@@ -45,10 +47,10 @@ public class LoginReqHandler extends AbCmdHandler {
 		}
 		String userid = user.getId();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
-		Aio.bindUser(channelContext,userid);
 		String token = imSessionContext.getToken();
 		user.setTerminal(ImKit.getTerminal(channelContext));
 		imSessionContext.getClient().setUser(user);
+		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
 		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);

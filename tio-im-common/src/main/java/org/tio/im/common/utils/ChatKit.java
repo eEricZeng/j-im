@@ -5,8 +5,8 @@ package org.tio.im.common.utils;
 
 import org.apache.log4j.Logger;
 import org.tio.core.ChannelContext;
+import org.tio.im.common.Const;
 import org.tio.im.common.ImAio;
-import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.ImStatus;
@@ -128,12 +128,48 @@ public class ChatKit {
       * @return
       */
      public static boolean isOnline(String userid){
-    	 if(ImConfig.groupContext == null)
-    		 return false;
-    	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(ImConfig.groupContext,userid);
+    	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(userid);
     	 if(toChannleContexts != null && toChannleContexts.size() > 0){
     		 return true;
     	 }
     	 return false;
+     }
+     /**
+      * 获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
+      * @param from
+      * @param to
+      * @return
+      */
+     public static String sessionId(String from , String to){
+    	 String sessionId = "";
+    	 try{
+	    	 byte[] fbytes = from.getBytes(Const.CHARSET);
+	    	 byte[] tbytes = to.getBytes(Const.CHARSET);
+	    	 boolean isfmax = fbytes.length > tbytes.length;
+	    	 boolean isequal = fbytes.length == tbytes.length;
+	    	 if(isfmax){
+	    		 for(int i = 0 ; i < fbytes.length ; i++){
+		    		 for(int j = 0 ; j < tbytes.length ; j++){
+		    			 fbytes[i] = (byte) (fbytes[i]^tbytes[j]);
+		    		 }
+		    	 }
+	    		 sessionId = new String(fbytes);
+	    	 }else if(isequal){
+	    		 for(int i = 0 ; i < fbytes.length ; i++){
+		    		  fbytes[i] = (byte) (fbytes[i]^tbytes[i]);
+		    	 }
+	    		 sessionId = new String(fbytes);
+	    	 }else{
+	    		 for(int i = 0 ; i < tbytes.length ; i++){
+		    		 for(int j = 0 ; j < fbytes.length ; j++){
+		    			 tbytes[i] = (byte) (tbytes[i]^fbytes[j]);
+		    		 }
+		    	 }
+	    		 sessionId = new String(tbytes);
+	    	 }
+    	 }catch (Exception e) {
+			log.error(e.toString(),e);
+    	 }
+    	 return Md5.getMD5(sessionId);
      }
 }

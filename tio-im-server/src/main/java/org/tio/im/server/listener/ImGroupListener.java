@@ -3,7 +3,6 @@ package org.tio.im.server.listener;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.GroupListener;
 import org.tio.im.common.ImAio;
-import org.tio.im.common.ImConfig;
 import org.tio.im.common.ImPacket;
 import org.tio.im.common.ImSessionContext;
 import org.tio.im.common.packets.Client;
@@ -65,7 +64,7 @@ public class ImGroupListener implements GroupListener{
 		
 		RespBody respBody = new RespBody(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP,exitGroupNotifyRespBody);
 		ImPacket imPacket = new ImPacket(Command.COMMAND_EXIT_GROUP_NOTIFY_RESP, respBody.toByte());
-		ImAio.sendToGroup(ImConfig.groupContext, group, imPacket);
+		ImAio.sendToGroup(group, imPacket);
 		
 	}
 }

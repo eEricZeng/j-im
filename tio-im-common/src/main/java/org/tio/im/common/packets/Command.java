@@ -149,6 +149,22 @@ public enum Command{
    * <code>COMMAND_GET_USER_RESP = 18;</code>
    */
   COMMAND_GET_USER_RESP(18),
+  /**
+   * <pre>
+   * 获取聊天消息;
+   * </pre>
+   *
+   * <code>COMMAND_GET_MESSAGE_REQ = 19;</code>
+   */
+  COMMAND_GET_MESSAGE_REQ(19),
+  /**
+   * <pre>
+   * 获取聊天消息响应;
+   * </pre>
+   *
+   * <code>COMMAND_GET_MESSAGE_RESP = 20;</code>
+   */
+  COMMAND_GET_MESSAGE_RESP(20),
   ;
 
   public final int getNumber() {
@@ -180,6 +196,8 @@ public enum Command{
       case 16: return COMMAND_CANCEL_MSG_RESP;
       case 17: return COMMAND_GET_USER_REQ;
       case 18: return COMMAND_GET_USER_RESP;
+      case 19: return COMMAND_GET_MESSAGE_REQ;
+      case 20: return COMMAND_GET_MESSAGE_RESP;
       default: return null;
     }
   }

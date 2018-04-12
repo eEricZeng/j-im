@@ -21,7 +21,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 	
 	private ChannelContext channelContext = null;
 	
-	private AbstractChatProcessor chatProCmdHandler;
+	private AbstractChatProcessor chatProcessor;
 	
 	@Override
 	public boolean addMsg(ImPacket msg) {
@@ -36,7 +36,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 		super(executor);
 		this.channelContext = channelContext;
 		ChatReqHandler chatReqHandler = CommandManager.getCommand(Command.COMMAND_CHAT_REQ,ChatReqHandler.class);
-		chatProCmdHandler = (AbstractChatProcessor)chatReqHandler.getProcessor(channelContext);
+		chatProcessor = (AbstractChatProcessor)chatReqHandler.getProcessor(channelContext);
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 		}
 		ImPacket packet = null;
 		while ((packet = msgQueue.poll()) != null) {
-			if(chatProCmdHandler != null){
+			if(chatProcessor != null){
 				try {
-					chatProCmdHandler.handler(packet, channelContext);
+					chatProcessor.handler(packet, channelContext);
 				} catch (Exception e) {
 					log.error(e.toString(),e);
 				}

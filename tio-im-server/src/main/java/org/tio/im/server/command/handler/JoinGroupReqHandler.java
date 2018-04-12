@@ -46,7 +46,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,joinGroupNotifyRespBody);
 		
 		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
-		ImAio.sendToGroup(ImConfig.groupContext, groupId, joinGroupNotifyrespPacket);
+		ImAio.sendToGroup(groupId, joinGroupNotifyrespPacket);
 		
 		return joinGroupRespPacket;
 	}
@@ -70,7 +70,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 			return null;
 		}
 		
-		Aio.bindGroup(channelContext, groupId);
+		ImAio.bindGroup(channelContext, groupId,ImConfig.getMessageHelper().getBindListener());
 
 		//回一条消息，告诉对方进群结果
 		JoinGroupResult joinGroupResult = JoinGroupResult.JOIN_GROUP_RESULT_OK;

@@ -40,7 +40,9 @@ function connect(){
 	socket.onopen = function(e){
 		logDiv.innerHTML+="<font color='green' size='1'>登录成功...</font><br>";
 		var userCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+username+"\"}";
+		var msgCmd = "{\"cmd\":19,\"type\":\"0\",\"userId\":\""+username+"\"}";
 		socket.send(userCmd);//获取登录用户信息;
+		socket.send(msgCmd);//获取用户离线消息(好友+群组);
 		scrollToBottom();
 	};
 	socket.onerror = function(e){
@@ -66,6 +68,17 @@ function connect(){
 		   COMMAND_JOIN_GROUP_NOTIFY_RESP(dataObj);
 	   }else if(dataObj.command == 10){
 		   COMMAND_EXIT_GROUP_NOTIFY_RESP(dataObj);
+	   }else if(dataObj.command == 20 && dataObj.code == 10016){//处理离线消息;
+		   var msgFlag = "离线消息";
+		   COMMAND_GET_MESSAGE_RESP(dataObj,msgFlag);
+	   }else if(dataObj.command == 20 && dataObj.code == 10018){//处理历史消息;
+		   var msgFlag = "历史消息";
+		   var msgObj = dataObj.data;
+		   if(msgObj){
+			   COMMAND_GET_MESSAGE_RESP(dataObj,msgFlag);
+		   }else{//没有历史消息;
+			   OTHER(data);
+		   }
 	   }else{
 		   OTHER(data);
 	   }
@@ -116,10 +129,42 @@ function COMMAND_CHAT_RESP(data){
 	if(user){
 		 logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+user.nick+"("+user.id+")"+" "+createTime+"</font><br>";
 	}else{
-		logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+from+" "+createTime+"</font><br>";
+		 logDiv.innerHTML+="<font color='#009ACD' size='1' style='font-weight: bold'>"+from+" "+createTime+"</font><br>";
 	}
     //处理数据
     logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+content+"</font><br>";
+}
+//处理用户同步+持久化消息
+function COMMAND_GET_MESSAGE_RESP(data,msgFlag){
+	var msgObj = data.data;
+	friendOfflineMessage(msgObj,msgFlag);
+	groupOfflineMessage(msgObj,msgFlag);
+}
+//好友消息
+function friendOfflineMessage(msgObj,msgFlag){
+	var friends = msgObj.friends;
+	for (var key in friends) {
+	   var chatDatas = friends[key];
+       for(var index in chatDatas){
+    	   var user_id = chatDatas[index].from;
+    	   var createTime = new Date(chatDatas[index].createTime).Format("yyyy/MM/dd HH:mm:ss");
+    	   logDiv.innerHTML+="<font color='	#009ACD' size='1' style='font-weight: bold'>"+user_id+"</font><font color='#DC143C' size='1' style='font-weight: bold'>(好友"+msgFlag+")</font>"+"<font color='#009ACD' size='1' style='font-weight: bold'>"+createTime+"</font><br>";
+    	   logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+chatDatas[index].content+"</font><br>";
+       }
+    }
+}
+//群组消息
+function groupOfflineMessage(msgObj,msgFlag){
+	var groups = msgObj.groups;
+	for (var key in groups) {
+	   var chatDatas = groups[key];
+       for(var index in chatDatas){
+    	   var user_id = chatDatas[index].from;
+    	   var createTime = new Date(chatDatas[index].createTime).Format("yyyy/MM/dd HH:mm:ss");
+    	   logDiv.innerHTML+="<font color='	#009ACD' size='1' style='font-weight: bold'>"+user_id+"</font><font color='#DC143C' size='1' style='font-weight: bold'>(群聊["+chatDatas[index].group_id+"]"+msgFlag+")</font>"+"<font color='#009ACD' size='1' style='font-weight: bold'>"+createTime+"</font><br>";
+    	   logDiv.innerHTML+="<font color='#FFFFFF' size='1'>&nbsp;"+chatDatas[index].content+"</font><br>";
+       }
+	}
 }
 //其它信息处理;
 function OTHER(data){
@@ -156,6 +201,14 @@ function send(){
 	if(content == "")
 		return ;
 	var msg = "{\"from\": \""+username+"\",\"to\": \""+toId+"\",\"cmd\":11,\"createTime\":"+createTime+",\"chatType\":\"2\",\"msgType\": \"0\",\"content\": \""+content+"\"}";
+	if(!toId){
+		alert("请选择要私聊的人!");
+		return;
+	}
+	if(toId == username){
+		alert("无法给自己发送消息!");
+		return ;
+	}
 	socket.send(msg);
 	var chatObj = eval("("+msg+")");
 	var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
@@ -247,6 +300,34 @@ function heartbeatCmd(){
 	var heartbeatCmd = "{\"cmd\":13,\"hbbyte\":\"-127\"}";
 	socket.send(heartbeatCmd);
 }
+
+function friendHistoryCmd(){
+	if(!curUser){
+		alert("请先登录!");
+		return;
+	}
+	var friend_id = document.getElementById("history_friend_id").value;;
+	if(friend_id == ""){
+		alert("请输入要获取的好友ID!");
+		return;
+	}
+	var msgHistoryCmd = "{\"cmd\":19,\"type\":\"1\",\"fromUserId\":\""+friend_id+"\",\"userId\":\""+username+"\"}";
+	socket.send(msgHistoryCmd);//获取用户历史消息;
+}
+
+function groupHistoryCmd(){
+	if(!curUser){
+		alert("请先登录!");
+		return;
+	}
+	var group_id = document.getElementById("history_group_id").value;;
+	if(group_id == ""){
+		alert("请输入要获取的群组ID!");
+		return;
+	}
+	var msgHistoryCmd = "{\"cmd\":19,\"type\":\"1\",\"groupId\":\""+group_id+"\",\"userId\":\""+username+"\"}";
+	socket.send(msgHistoryCmd);//获取群组历史消息;
+}
 </script>
 <body onload="setUserName();">
    <div id="wrap" style="height:600px;">
@@ -270,6 +351,10 @@ function heartbeatCmd(){
 			<input type="button" value="清空记录" onclick="clearLogs();"/>
 			<input type="button" value="鉴权命令" onclick="authCmd();"/>
 			<input type="button" value="心跳命令" onclick="heartbeatCmd();"/>
+			<input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;"/>
+			<input id="history_friend_id" style="width:100px;" placeholder="输入好友ID"/>
+			<input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;"/>
+			<input id="history_group_id" style="width:100px;" placeholder="输入群组ID"/>
 		</div>
 		<div class="content">
 				<div id="logs" class="unit log">

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class Group extends Message{
 	
+	private static final long serialVersionUID = -3817755433171220952L;
 	private String group_id;
 	private String name;//群组名称;
 	private String avatar;//群组头像;

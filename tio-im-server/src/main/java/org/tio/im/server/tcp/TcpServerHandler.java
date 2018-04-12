@@ -6,7 +6,6 @@ package org.tio.im.server.tcp;
 import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
-import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
@@ -22,7 +21,6 @@ import org.tio.im.common.tcp.TcpPacket;
 import org.tio.im.common.tcp.TcpServerDecoder;
 import org.tio.im.common.tcp.TcpServerEncoder;
 import org.tio.im.common.tcp.TcpSessionContext;
-import org.tio.im.common.utils.ImKit;
 import org.tio.im.common.utils.ImUtils;
 import org.tio.im.server.command.AbCmdHandler;
 import org.tio.im.server.command.CommandManager;
@@ -65,9 +63,8 @@ public class TcpServerHandler extends AbServerHandler{
 		TcpPacket tcpPacket = (TcpPacket)packet;
 		AbCmdHandler cmdHandler = CommandManager.getCommand(tcpPacket.getCommand());
 		if(cmdHandler == null){
-			RespBody respBody = new RespBody().setCode(ImStatus.C10002.getCode()).setMsg(ImStatus.C10002.getText()).setCommand(Command.COMMAND_UNKNOW);
-			ImPacket responsePacket = ImKit.ConvertRespPacket(respBody, channelContext);
-			Aio.send(channelContext, responsePacket);
+			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10017).toByte());
+			ImAio.send(channelContext, imPacket);
 			return;
 		}
 		Object response = cmdHandler.handler(tcpPacket, channelContext);

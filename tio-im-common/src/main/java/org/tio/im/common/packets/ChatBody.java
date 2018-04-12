@@ -10,6 +10,7 @@ package org.tio.im.common.packets;
  */
 public class ChatBody extends Message {
 	
+	private static final long serialVersionUID = 5731474214655476286L;
 	private String from;//来自channel id;
 	private String to;//目标channel id;
 	private Integer msgType;//消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)

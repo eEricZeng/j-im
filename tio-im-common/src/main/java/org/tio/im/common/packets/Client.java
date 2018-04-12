@@ -9,6 +9,8 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年7月26日 下午3:11:55
  */
 public class Client extends Message{
+	
+	private static final long serialVersionUID = 6196600593975727155L;
 	private String ip; //客户端ip
 	private int port; //客户端port
 	private User user; //如果没登录过，则为null

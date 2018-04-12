@@ -12,6 +12,8 @@ import org.tio.im.common.packets.Message;
  */
 public class LoginReqBody extends Message {
 	
+	private static final long serialVersionUID = -10113316720288444L;
+
 	private String loginname;
 	
 	private String password;

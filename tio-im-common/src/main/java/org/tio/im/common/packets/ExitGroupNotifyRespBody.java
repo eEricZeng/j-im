@@ -9,6 +9,8 @@ package org.tio.im.common.packets;
  * 作者: WChao 创建时间: 2017年7月26日 下午5:15:18
  */
 public class ExitGroupNotifyRespBody extends Message{
+	
+	private static final long serialVersionUID = 3680734574052114902L;
 	private User user;
 	private String group;
 	

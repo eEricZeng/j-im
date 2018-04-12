@@ -35,13 +35,13 @@ public class RedisCache implements ICache {
 
 	private String cacheName = null;
 
-	private Long timeToLiveSeconds = null;
+	private Integer timeToLiveSeconds = null;
 
-	private Long timeToIdleSeconds = null;
+	private Integer timeToIdleSeconds = null;
 
-	private Long timeout = null;
+	private Integer timeout = null;
 
-	public RedisCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public RedisCache(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds) {
 		this.cacheName = cacheName;
 		this.timeToLiveSeconds = timeToLiveSeconds;
 		this.timeToIdleSeconds = timeToIdleSeconds;
@@ -117,6 +117,38 @@ public class RedisCache implements ICache {
 			log.error(e.toString(),e);
 		}
 	}
+	public void listPushTail(String key, Serializable value) {
+		if (StringUtils.isBlank(key)) {
+			return;
+		}
+		try {
+			String jsonValue = value instanceof String? (String)value:JsonKit.toJSONString(value);
+			JedisTemplate.me().listPushTail(cacheKey(cacheName, key),jsonValue);
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+	}
+	public List<String> listGetAll(String key) {
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		try {
+			return JedisTemplate.me().listGetAll(cacheKey(cacheName, key));
+		}catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return null;
+	}
+	public Long listRemove(String key ,String value){
+		if(StringUtils.isBlank(key) || StringUtils.isBlank(value))
+			return 0L;
+		try {
+			return JedisTemplate.me().listRemove(key, 0, value);
+		} catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return 0L;
+	}
 	@Override
 	public void putTemporary(String key, Serializable value) {
 		if (StringUtils.isBlank(key)) {
@@ -151,15 +183,15 @@ public class RedisCache implements ICache {
 		return cacheName;
 	}
 
-	public Long getTimeout() {
+	public Integer getTimeout() {
 		return timeout;
 	}
 
-	public Long getTimeToIdleSeconds() {
+	public Integer getTimeToIdleSeconds() {
 		return timeToIdleSeconds;
 	}
 
-	public Long getTimeToLiveSeconds() {
+	public Integer getTimeToLiveSeconds() {
 		return timeToLiveSeconds;
 	}
 }

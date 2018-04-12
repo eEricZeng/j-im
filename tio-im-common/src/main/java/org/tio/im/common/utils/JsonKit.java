@@ -1,6 +1,8 @@
 package org.tio.im.common.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -115,4 +117,19 @@ public class JsonKit {
 		 return JSONObject.toJSONBytes(bean,features);
 	}
 	
+	/**
+	 * 成指定类型集合;
+	 * @param jsonArray
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> List<T> toArray(List<String> datas, Class<T> clazz){
+		if(datas == null)
+			return null;
+		List<T> result  = new ArrayList<T>();
+		for(String obj : datas){
+			result.add(toBean(obj, clazz));
+		}
+		return result;
+	}
 }

@@ -8,8 +8,8 @@ import java.util.Properties;
 public class CaffeineConfiguration {
 	
 	private String cacheName;
-	private Long  timeToLiveSeconds = 1800L;
-	private Long  timeToIdleSeconds = 1800L;
+	private Integer  timeToLiveSeconds = 1800;
+	private Integer  timeToIdleSeconds = 1800;
 	private Integer  maximumSize = 5000000;
 	private Integer initialCapacity = 10;
 	private boolean recordStats = false;
@@ -21,8 +21,8 @@ public class CaffeineConfiguration {
 		String[] values = prop.getProperty(cacheName,"5000000,1800").split(",");
 		this.maximumSize = Integer.valueOf(values[0]);
 		if(values.length>1){
-			this.timeToLiveSeconds = Long.valueOf(values[1]);
-			this.timeToIdleSeconds = Long.valueOf(values[1]);
+			this.timeToLiveSeconds = Integer.valueOf(values[1]);
+			this.timeToIdleSeconds = Integer.valueOf(values[1]);
 		}
 	}
 	public String getCacheName() {
@@ -31,16 +31,16 @@ public class CaffeineConfiguration {
 	public void setCacheName(String cacheName) {
 		this.cacheName = cacheName;
 	}
-	public Long getTimeToLiveSeconds() {
+	public Integer getTimeToLiveSeconds() {
 		return timeToLiveSeconds;
 	}
-	public void setTimeToLiveSeconds(Long timeToLiveSeconds) {
+	public void setTimeToLiveSeconds(Integer timeToLiveSeconds) {
 		this.timeToLiveSeconds = timeToLiveSeconds;
 	}
-	public Long getTimeToIdleSeconds() {
+	public Integer getTimeToIdleSeconds() {
 		return timeToIdleSeconds;
 	}
-	public void setTimeToIdleSeconds(Long timeToIdleSeconds) {
+	public void setTimeToIdleSeconds(Integer timeToIdleSeconds) {
 		this.timeToIdleSeconds = timeToIdleSeconds;
 	}
 	public Integer getMaximumSize() {

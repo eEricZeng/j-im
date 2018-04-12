@@ -56,12 +56,12 @@ public class CaffeineCacheManager {
 	 * @return
 	 * @author wchao
 	 */
-	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static CaffeineCache register(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds) {
 		CaffeineCache CaffeineCache = register(cacheName, timeToLiveSeconds, timeToIdleSeconds,5000000, null);
 		return CaffeineCache;
 	}
 
-	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer maximumSize , RemovalListener<String, Serializable> removalListener) {
+	public static CaffeineCache register(String cacheName, Integer timeToLiveSeconds, Integer timeToIdleSeconds, Integer maximumSize , RemovalListener<String, Serializable> removalListener) {
 		CaffeineCache caffeineCache = map.get(cacheName);
 		if (caffeineCache == null) {
 			synchronized (CaffeineCacheManager.class) {
@@ -70,7 +70,7 @@ public class CaffeineCacheManager {
 					Integer initialCapacity = 10;
 					boolean recordStats = false;
 					LoadingCache<String, Serializable> loadingCache = CaffeineUtils.createLoadingCache(cacheName, timeToLiveSeconds, timeToIdleSeconds, initialCapacity, maximumSize, recordStats, removalListener);
-					LoadingCache<String, Serializable> temporaryLoadingCache = CaffeineUtils.createLoadingCache(cacheName, (Long)null, 10L, initialCapacity, maximumSize, recordStats, removalListener);
+					LoadingCache<String, Serializable> temporaryLoadingCache = CaffeineUtils.createLoadingCache(cacheName,null, 10, initialCapacity, maximumSize, recordStats, removalListener);
 					caffeineCache = new CaffeineCache(loadingCache, temporaryLoadingCache);
 					map.put(cacheName, caffeineCache);
 				}
