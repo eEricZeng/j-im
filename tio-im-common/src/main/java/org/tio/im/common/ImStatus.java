@@ -12,6 +12,7 @@ public enum ImStatus implements Status{
 	
 	C10000(10000,"ok","发送成功"),
 	C10001(10001,"offline","用户不在线"),
+	C10019(10019,"online","用户在线"),
 	C10002(10002,"send failed","消息发送失败,数据格式不正确,请参考:{'from':来源ID,'to':目标ID,'cmd':'消息命令码','createTime':消息创建时间(Long型),'msgType':Integer消息类型,'content':内容}"),
 	C10003(10003,"ok","获取用户信息成功!"),
 	C10004(10004,"get user failed !","获取用户信息失败!"),
@@ -28,7 +29,8 @@ public enum ImStatus implements Status{
 	C10015(10015,"get user message failed!","获取用户消息失败!"),
 	C10016(10016,"get user message ok!","获取离线消息成功!"),
 	C10017(10017,"cmd failed!","未知的cmd命令!"),
-	C10018(10018,"get user message ok!","获取历史消息成功!");
+	C10018(10018,"get user message ok!","获取历史消息成功!"),
+	C10020(10020,"Invalid verification!","不合法校验");
 	
 	private int status;
 	

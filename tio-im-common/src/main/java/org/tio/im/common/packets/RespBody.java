@@ -33,6 +33,10 @@ public class RespBody{
 		this.code = status.getCode();
 		this.msg = status.getText();
 	}
+	public RespBody(ImStatus status){
+		this.code = status.getCode();
+		this.msg = status.getText();
+	}
 	public Integer getCode() {
 		return code;
 	}
