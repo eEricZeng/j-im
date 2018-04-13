@@ -326,7 +326,7 @@ public class ImAio {
 	 */
 	public static void remove(String userid,String remark){
 		SetWithLock<ChannelContext> userChannelContexts = getChannelContextsByUserid(userid);
-		if(userChannelContexts.size() > 0){
+		if(userChannelContexts != null && userChannelContexts.size() > 0){
 			ReadLock readLock = userChannelContexts.getLock().readLock();
 			readLock.lock();
 			try{
