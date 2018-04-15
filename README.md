@@ -1,6 +1,6 @@
-## tio-im简介
+## J-IM简介
 
- tio-im是基于t-io写的轻量、高性能、(可能)支持百万在线用户IM，主要目标降低即时通讯门槛，快速打造低成本接入在线IM系统，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如内置(http、websocket、tcp自定义im协议)等，并提供通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
+ J-IM(原名tio-im)是基于t-io写的轻量、高性能、(可能)支持百万在线用户IM，主要目标降低即时通讯门槛，快速打造低成本接入在线IM系统，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如内置(http、websocket、tcp自定义im协议)等，并提供通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
 
 ## 主要特点
         1、高性能(单机可支持上万人同时在线)
@@ -68,7 +68,8 @@
  **6.关闭、退出请求消息结构** 
 ```
 {
-    "cmd":"命令码(14)int类型"
+    "cmd":"命令码(14)int类型",
+    "userid":"用户id"
 }
 ```
 请求:COMMAND_CLOSE_REQ(14) 响应:无
@@ -106,7 +107,7 @@
 更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)** 
 
 
-## tio-im一些截图
+## J-IM一些截图
 
   Web访问地址:http://localhost:8888
 
@@ -119,14 +120,15 @@
   ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
 ## 说明
-tio-im会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
+J-IM会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
 
 ## 鸣谢
 [t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)
 
 ## 联系方式
-   个人QQ:1241503759
+   个人QQ:1241503759<br>
+   个人Email:wchaojava@163.com
 
-   QQ群号：245513673
+   QQ群号：245513673 <a target="_blank"  href="//shang.qq.com/wpa/qunwpa?idkey=c876012ca4131bfdb6a32c9e5b4cde730b686fa1d20cc2ebd795a0fe2760b5d8"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="J-IM朋友圈" title="J-IM朋友圈"></a>
 
-![输入图片说明](https://gitee.com/uploads/images/2017/1022/010716_c9cd3624_410355.jpeg "无标题.jpg")
+![群二维码](https://gitee.com/uploads/images/2018/0415/131601_e2cf7bde_410355.png "1523769300727.png")
