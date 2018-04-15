@@ -123,7 +123,7 @@
 J-IM会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
 
 ## 鸣谢
-[t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)
+[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)
 
 ## 联系方式
    个人QQ:1241503759<br>
