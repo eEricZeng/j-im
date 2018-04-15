@@ -107,7 +107,7 @@
 更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)** 
 
 
-## tio-im一些截图
+## J-IM一些截图
 
   Web访问地址:http://localhost:8888
 
@@ -120,7 +120,7 @@
   ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
 ## 说明
-tio-im会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
+J-IM会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
 
 ## 鸣谢
 [t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)
