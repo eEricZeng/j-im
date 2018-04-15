@@ -101,29 +101,29 @@
 请求:COMMAND_GET_MESSAGE_REQ(19) 响应:COMMAND_GET_MESSAGE_RESP(20)
 
 ## 性能
-性能不用说，去参考[t-io性能指标](http://git.oschina.net/tywo45/t-io#%E6%9E%81%E9%9C%87%E6%92%BC%E7%9A%84%E6%80%A7%E8%83%BD)，相关版本第一时间与tio保持同步更新！
+性能不用说，去参考[t-io性能指标](http://gitee.com/tywo45/t-io#%E6%9E%81%E9%9C%87%E6%92%BC%E7%9A%84%E6%80%A7%E8%83%BD)，相关版本第一时间与tio保持同步更新！
 
 ## 更多
-更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)** 
+更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)** 
 
 
 ## J-IM一些截图
 
   Web访问地址:http://localhost:8888
 
-  ![输入图片说明](https://git.oschina.net/uploads/images/2017/0922/195539_4a5d9ed4_410355.jpeg "tio-img-0.jpg")
+  ![输入图片说明](https://gitee.com/uploads/images/2017/0922/195539_4a5d9ed4_410355.jpeg "tio-img-0.jpg")
 
   Http协议api调用地址:http://localhost:8888/api/message/send
 
-  ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
+  ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
 
-  ![输入图片说明](https://git.oschina.net/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
+  ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
 ## 说明
 J-IM会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成天鹅的，希望大家多提意见！
 
 ## 鸣谢
-[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)
+[t-io不仅仅百万并发框架](https://gitee.com/tywo45/t-io)
 
 ## 联系方式
    个人QQ:1241503759<br>
