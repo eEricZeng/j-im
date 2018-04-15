@@ -126,6 +126,7 @@ J-IM会有一个成长过程，一如t-io的发展历程，会从丑小鸭变成
 [t-io不仅仅百万并发框架](http://git.oschina.net/tywo45/t-io)
 
 ## 联系方式
+   个人QQ:1241503759
    个人Email:wchaojava@163.com
 
    QQ群号：245513673 <a target="_blank"  href="//shang.qq.com/wpa/qunwpa?idkey=c876012ca4131bfdb6a32c9e5b4cde730b686fa1d20cc2ebd795a0fe2760b5d8"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="J-IM朋友圈" title="J-IM朋友圈"></a>
