@@ -1,6 +1,7 @@
 package org.jim.server.command.handler;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
@@ -46,7 +47,7 @@ public class MessageReqHandler extends AbCmdHandler {
 		Integer offset = messageReqBody.getOffset();//分页偏移量;
 		Integer count = messageReqBody.getCount();//分页数量;
 		int type = messageReqBody.getType();//消息类型;
-		if(StringUtils.isEmpty(userId) || (0 != type && 1 != type)){//如果用户ID为空或者type格式不正确，获取消息失败;
+		if(StringUtils.isEmpty(userId) || (0 != type && 1 != type) || !Const.ON.equals(ImConfig.isStore)){//如果用户ID为空或者type格式不正确，获取消息失败;
 			return getMessageFailedPacket(channelContext);
 		}
 		if(type == 0){
