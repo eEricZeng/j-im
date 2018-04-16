@@ -67,7 +67,7 @@ public class HttpApiController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestPath(value = "/close")
+	@RequestPath(value = "user/close")
 	public HttpResponse close(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
 		Object[] params = request.getParams().get("userid");
 		if(params == null || params.length == 0){
