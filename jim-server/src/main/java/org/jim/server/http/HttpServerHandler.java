@@ -83,7 +83,7 @@ public class HttpServerHandler extends AbServerHandler{
 	@Override
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
 		if(buffer != null){
-			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
 			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
 			{
 				channelContext.setAttribute(new HttpSession().setServerHandler(this));
@@ -109,7 +109,7 @@ public class HttpServerHandler extends AbServerHandler{
 
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
-		HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+		HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,true);
 		channelContext.setAttribute(Const.HTTP_REQUEST,request);
 		return request;
 	}

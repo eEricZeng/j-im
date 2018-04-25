@@ -38,6 +38,7 @@ public class ImServerStarter {
 	}
 	
 	public void init(){
+		System.setProperty("tio.default.read.buffer.size", String.valueOf(imConfig.getReadBufferSize()));
 		imAioHandler = new ImServerAioHandler() ;
 		if(imAioListener == null){
 			imAioListener = new ImServerAioListener();

@@ -38,7 +38,7 @@ public class HttpRequest extends HttpPacket {
 	/**
 	 * 请求参数
 	 */
-	private Map<String, Object[]> params = null;
+	private Map<String, Object[]> params = new HashMap<>();;
 	private List<Cookie> cookies = null;
 	private Map<String, Cookie> cookieMap = null;
 	private int contentLength;

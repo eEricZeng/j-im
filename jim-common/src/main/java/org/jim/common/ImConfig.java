@@ -43,6 +43,10 @@ public class ImConfig {
 	 * 是否开启持久化;
 	 */
 	public static String isStore;
+	/**
+	 *  默认的接收数据的buffer size
+	 */
+	private long readBufferSize = 1024 * 1024;
 	
 	
 	public ImConfig(String bindIp,Integer bindPort){
@@ -85,4 +89,11 @@ public class ImConfig {
 	public static void setMessageHelper(IMesssageHelper helper) {
 		messageHelper = helper;
 	}
+	public long getReadBufferSize() {
+		return readBufferSize;
+	}
+	public void setReadBufferSize(long readBufferSize) {
+		this.readBufferSize = readBufferSize;
+	}
+	
 }

@@ -68,7 +68,7 @@ public class WsServerHandler extends AbServerHandler{
 	@Override
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
 		if(buffer != null){//第一次连接;
-			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext);
+			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
 			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
 			{
 				channelContext.setAttribute(new WsSessionContext().setServerHandler(this));
@@ -113,7 +113,7 @@ public class WsServerHandler extends AbServerHandler{
 	public ImPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
 		WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();
 		if(!wsSessionContext.isHandshaked()){//握手
-			HttpRequest  httpRequest = HttpRequestDecoder.decode(buffer,channelContext);
+			HttpRequest  httpRequest = HttpRequestDecoder.decode(buffer,channelContext,true);
 			if(httpRequest == null)
 				return null;
 			//升级到WebSocket协议处理
