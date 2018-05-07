@@ -104,8 +104,11 @@
 ```
 请求:COMMAND_GET_MESSAGE_REQ(19) 响应:COMMAND_GET_MESSAGE_RESP(20)
 
-## 引入J-IM (快速开发自己的高性能IM服务器)
-- 在你的pom.xml中加入如下代码片段
+## 性能
+&nbsp;&nbsp;&nbsp;极其震撼的性能，那个每秒发送500万条聊天消息，单机支持几十万人同时在线的测试当年引起了极大争议,看看t-io用户的一则测试报告吧：[ t-io 30W长连接并发压力测试报告](https://my.oschina.net/u/2369298/blog/915435)
+
+## 使用
+- 引入j-im(快速开发自己的高性能IM服务器),在你的pom.xml中加入如下代码片段
 ```
 <dependency>
     <groupId>org.j-im</groupId>
@@ -113,12 +116,6 @@
     <version>1.0.0.v20180413-RELEASE</version>
 </dependency>
 ```
-## 性能
-&nbsp;&nbsp;&nbsp;极其震撼的性能，那个每秒发送500万条聊天消息，单机支持几十万人同时在线的测试当年引起了极大争议,看看t-io用户的一则测试报告吧：[ t-io 30W长连接并发压力测试报告](https://my.oschina.net/u/2369298/blog/915435)
-
-## 更多
-更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)** 
-
 
 ## J-IM一些截图
 
@@ -131,6 +128,9 @@
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
 
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
+
+## 更多
+更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)** 
 
 ## 鸣谢
 [t-io不仅仅百万并发框架](https://gitee.com/tywo45/t-io)
