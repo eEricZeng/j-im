@@ -67,7 +67,7 @@
     "hbbyte":"心跳1个字节"
 }
 ```
-请求:COMMAND_HEARTBEAT_REQ(13) 响应:无
+请求:COMMAND_HEARTBEAT_REQ(13) 响应:COMMAND_HEARTBEAT_REQ(13)
 
  **6.关闭、退出请求消息结构** 
 ```
@@ -128,6 +128,11 @@
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190054_a128b214_410355.jpeg "tio-im-2.jpg")
 
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
+
+## 近期发布
+- 集群支持
+- J-IM开发文档编写
+- 官网开发
 
 ## 更多
 更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)** 
