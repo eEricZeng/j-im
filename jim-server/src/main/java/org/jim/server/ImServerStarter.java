@@ -55,4 +55,8 @@ public class ImServerStarter {
 	public void start() throws IOException {
 		aioServer.start(this.imConfig.getBindIp(),this.imConfig.getBindPort());
 	}
+	
+	public void stop(){
+		aioServer.stop();
+	}
 }
