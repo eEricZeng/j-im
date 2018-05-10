@@ -58,10 +58,17 @@ public class WsServerHandler extends AbServerHandler{
 	}
 	@Override
 	public void init(ImConfig imConfig) {
-		this.wsServerConfig = new WsServerConfig();
-		imConfig.setWsServerConfig(wsServerConfig);
-		this.wsMsgHandler = new WsMsgHandler();
-		this.wsServerConfig.setWsMsgHandler(wsMsgHandler);
+		WsServerConfig wsServerConfig = imConfig.getWsServerConfig();
+		if(wsServerConfig == null){
+			wsServerConfig = new WsServerConfig();
+			imConfig.setWsServerConfig(wsServerConfig);
+		}
+		IWsMsgHandler wsMsgHandler = wsServerConfig.getWsMsgHandler();
+		if(wsMsgHandler == null){
+			wsServerConfig.setWsMsgHandler(new WsMsgHandler());
+		}
+		this.wsServerConfig = wsServerConfig;
+		this.wsMsgHandler = wsServerConfig.getWsMsgHandler();
 		logger.info("wsServerHandler 初始化完毕...");
 	}
 
