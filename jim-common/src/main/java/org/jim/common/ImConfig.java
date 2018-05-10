@@ -106,5 +106,4 @@ public class ImConfig {
 	public void setImGroupListener(GroupListener imGroupListener) {
 		this.imGroupListener = imGroupListener;
 	}
-	
 }
