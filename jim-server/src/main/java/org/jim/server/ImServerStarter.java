@@ -10,6 +10,7 @@ import org.jim.server.handler.ImServerAioHandler;
 import org.jim.server.helper.redis.RedisMessageHelper;
 import org.jim.server.listener.ImGroupListener;
 import org.jim.server.listener.ImServerAioListener;
+import org.tio.core.intf.GroupListener;
 import org.tio.server.AioServer;
 
 /**
@@ -43,7 +44,11 @@ public class ImServerStarter {
 		if(imAioListener == null){
 			imAioListener = new ImServerAioListener();
 		}
-		imGroupListener = new ImGroupListener();
+		GroupListener groupListener = imConfig.getImGroupListener();
+		if(groupListener == null){
+			this.imGroupListener = new ImGroupListener();
+			imConfig.setImGroupListener(this.imGroupListener);
+		}
 		imServerGroupContext = new ImServerGroupContext(imConfig,imAioHandler, imAioListener);
 		imServerGroupContext.setGroupListener(imGroupListener);
 		if(imConfig.getMessageHelper() == null){

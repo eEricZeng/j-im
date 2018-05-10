@@ -3,10 +3,11 @@
  */
 package org.jim.common;
 
-import org.tio.core.GroupContext;
 import org.jim.common.http.HttpConfig;
 import org.jim.common.message.IMesssageHelper;
 import org.jim.common.ws.WsServerConfig;
+import org.tio.core.GroupContext;
+import org.tio.core.intf.GroupListener;
 /**
  * @author WChao
  *
@@ -35,6 +36,10 @@ public class ImConfig {
 	 * 全局群组上下文;
 	 */
 	public static GroupContext groupContext;
+	/**
+	 * 群组监听器;
+	 */
+	private GroupListener imGroupListener;
 	/**
 	 * 用户消息持久化助手;
 	 */
@@ -94,6 +99,12 @@ public class ImConfig {
 	}
 	public void setReadBufferSize(long readBufferSize) {
 		this.readBufferSize = readBufferSize;
+	}
+	public GroupListener getImGroupListener() {
+		return imGroupListener;
+	}
+	public void setImGroupListener(GroupListener imGroupListener) {
+		this.imGroupListener = imGroupListener;
 	}
 	
 }
