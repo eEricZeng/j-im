@@ -46,9 +46,9 @@ public class ImServerStarter {
 		}
 		GroupListener groupListener = imConfig.getImGroupListener();
 		if(groupListener == null){
-			this.imGroupListener = new ImGroupListener();
-			imConfig.setImGroupListener(this.imGroupListener);
+			imConfig.setImGroupListener(new ImGroupListener());
 		}
+		this.imGroupListener = (ImGroupListener)imConfig.getImGroupListener();
 		imServerGroupContext = new ImServerGroupContext(imConfig,imAioHandler, imAioListener);
 		imServerGroupContext.setGroupListener(imGroupListener);
 		if(imConfig.getMessageHelper() == null){
