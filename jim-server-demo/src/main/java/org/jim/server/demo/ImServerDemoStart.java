@@ -12,7 +12,9 @@ import org.jim.server.command.handler.LoginReqHandler;
 import org.jim.server.demo.command.DemoWsHandshakeProcessor;
 import org.jim.server.demo.init.HttpServerInit;
 import org.jim.server.demo.listener.ImDemoAioListener;
+import org.jim.server.demo.listener.ImDemoGroupListener;
 import org.jim.server.demo.service.LoginServiceProcessor;
+
 import com.jfinal.kit.PropKit;
 /**
  * 
@@ -28,6 +30,7 @@ public class ImServerDemoStart {
 		ImConfig imConfig = new ImConfig(null, port);
 		HttpServerInit.init(imConfig);
 		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;
+		imConfig.setImGroupListener(new ImDemoGroupListener());//设置群组监听器，非必须，根据需要自己选择性实现;
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
 		/*****************start 以下处理器根据业务需要自行添加与扩展，每个Command都可以添加扩展,此处为demo中处理**********************************/
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
