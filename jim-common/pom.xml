@@ -3,13 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jim-common</artifactId>
   <packaging>jar</packaging>
-  <version>${jim.version}</version>
   <name>jim-common</name>
-  
   <parent>
 		<groupId>org.j-im</groupId>
 		<artifactId>jim-parent</artifactId>
-		<version>1.0.0.v20180413-RELEASE</version>
+		<version>1.0.1.v20180515-RELEASE</version>
 		<relativePath>../jim-parent/pom.xml</relativePath>
   </parent>
   <dependencies>

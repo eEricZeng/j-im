@@ -1,14 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jim-client</artifactId>
-  <version>${jim.version}</version>
   <packaging>jar</packaging>
-
   <name>jim-client</name>
   <parent>
 		<groupId>org.j-im</groupId>
 		<artifactId>jim-parent</artifactId>
-		<version>1.0.0.v20180413-RELEASE</version>
+		<version>1.0.1.v20180515-RELEASE</version>
 		<relativePath>../jim-parent/pom.xml</relativePath>
   </parent>
   <dependencies>
