@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jim</groupId>
+	<groupId>org.j-im</groupId>
 	<artifactId>jim-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
@@ -72,17 +72,17 @@
 				<version>${tio-core.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.jim</groupId>
+				<groupId>org.j-im</groupId>
 				<artifactId>jim-common</artifactId>
 				<version>${jim.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.jim</groupId>
+				<groupId>org.j-im</groupId>
 				<artifactId>jim-server</artifactId>
 				<version>${jim.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.jim</groupId>
+				<groupId>org.j-im</groupId>
 				<artifactId>jim-client</artifactId>
 				<version>${jim.version}</version>
 			</dependency>
