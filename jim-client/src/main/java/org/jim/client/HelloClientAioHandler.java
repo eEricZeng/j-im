@@ -52,7 +52,7 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 	}
 	
 	@Override
-	public TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
+	public TcpPacket decode(ByteBuffer buffer,int limit, int position, int readableLength,ChannelContext channelContext) throws AioDecodeException {
 		TcpPacket tcpPacket = TcpServerDecoder.decode(buffer, channelContext);
 		return tcpPacket;
 	}

@@ -77,7 +77,7 @@ public class HttpServerHandler extends AbServerHandler{
 		ImConfig.groupContext.setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
 		long end = SystemTimer.currentTimeMillis();
 		long iv = end - start;
-		log.info("t-im Http Server初始化完毕,耗时:{}ms", iv);
+		log.info("j-im Http Server初始化完毕,耗时:{}ms", iv);
 	}
 	
 	@Override

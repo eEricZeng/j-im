@@ -10,6 +10,7 @@ import org.jim.server.handler.ImServerAioHandler;
 import org.jim.server.handler.ServerHandlerManager;
 import org.jim.server.listener.ImServerAioListener;
 import org.tio.server.ServerGroupContext;
+import org.tio.utils.Threads;
 import org.tio.utils.thread.pool.DefaultThreadFactory;
 import org.tio.utils.thread.pool.SynThreadPoolExecutor;
 
@@ -29,7 +30,7 @@ public class ImServerGroupContext extends ServerGroupContext {
 		if (this.timExecutor == null) {
 			LinkedBlockingQueue<Runnable> timQueue = new LinkedBlockingQueue<>();
 			String timThreadName = "jim";
-			this.timExecutor = new SynThreadPoolExecutor(CORE_POOL_SIZE, CORE_POOL_SIZE, KEEP_ALIVE_TIME, timQueue,
+			this.timExecutor = new SynThreadPoolExecutor(CORE_POOL_SIZE, CORE_POOL_SIZE, Threads.KEEP_ALIVE_TIME, timQueue,
 					DefaultThreadFactory.getInstance(timThreadName, Thread.NORM_PRIORITY), timThreadName);
 			this.timExecutor.prestartAllCoreThreads();
 		}

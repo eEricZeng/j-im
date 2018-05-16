@@ -68,7 +68,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	 * 
 	 */
 	@Override
-	public Packet decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
+	public Packet decode(ByteBuffer buffer,int limit, int position, int readableLength,ChannelContext channelContext) throws AioDecodeException {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		AbServerHandler handler = null;
 		if(imSessionContext == null){

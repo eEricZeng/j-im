@@ -19,13 +19,13 @@
 			<id>wchao</id>
 			<name>wchao</name>
 			<email>wchaojava@163.com</email>
-			<url>http://git.oschina.net/xchao/tio-im</url>
+			<url>http://git.oschina.net/xchao/j-im</url>
 		</developer>
 	</developers>
 	<scm>
-	  <connection>scm:git:git@gitee.com:xchao/tio-im.git</connection>
-	  <developerConnection>scm:git:git@gitee.com:xchao/tio-im.git</developerConnection>
-	  <url>git@gitee.com:xchao/tio-im.git</url>
+	  <connection>scm:git:git@gitee.com:xchao/j-im.git</connection>
+	  <developerConnection>scm:git:git@gitee.com:xchao/j-im.git</developerConnection>
+	  <url>git@gitee.com:xchao/j-im.git</url>
 	</scm>
 	<modules>
   		<module>../jim-client</module>
@@ -35,8 +35,8 @@
 	</modules>
 	<properties>
 		<jim.version>1.0.1.v20180515-RELEASE</jim.version>
-		<tio-core.version>2.0.8.v20180205-RELEASE</tio-core.version>
-		<tio-utils.version>2.0.8.v20180205-RELEASE</tio-utils.version>
+		<tio-core.version>2.4.0.v20180508-RELEASE</tio-core.version>
+		<tio-utils.version>2.4.0.v20180508-RELEASE</tio-utils.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -58,7 +58,7 @@
 		<commons-compress.version>1.14</commons-compress.version>
 		<fastjson.version>1.2.35</fastjson.version>
 		<testng.version>6.11</testng.version>
-		<hutool.version>3.1.0</hutool.version>
+		<hutool.version>4.0.10</hutool.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
 		<jedis.version>2.7.3</jedis.version>
 		
