@@ -61,7 +61,7 @@
 		<hutool.version>4.0.10</hutool.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
 		<jedis.version>2.7.3</jedis.version>
-		
+		<redisson.version>3.7.0</redisson.version>
 	</properties>
 	<repositories>
 
@@ -110,7 +110,13 @@
 				<artifactId>jedis</artifactId>
 				<version>${jedis.version}</version>
 			</dependency>
-
+			
+			<dependency>
+				<groupId>org.redisson</groupId>
+				<artifactId>redisson</artifactId>
+				<version>${redisson.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>

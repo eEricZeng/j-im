@@ -16,7 +16,10 @@
 			<groupId>org.t-io</groupId>
 			<artifactId>tio-core</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.redisson</groupId>
+			<artifactId>redisson</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>nl.basjes.parse.useragent</groupId>
 			<artifactId>yauaa</artifactId>
