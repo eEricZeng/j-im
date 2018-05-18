@@ -39,4 +39,6 @@ public interface Const
 	
 	public static final String OFF = "off";
 	
+	public static final String JIM = "JIM";
+	
 }

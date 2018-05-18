@@ -1,5 +1,7 @@
 package org.jim.common.cache.redis;
 import java.util.Properties;
+
+import org.apache.commons.lang3.StringUtils;
 /**
  * @author WChao
  * @date 2018年3月9日 上午1:09:03
@@ -10,7 +12,7 @@ public class RedisConfiguration {
 	private  int maxIdle=20;
 	private  long maxWait=5000L;
 	private  int timeout=2000;
-	private  String auth = "";
+	private  String auth;
 	private  String host = "";
 	private  int port= 0;
 	
@@ -22,7 +24,9 @@ public class RedisConfiguration {
 		this.maxIdle =  Integer.valueOf(prop.getProperty("maxidle", "20"));
 		this.maxWait =  Long.valueOf(prop.getProperty("maxwait","5000"));
 		this.timeout =  Integer.valueOf(prop.getProperty("timeout", "2000"));
-		this.auth =  prop.getProperty("auth","");
+		this.auth =  prop.getProperty("auth",null);
+		if(StringUtils.isEmpty(auth))
+			this.auth = null;
 		this.host = prop.getProperty("host","");
 		this.port =  Integer.valueOf(prop.getProperty("port","0"));
 	}
