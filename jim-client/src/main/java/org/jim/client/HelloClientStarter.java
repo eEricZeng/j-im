@@ -1,18 +1,18 @@
 package org.jim.client;
 
 import org.jim.common.Const;
+import org.jim.common.ImAio;
+import org.jim.common.packets.ChatBody;
+import org.jim.common.packets.Command;
+import org.jim.common.packets.LoginReqBody;
+import org.jim.common.tcp.TcpPacket;
 import org.tio.client.AioClient;
 import org.tio.client.ClientChannelContext;
 import org.tio.client.ClientGroupContext;
 import org.tio.client.ReconnConf;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.client.intf.ClientAioListener;
-import org.tio.core.Aio;
 import org.tio.core.Node;
-import org.jim.common.packets.ChatBody;
-import org.jim.common.packets.Command;
-import org.jim.common.packets.LoginReqBody;
-import org.jim.common.tcp.TcpPacket;
 /**
  * 
  * 版本: [1.0]
@@ -53,7 +53,7 @@ public class HelloClientStarter {
 	private static void send() throws Exception {
 		byte[] loginBody = new LoginReqBody("hello_client","123").toByte();
 		TcpPacket loginPacket = new TcpPacket(Command.COMMAND_LOGIN_REQ,loginBody);
-		Aio.send(clientChannelContext, loginPacket);//先登录;
+		ImAio.send(clientChannelContext, loginPacket);//先登录;
 		ChatBody chatBody = new ChatBody()
 				.setFrom("hello_client")
 				.setTo("admin")
@@ -62,6 +62,6 @@ public class HelloClientStarter {
 				.setGroup_id("100")
 				.setContent("Socket普通客户端消息测试!");
 		TcpPacket chatPacket = new TcpPacket(Command.COMMAND_CHAT_REQ,chatBody.toByte());
-		Aio.send(clientChannelContext, chatPacket);
+		ImAio.send(clientChannelContext, chatPacket);
 	}
 }

@@ -22,7 +22,7 @@ public class ImSessionContext extends SessionContext
 	/**
 	 * 通道所属协议处理器;
 	 */
-	private ServerAioHandler serverHandler;
+	private ServerAioHandler protocolHandler;
 	
 	/**
 	 * 
@@ -81,12 +81,12 @@ public class ImSessionContext extends SessionContext
 		this.requestRateLimiter = requestRateLimiter;
 	}
 
-	public ServerAioHandler getServerHandler() {
-		return serverHandler;
+	public ServerAioHandler getProtocolHandler() {
+		return protocolHandler;
 	}
 
-	public ImSessionContext setServerHandler(ServerAioHandler serverHandler) {
-		this.serverHandler = serverHandler;
+	public ImSessionContext setProtocolHandler(ServerAioHandler protocolHandler) {
+		this.protocolHandler = protocolHandler;
 		return this;
 	}
 }

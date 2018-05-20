@@ -9,14 +9,12 @@ import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
-import org.jim.common.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
-import org.jim.common.http.HttpConst;
 import org.jim.common.http.HttpRequest;
 import org.jim.common.http.HttpRequestDecoder;
 import org.jim.common.http.HttpResponse;
@@ -24,10 +22,11 @@ import org.jim.common.http.HttpResponseEncoder;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.Message;
 import org.jim.common.packets.RespBody;
-import org.jim.common.utils.ImUtils;
+import org.jim.common.protocol.IProtocol;
 import org.jim.common.utils.JsonKit;
 import org.jim.common.ws.IWsMsgHandler;
 import org.jim.common.ws.Opcode;
+import org.jim.common.ws.WsProtocol;
 import org.jim.common.ws.WsRequestPacket;
 import org.jim.common.ws.WsResponsePacket;
 import org.jim.common.ws.WsServerConfig;
@@ -36,23 +35,23 @@ import org.jim.common.ws.WsServerEncoder;
 import org.jim.common.ws.WsSessionContext;
 import org.jim.server.command.AbCmdHandler;
 import org.jim.server.command.CommandManager;
-import org.jim.server.handler.AbServerHandler;
+import org.jim.server.handler.AbProtocolHandler;
 /**
  * 版本: [1.0]
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午6:38:36
  */
-public class WsServerHandler extends AbServerHandler{
+public class WsProtocolHandler extends AbProtocolHandler{
 	
-	private Logger logger = LoggerFactory.getLogger(WsServerHandler.class);
+	private Logger logger = LoggerFactory.getLogger(WsProtocolHandler.class);
 	
 	private WsServerConfig wsServerConfig;
 
 	private IWsMsgHandler wsMsgHandler;
 	
-	public WsServerHandler() {}
+	public WsProtocolHandler() {}
 	
-	public WsServerHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
+	public WsProtocolHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
 		this.wsServerConfig = wsServerConfig;
 		this.wsMsgHandler = wsMsgHandler;
 	}
@@ -70,20 +69,6 @@ public class WsServerHandler extends AbServerHandler{
 		this.wsServerConfig = wsServerConfig;
 		this.wsMsgHandler = wsServerConfig.getWsMsgHandler();
 		logger.info("wsServerHandler 初始化完毕...");
-	}
-
-	@Override
-	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
-		if(buffer != null){//第一次连接;
-			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
-			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
-			{
-				channelContext.setAttribute(new WsSessionContext().setServerHandler(this));
-				ImUtils.setClient(channelContext);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -171,9 +156,7 @@ public class WsServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public String name() {
-		
-		return Protocol.WEBSOCKET;
+	public IProtocol protocol() {
+		return new WsProtocol();
 	}
-
 }

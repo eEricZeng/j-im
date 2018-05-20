@@ -41,4 +41,6 @@ public interface Const
 	
 	public static final String JIM = "JIM";
 	
+	public static final String CONVERTOR = "convertor";
+	
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jim.common.cluster.ImCluster;
 import org.jim.common.listener.ImBindListener;
 import org.jim.common.packets.Client;
 import org.jim.common.packets.User;
@@ -19,7 +20,6 @@ import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.utils.lock.SetWithLock;
-
 import cn.hutool.core.bean.BeanUtil;
 /**
  * 版本: [1.0]
@@ -162,6 +162,10 @@ public class ImAio {
 			}
 		}finally{
 			readLock.unlock();
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToGroup(groupContext, group, packet);
+			}
 		}
 	}
 	/**
@@ -169,12 +173,35 @@ public class ImAio {
 	 * @param toChannleContexts
 	 * @param packet
 	 */
-	public static void send(ChannelContext channelContext,ImPacket packet){
+	public static boolean send(ChannelContext channelContext,ImPacket packet){
 		if(channelContext == null)
-			return;
-		ImPacket rspPacket = ImKit.ConvertRespPacket(packet.getBody(), packet.getCommand(), channelContext);
+			return false;
+		ImPacket rspPacket = ImKit.ConvertRespPacket(packet, packet.getCommand(), channelContext);
+		if(rspPacket == null){
+			log.error("转换协议包为空,请检查协议！");
+			return false;
+		}
 		rspPacket.setSynSeq(packet.getSynSeq());
-		Aio.sendToId(channelContext.getGroupContext(), channelContext.getId(), rspPacket);
+		if(groupContext == null){
+			groupContext = channelContext.getGroupContext();
+		}
+		return sendToId(channelContext.getId(), rspPacket);
+	}
+	/**
+	 * 发消息给指定ChannelContext id
+	 * @param channelId
+	 * @param packet
+	 * @return
+	 */
+	public static Boolean sendToId(String channelId, ImPacket packet) {
+		ChannelContext channelContext = Aio.getChannelContextById(groupContext, channelId);
+		if (channelContext == null) {
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToChannelId(groupContext, channelId, packet);
+			}
+		}
+		return Aio.sendToId(groupContext, channelId, packet);
 	}
 	/**
 	 * 发送到指定用户;
@@ -196,6 +223,27 @@ public class ImAio {
 			}
 		}finally{
 			readLock.unlock();
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToUser(groupContext, userid, packet);
+			}
+		}
+	}
+	/**
+	 * 发送到指定ip对应的集合
+	 * @param groupContext
+	 * @param ip
+	 * @param packet
+	 * @author: tanyaowu
+	 */
+	public static void sendToIp(GroupContext groupContext, String ip, ImPacket packet) {
+		try{
+			Aio.sendToIp(groupContext, ip, packet, null);
+		}finally{
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToIp(groupContext, ip, packet);
+			}
 		}
 	}
 	/**

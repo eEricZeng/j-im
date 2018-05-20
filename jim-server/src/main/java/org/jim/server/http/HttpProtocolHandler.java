@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 
 import org.jim.common.Const;
 import org.jim.common.ImConfig;
-import org.jim.common.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
@@ -17,16 +16,16 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.jim.common.http.GroupContextKey;
 import org.jim.common.http.HttpConfig;
-import org.jim.common.http.HttpConst;
+import org.jim.common.http.HttpProtocol;
 import org.jim.common.http.HttpRequest;
 import org.jim.common.http.HttpRequestDecoder;
 import org.jim.common.http.HttpResponse;
 import org.jim.common.http.HttpResponseEncoder;
 import org.jim.common.http.handler.IHttpRequestHandler;
-import org.jim.common.http.session.HttpSession;
+import org.jim.common.protocol.IProtocol;
 import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
 import org.jim.server.ImServerStarter;
-import org.jim.server.handler.AbServerHandler;
+import org.jim.server.handler.AbProtocolHandler;
 import org.jim.server.http.mvc.Routes;
 import org.tio.utils.SystemTimer;
 import org.tio.utils.cache.guava.GuavaCache;
@@ -35,17 +34,17 @@ import org.tio.utils.cache.guava.GuavaCache;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午3:07:54
  */
-public class HttpServerHandler extends AbServerHandler{
+public class HttpProtocolHandler extends AbProtocolHandler{
 	
-	private Logger log = LoggerFactory.getLogger(HttpServerHandler.class);
+	private Logger log = LoggerFactory.getLogger(HttpProtocolHandler.class);
 
 	private HttpConfig httpConfig;
 	
 	private IHttpRequestHandler httpRequestHandler;
 	
-	public HttpServerHandler() {}
+	public HttpProtocolHandler() {}
 	
-	public HttpServerHandler(HttpConfig httpServerConfig){
+	public HttpProtocolHandler(HttpConfig httpServerConfig){
 		this.httpConfig = httpServerConfig;
 	}
 	@Override
@@ -80,19 +79,6 @@ public class HttpServerHandler extends AbServerHandler{
 		log.info("j-im Http Server初始化完毕,耗时:{}ms", iv);
 	}
 	
-	@Override
-	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext)throws Throwable{
-		if(buffer != null){
-			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
-			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
-			{
-				channelContext.setAttribute(new HttpSession().setServerHandler(this));
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext,ChannelContext channelContext) {
 		HttpResponse httpResponsePacket = (HttpResponse) packet;
@@ -131,9 +117,7 @@ public class HttpServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public String name() {
-		
-		return Protocol.HTTP;
+	public IProtocol protocol() {
+		return new HttpProtocol();
 	}
-	
 }

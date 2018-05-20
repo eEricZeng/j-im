@@ -3,6 +3,7 @@
  */
 package org.jim.common;
 
+import org.jim.common.cluster.ImCluster;
 import org.jim.common.http.HttpConfig;
 import org.jim.common.message.IMesssageHelper;
 import org.jim.common.ws.WsServerConfig;
@@ -47,7 +48,16 @@ public class ImConfig {
 	/**
 	 * 是否开启持久化;
 	 */
-	public static String isStore;
+	public static String isStore = "off";
+	/**
+	 * 是否开启集群;
+	 */
+	public static String isCluster = "off";
+	/**
+	 * 集群配置
+	 * 如果此值不为null，就表示要集群
+	 */
+	public static ImCluster cluster;
 	/**
 	 *  默认的接收数据的buffer size
 	 */

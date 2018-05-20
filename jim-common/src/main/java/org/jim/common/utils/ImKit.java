@@ -3,32 +3,44 @@
  */
 package org.jim.common.utils;
 
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.jim.common.Const;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
-import org.jim.common.Protocol;
+import org.jim.common.http.HttpConst;
+import org.jim.common.http.HttpProtocol;
+import org.jim.common.packets.Command;
+import org.jim.common.packets.RespBody;
+import org.jim.common.protocol.AbProtocol;
+import org.jim.common.protocol.IConvertProtocolPacket;
+import org.jim.common.protocol.IProtocol;
+import org.jim.common.tcp.TcpProtocol;
+import org.jim.common.ws.WsProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.jim.common.http.HttpConst;
-import org.jim.common.http.HttpRequest;
-import org.jim.common.http.HttpResponse;
-import org.jim.common.http.session.HttpSession;
-import org.jim.common.packets.Command;
-import org.jim.common.packets.RespBody;
-import org.jim.common.tcp.TcpPacket;
-import org.jim.common.tcp.TcpServerEncoder;
-import org.jim.common.tcp.TcpSessionContext;
-import org.jim.common.ws.Opcode;
-import org.jim.common.ws.WsResponsePacket;
-import org.jim.common.ws.WsSessionContext;
 /**
+ * IM工具类;
  * @author WChao
  *
  */
 public class ImKit {
 	
 	private static Logger logger = LoggerFactory.getLogger(ImKit.class);
+	private static Map<String,AbProtocol> protocols = new HashMap<String,AbProtocol>();
+	
+	static{
+		WsProtocol wsProtocol = new WsProtocol();
+		TcpProtocol tcpProtocol = new TcpProtocol();
+		HttpProtocol httpProtocol = new HttpProtocol();
+		protocols.put(wsProtocol.name(),wsProtocol);
+		protocols.put(tcpProtocol.name(),tcpProtocol);
+		protocols.put(httpProtocol.name(),httpProtocol);
+	}
 	/**
 	 * 
 		 * 功能描述：[转换不同协议响应包]
@@ -61,41 +73,63 @@ public class ImKit {
 		 *
 	 */
 	public static ImPacket ConvertRespPacket(byte[] body,Command command, ChannelContext channelContext){
-		Object sessionContext = channelContext.getAttribute();
 		ImPacket respPacket = null;
-		if(sessionContext instanceof HttpSession){//转HTTP协议响应包;
-			HttpRequest request = (HttpRequest)channelContext.getAttribute(Const.HTTP_REQUEST);
-			HttpResponse response = new HttpResponse(request,request.getHttpConfig());
-			response.setBody(body, request);
-			respPacket = response;
-		}else if(sessionContext instanceof TcpSessionContext){//转TCP协议响应包;
-			TcpPacket tcpPacket = new TcpPacket(command,body);
-			TcpServerEncoder.encode(tcpPacket, channelContext.getGroupContext(), channelContext);
-			respPacket = tcpPacket;
-		}else if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
-			WsResponsePacket wsResponsePacket = new WsResponsePacket();
-			wsResponsePacket.setBody(body);
-			wsResponsePacket.setWsOpcode(Opcode.TEXT);
-			respPacket = wsResponsePacket;
+		IConvertProtocolPacket convertor = (IConvertProtocolPacket)channelContext.getAttribute(Const.CONVERTOR);
+		if(convertor != null){
+			return convertor.RespPacket(body, command, channelContext);
 		}
-		respPacket.setCommand(command);
+		for(Entry<String,AbProtocol> entry : protocols.entrySet()){
+			AbProtocol protocol = entry.getValue();
+			IConvertProtocolPacket convertorObj = protocol.getConvertor();
+			respPacket = convertorObj.RespPacket(body, command, channelContext);
+			if(respPacket != null){
+				channelContext.setAttribute(Const.CONVERTOR, convertorObj);
+				return respPacket;
+			}
+		}
+		return respPacket;
+	}
+	
+	public static ImPacket ConvertRespPacket(ImPacket imPacket,Command command, ChannelContext channelContext){
+		ImPacket respPacket = ConvertRespPacket(imPacket.getBody(), command, channelContext);
+		if(respPacket == null){
+			for(Entry<String,AbProtocol> entry : protocols.entrySet()){
+				AbProtocol protocol = entry.getValue();
+				try{
+					boolean isProtocol = protocol.isProtocol(imPacket,channelContext);
+					if(isProtocol){
+						IConvertProtocolPacket convertorObj = protocol.getConvertor();
+						respPacket = convertorObj.RespPacket(imPacket.getBody(), command, channelContext);
+						if(respPacket != null){
+							channelContext.setAttribute(Const.CONVERTOR, convertorObj);
+							return respPacket;
+						}
+					}
+				}catch(Throwable e){
+					logger.error(e.toString());
+				}
+			}
+		}
 		return respPacket;
 	}
 	/**
 	 * 获取所属终端协议;
+	 * @param byteBuffer
 	 * @param channelContext
-	 * @return
 	 */
-	public static String getTerminal(ChannelContext channelContext){
-		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext instanceof HttpSession){//HTTP协议;
-			return Protocol.HTTP;
-		}else if(sessionContext instanceof TcpSessionContext){//TCP协议;
-			return Protocol.TCP;
-		}else if(sessionContext instanceof WsSessionContext){//ws协议;
-			return Protocol.WEBSOCKET;
+	public static IProtocol protocol(ByteBuffer byteBuffer , ChannelContext channelContext){
+		for(Entry<String,AbProtocol> entry : protocols.entrySet()){
+			AbProtocol protocol = entry.getValue();
+			try {
+				boolean isPrototol = protocol.isProtocol(byteBuffer, channelContext);
+				if(isPrototol){
+					return protocol;
+				}
+			} catch (Throwable e) {
+				logger.error(e.toString(),e);
+			}
 		}
-		return "";
+		return null;
 	}
 	/**
 	 * 格式化状态码消息响应体;
@@ -104,5 +138,12 @@ public class ImKit {
 	 */
 	public static byte[] toImStatusBody(ImStatus status){
 		return JsonKit.toJsonBytes(new RespBody().setCode(status.getCode()).setMsg(status.getDescription()+" "+status.getText()));
+	}
+	/**
+	 * 获取所有协议判断器，目前内置(HttpProtocol、WebsocketProtocol、HttpProtocol)
+	 * @return
+	 */
+	public static Map<String, AbProtocol> getProtocols() {
+		return protocols;
 	}
 }

@@ -4,14 +4,14 @@ import java.util.Properties;
  * @author WChao
  * @date 2018年3月9日 上午1:09:03
  */
-public class ServerHandlerConfiguration {
+public class ProtocolHandlerConfiguration {
 	
 	private  String name ;
 	private  String serverHandler ;
 	
-	public ServerHandlerConfiguration(){}
+	public ProtocolHandlerConfiguration(){}
 	
-	public ServerHandlerConfiguration(String name,Properties prop){
+	public ProtocolHandlerConfiguration(String name,Properties prop){
 		this.name = name;
 		this.serverHandler = prop.getProperty(name);
 	}

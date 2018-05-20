@@ -32,7 +32,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbServerHandler handler = (AbServerHandler)imSessionContext.getServerHandler();
+		AbProtocolHandler handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -50,7 +50,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbServerHandler handler = (AbServerHandler)imSessionContext.getServerHandler();
+		AbProtocolHandler handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -70,13 +70,13 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public Packet decode(ByteBuffer buffer,int limit, int position, int readableLength,ChannelContext channelContext) throws AioDecodeException {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbServerHandler handler = null;
+		AbProtocolHandler handler = null;
 		if(imSessionContext == null){
-			handler = ServerHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
+			handler = ProtocolHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
 			ImServerGroupContext imGroupContext = (ImServerGroupContext)ImConfig.groupContext;
 			channelContext.setAttribute(Const.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
 		}else{
-			handler = (AbServerHandler)imSessionContext.getServerHandler();
+			handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
 		}
 		if(handler != null){
 			return handler.decode(buffer, channelContext);

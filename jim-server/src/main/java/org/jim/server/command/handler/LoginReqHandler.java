@@ -14,6 +14,7 @@ import org.jim.common.packets.LoginReqBody;
 import org.jim.common.packets.LoginRespBody;
 import org.jim.common.packets.RespBody;
 import org.jim.common.packets.User;
+import org.jim.common.protocol.IProtocol;
 import org.jim.common.utils.ImKit;
 import org.jim.common.utils.JsonKit;
 import org.jim.server.command.AbCmdHandler;
@@ -48,7 +49,9 @@ public class LoginReqHandler extends AbCmdHandler {
 		String userid = user.getId();
 		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
 		String token = imSessionContext.getToken();
-		user.setTerminal(ImKit.getTerminal(channelContext));
+		IProtocol protocol = ImKit.protocol(null, channelContext);
+		String terminal = protocol == null ? "" : protocol.name();
+		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
 		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
 		loginRespBodyBuilder.setUser(user);

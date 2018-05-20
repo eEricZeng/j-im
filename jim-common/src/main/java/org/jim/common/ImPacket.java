@@ -17,6 +17,11 @@ public class ImPacket extends Packet
 	protected byte[] body;//消息体;
 	
 	private Command command;//消息命令;
+	/**
+	 * 消息是否是另外一台机器通过topic转过来的，如果是就不要死循环地再一次转发啦
+	 * 这个属性是j-im内部使用，业务层的用户请务使用
+	 */
+	private boolean isFromCluster = false;
 	
 	public ImPacket(){}
 	
@@ -165,4 +170,11 @@ public class ImPacket extends Packet
 		this.status = status;
 	}
 
+	public boolean isFromCluster() {
+		return isFromCluster;
+	}
+
+	public void setFromCluster(boolean isFromCluster) {
+		this.isFromCluster = isFromCluster;
+	}
 }

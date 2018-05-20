@@ -10,46 +10,31 @@ import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
-import org.jim.common.Protocol;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.RespBody;
+import org.jim.common.protocol.IProtocol;
 import org.jim.common.tcp.TcpPacket;
+import org.jim.common.tcp.TcpProtocol;
 import org.jim.common.tcp.TcpServerDecoder;
 import org.jim.common.tcp.TcpServerEncoder;
-import org.jim.common.tcp.TcpSessionContext;
-import org.jim.common.utils.ImUtils;
 import org.jim.server.command.AbCmdHandler;
 import org.jim.server.command.CommandManager;
-import org.jim.server.handler.AbServerHandler;
+import org.jim.server.handler.AbProtocolHandler;
 /**
  * 版本: [1.0]
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午7:44:48
  */
-public class TcpServerHandler extends AbServerHandler{
+public class TcpProtocolHandler extends AbProtocolHandler{
 	
-	Logger logger = Logger.getLogger(TcpServerHandler.class);
+	Logger logger = Logger.getLogger(TcpProtocolHandler.class);
 	
 	@Override
 	public void init(ImConfig imConfig) {
-	}
-
-	@Override
-	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext){
-		if(buffer != null){
-			//获取第一个字节协议版本号;
-			byte version = buffer.get();
-			if(version == Protocol.VERSION){//TCP协议;
-				channelContext.setAttribute(new TcpSessionContext().setServerHandler(this));
-				ImUtils.setClient(channelContext);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -80,8 +65,7 @@ public class TcpServerHandler extends AbServerHandler{
 	}
 
 	@Override
-	public String name() {
-		
-		return Protocol.TCP;
+	public IProtocol protocol() {
+		return new TcpProtocol();
 	}
 }

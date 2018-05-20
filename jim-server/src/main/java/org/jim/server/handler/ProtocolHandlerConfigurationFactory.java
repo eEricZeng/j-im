@@ -16,28 +16,28 @@ import org.slf4j.LoggerFactory;
  * @author WChao
  * @date 2018年3月9日 上午1:06:33
  */
-public class ServerHandlerConfigurationFactory {
+public class ProtocolHandlerConfigurationFactory {
 	
-    private static final Logger LOG = LoggerFactory.getLogger(ServerHandlerConfigurationFactory.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ProtocolHandlerConfigurationFactory.class.getName());
 
-    private static final String DEFAULT_CLASSPATH_CONFIGURATION_FILE = "server_handler.properties";
+    private static final String DEFAULT_CLASSPATH_CONFIGURATION_FILE = "protocol_handler.properties";
     
     /**
      * Constructor.
      */
-    private ServerHandlerConfigurationFactory() {
+    private ProtocolHandlerConfigurationFactory() {
 
     }
 
     /**
      * Configures a bean from an property file.
      */
-    public static List<ServerHandlerConfiguration> parseConfiguration(final File file) throws Exception {
+    public static List<ProtocolHandlerConfiguration> parseConfiguration(final File file) throws Exception {
         if (file == null) {
             throw new Exception("Attempt to configure server_handler from null file.");
         }
         LOG.debug("Configuring server_handler from file: {}", file);
-        List<ServerHandlerConfiguration> configurations  = null;
+        List<ProtocolHandlerConfiguration> configurations  = null;
         InputStream input = null;
         try {
             input = new BufferedInputStream(new FileInputStream(file));
@@ -58,9 +58,9 @@ public class ServerHandlerConfigurationFactory {
     /**
      * Configures a bean from an property file available as an URL.
      */
-    public static List<ServerHandlerConfiguration> parseConfiguration(final URL url) throws Exception {
+    public static List<ProtocolHandlerConfiguration> parseConfiguration(final URL url) throws Exception {
         LOG.debug("Configuring server_handler from URL: {}", url);
-        List<ServerHandlerConfiguration> configurations;
+        List<ProtocolHandlerConfiguration> configurations;
         InputStream input = null;
         try {
             input = url.openStream();
@@ -81,14 +81,14 @@ public class ServerHandlerConfigurationFactory {
     /**
      * Configures a bean from an property file in the classpath.
      */
-    public static List<ServerHandlerConfiguration> parseConfiguration() throws Exception {
+    public static List<ProtocolHandlerConfiguration> parseConfiguration() throws Exception {
         ClassLoader standardClassloader = Thread.currentThread().getContextClassLoader();
         URL url = null;
         if (standardClassloader != null) {
             url = standardClassloader.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
         }
         if (url == null) {
-        	url = ServerHandlerConfigurationFactory.class.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
+        	url = ProtocolHandlerConfigurationFactory.class.getResource(DEFAULT_CLASSPATH_CONFIGURATION_FILE);
         }
         if (url != null) {
             LOG.debug("Configuring server_handler from server_handler.properties found in the classpath: " + url);
@@ -97,23 +97,23 @@ public class ServerHandlerConfigurationFactory {
                     + " found in the classpath: {}", url);
 
         }
-        List<ServerHandlerConfiguration> configurations = parseConfiguration(url);
+        List<ProtocolHandlerConfiguration> configurations = parseConfiguration(url);
         return configurations;
     }
     
     /**
      * Configures a bean from an property input stream.
      */
-    public static List<ServerHandlerConfiguration> parseConfiguration(final InputStream inputStream) throws Exception {
+    public static List<ProtocolHandlerConfiguration> parseConfiguration(final InputStream inputStream) throws Exception {
 
         LOG.debug("Configuring server_handler from InputStream");
 
-        List<ServerHandlerConfiguration> configurations = new ArrayList<ServerHandlerConfiguration>();
+        List<ProtocolHandlerConfiguration> configurations = new ArrayList<ProtocolHandlerConfiguration>();
         try {
             Properties props = new Properties();
             props.load(inputStream);
 			for(String key : props.stringPropertyNames()){
-    			configurations.add(new ServerHandlerConfiguration(key , props));
+    			configurations.add(new ProtocolHandlerConfiguration(key , props));
     		}
         } catch (Exception e) {
             throw new Exception("Error configuring from input stream. Initial cause was " + e.getMessage(), e);
