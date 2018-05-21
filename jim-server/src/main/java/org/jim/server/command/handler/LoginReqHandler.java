@@ -1,15 +1,14 @@
 package org.jim.server.command.handler;
 
+import java.util.List;
+
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
 import org.jim.common.ImStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.Aio;
-import org.tio.core.ChannelContext;
 import org.jim.common.packets.Command;
+import org.jim.common.packets.Group;
 import org.jim.common.packets.LoginReqBody;
 import org.jim.common.packets.LoginRespBody;
 import org.jim.common.packets.RespBody;
@@ -18,8 +17,13 @@ import org.jim.common.protocol.IProtocol;
 import org.jim.common.utils.ImKit;
 import org.jim.common.utils.JsonKit;
 import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.CommandManager;
 import org.jim.server.command.handler.processor.ProcessorIntf;
 import org.jim.server.command.handler.processor.login.LoginProcessorIntf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.tio.core.Aio;
+import org.tio.core.ChannelContext;
 
 public class LoginReqHandler extends AbCmdHandler {
 	private static Logger log = LoggerFactory.getLogger(LoginReqHandler.class);
@@ -54,6 +58,18 @@ public class LoginReqHandler extends AbCmdHandler {
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
 		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
+		List<Group> groups = user.getGroups();
+		if( groups != null){
+			for(Group group : groups){//绑定群组
+				ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
+				try {
+					JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
+					joinGroupReqHandler.bindGroup(groupPacket, channelContext);
+				} catch (Exception e) {
+					log.error(e.toString(),e);
+				}
+			}
+		}
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
 		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);

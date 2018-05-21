@@ -25,7 +25,17 @@ public class TcpHandshakeProcessor implements HandshakeProcessorIntf {
 		return handshakePacket;
 	}
 
-	
+	/**
+	 * 握手成功后
+	 * @param packet
+	 * @param channelContext
+	 * @throws Exception
+	 * @author Wchao
+	 */
+	@Override
+	public void onAfterHandshaked(ImPacket packet, ChannelContext channelContext)throws Exception {
+		
+	}
 	@Override
 	public boolean isProtocol(ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();

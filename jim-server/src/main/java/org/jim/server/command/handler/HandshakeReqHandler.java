@@ -1,5 +1,6 @@
 package org.jim.server.command.handler;
 
+import org.jim.common.ImAio;
 import org.jim.common.ImPacket;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
@@ -22,7 +23,9 @@ public class HandshakeReqHandler extends AbCmdHandler {
 		if (handShakePacket == null) {
 			Aio.remove(channelContext, "业务层不同意握手");
 		}
-		return handShakePacket;
+		ImAio.send(channelContext, handShakePacket);
+		handShakeProCmdHandler.onAfterHandshaked(packet, channelContext);
+		return null;
 	}
 
 	@Override

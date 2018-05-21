@@ -13,6 +13,7 @@ import org.jim.common.packets.Command;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
 import org.jim.common.utils.JsonKit;
+import org.jim.server.command.CommandManager;
 import org.jim.server.command.handler.JoinGroupReqHandler;
 import org.jim.server.listener.ImServerAioListener;
 /**
@@ -30,10 +31,11 @@ public class ImDemoAioListener extends ImServerAioListener{
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 			User user = imSessionContext.getClient().getUser();
 			if(user.getGroups() != null){
-				for(Group group : user.getGroups()){//绑定群组并发送加入群组通知
+				for(Group group : user.getGroups()){//发送加入群组通知
 					ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
 					try {
-						new JoinGroupReqHandler().handler(groupPacket, channelContext);
+						JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
+						joinGroupReqHandler.joinGroupNotify(groupPacket, channelContext);
 					} catch (Exception e) {
 						log.error(e.toString(),e);
 					}

@@ -34,6 +34,16 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
 		
 		ImPacket joinGroupRespPacket = bindGroup(packet, channelContext);//绑定群组;
+		joinGroupNotify(packet,channelContext);//发送进房间通知;
+
+		return joinGroupRespPacket;
+	}
+	/**
+	 * 发送进房间通知;
+	 * @param packet
+	 * @param channelContext
+	 */
+	public void joinGroupNotify(ImPacket packet,ChannelContext channelContext){
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		
 		User clientUser = imSessionContext.getClient().getUser();
@@ -47,8 +57,6 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 		
 		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
 		ImAio.sendToGroup(groupId, joinGroupNotifyrespPacket);
-		
-		return joinGroupRespPacket;
 	}
 	/**
 	 * 绑定群组

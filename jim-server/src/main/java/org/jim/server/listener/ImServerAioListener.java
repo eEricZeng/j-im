@@ -5,6 +5,7 @@ import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.common.ImSessionContext;
 import org.jim.common.message.IMesssageHelper;
+import org.jim.common.packets.Client;
 import org.jim.common.packets.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
@@ -63,7 +64,12 @@ public class ImServerAioListener implements ServerAioListener {
 		IMesssageHelper messageHelper = ImConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			User onlineUser = imSessionContext.getClient().getUser();
+			Client client = imSessionContext.getClient();
+			if(client == null)
+				return;
+			User onlineUser = client.getUser();
+			if(onlineUser == null)
+				return;
 			messageHelper.getBindListener().initUserTerminal(channelContext, onlineUser.getTerminal(), Const.OFFLINE);
 		}
 	}

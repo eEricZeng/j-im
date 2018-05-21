@@ -44,6 +44,7 @@ public class RedisImBindListener implements ImBindListener,Const{
 		User onlineUser = imSessionContext.getClient().getUser();
 		if(onlineUser != null){
 			initUserTerminal(channelContext,onlineUser.getTerminal(),ONLINE);
+			initUserInfo(onlineUser);
 		}
 	}
 
@@ -111,6 +112,19 @@ public class RedisImBindListener implements ImBindListener,Const{
 		if(StringUtils.isEmpty(userid) || StringUtils.isEmpty(terminal))
 			return;
 		userCache.put(userid+SUBFIX+TERMINAL+SUBFIX+terminal, status);
+	}
+	/**
+	 * 初始化用户终端协议类型;
+	 * @param userid
+	 * @param status(online、offline)
+	 */
+	public void initUserInfo(User user){
+		if(!isStore() || user == null)
+			return;
+		String userid = user.getId();
+		if(StringUtils.isEmpty(userid))
+			return;
+		userCache.put(userid+SUBFIX+INFO, user);
 	}
 	//是否开启持久化;
 	public boolean isStore(){
