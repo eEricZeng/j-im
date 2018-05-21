@@ -5,10 +5,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.Const;
 import org.jim.common.ImConfig;
+import org.jim.common.ImSessionContext;
 import org.tio.core.ChannelContext;
 import org.jim.common.cache.redis.RedisCache;
 import org.jim.common.cache.redis.RedisCacheManager;
 import org.jim.common.listener.ImBindListener;
+import org.jim.common.packets.User;
 /**
  * @author WChao
  * @date 2018年4月8日 下午4:12:31
@@ -38,6 +40,11 @@ public class RedisImBindListener implements ImBindListener,Const{
 			return;
 		String userid = channelContext.getUserid();
 		initGroupUsers(group,userid);
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		User onlineUser = imSessionContext.getClient().getUser();
+		if(onlineUser != null){
+			initUserTerminal(channelContext,onlineUser.getTerminal(),ONLINE);
+		}
 	}
 
 	@Override
@@ -91,6 +98,19 @@ public class RedisImBindListener implements ImBindListener,Const{
 		if(!groups.contains(group)){
 			userCache.listPushTail(userid+SUBFIX+GROUP, group);
 		}
+	}
+	/**
+	 * 初始化用户终端协议类型;
+	 * @param userid
+	 * @param status(online、offline)
+	 */
+	public void initUserTerminal(ChannelContext channelContext , String terminal , String status){
+		if(!isStore())
+			return;
+		String userid = channelContext.getUserid();
+		if(StringUtils.isEmpty(userid) || StringUtils.isEmpty(terminal))
+			return;
+		userCache.put(userid+SUBFIX+TERMINAL+SUBFIX+terminal, status);
 	}
 	//是否开启持久化;
 	public boolean isStore(){

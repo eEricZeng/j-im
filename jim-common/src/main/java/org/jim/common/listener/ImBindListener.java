@@ -42,4 +42,11 @@ public interface ImBindListener {
 	 * @author tanyaowu
 	 */
 	void onAfterUserUnbind(ChannelContext channelContext, String userid) throws Exception;
+	/**
+	 * 更新用户终端协议类型及在线状态;
+	 * @param channelContext
+	 * @param terminal(ws、tcp、http、android、ios等)
+	 * @param status(online、offline)
+	 */
+    void initUserTerminal(ChannelContext channelContext , String terminal , String status);
 }

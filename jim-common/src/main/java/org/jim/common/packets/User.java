@@ -3,6 +3,7 @@
  */
 package org.jim.common.packets;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,8 +11,9 @@ import java.util.List;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 下午3:13:47
  */
-public class User{
+public class User implements Serializable{
 	
+	private static final long serialVersionUID = -1615307434369316605L;
 	private String id;//用户id;
 	private String nick; //user nick
 	private String avatar; //用户头像

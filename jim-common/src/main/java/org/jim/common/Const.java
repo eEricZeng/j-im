@@ -35,6 +35,12 @@ public interface Const
 	
 	public static final String USER = "user";
 	
+	public static final String TERMINAL = "terminal";
+	
+	public static final String ONLINE = "online";
+	
+	public static final String OFFLINE = "offline";
+	
 	public static final String ON = "on";
 	
 	public static final String OFF = "off";

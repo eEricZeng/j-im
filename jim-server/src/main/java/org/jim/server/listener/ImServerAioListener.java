@@ -1,6 +1,11 @@
 package org.jim.server.listener;
 
 import org.apache.log4j.Logger;
+import org.jim.common.Const;
+import org.jim.common.ImConfig;
+import org.jim.common.ImSessionContext;
+import org.jim.common.message.IMesssageHelper;
+import org.jim.common.packets.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioListener;
@@ -55,6 +60,12 @@ public class ImServerAioListener implements ServerAioListener {
 	 */
 	@Override
 	public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) {
+		IMesssageHelper messageHelper = ImConfig.getMessageHelper();
+		if(messageHelper != null){
+			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+			User onlineUser = imSessionContext.getClient().getUser();
+			messageHelper.getBindListener().initUserTerminal(channelContext, onlineUser.getTerminal(), Const.OFFLINE);
+		}
 	}
 	/**
 	 * 解码成功后触发本方法
