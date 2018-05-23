@@ -26,8 +26,8 @@ public class ImServerDemoStart {
 	public static void main(String[] args)throws Exception{
 		PropKit.use("app.properties");
 		int port = PropKit.getInt("port");//启动端口
-		ImConfig.isStore =  PropKit.get("store");//是否开启持久化;(on:开启,off:不开启)
-		ImConfig.isCluster = PropKit.get("cluster");//是否开启集群;
+		ImConfig.isStore =  PropKit.get("is_store");//是否开启持久化;(on:开启,off:不开启)
+		ImConfig.isCluster = PropKit.get("is_cluster");//是否开启集群;
 		ImConfig imConfig = new ImConfig(null, port);
 		HttpServerInit.init(imConfig);
 		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;
