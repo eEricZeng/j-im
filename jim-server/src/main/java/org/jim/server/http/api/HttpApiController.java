@@ -58,7 +58,7 @@ public class HttpApiController {
 		}
 	}
 	/**
-	 * 判断用户是否在线接口;
+	 * 关闭指定用户;
 	 * @param request
 	 * @param httpConfig
 	 * @param channelContext
