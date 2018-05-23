@@ -6,16 +6,17 @@ package org.jim.common.utils;
 import org.apache.log4j.Logger;
 import org.jim.common.Const;
 import org.jim.common.ImAio;
+import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
 import org.jim.common.ImStatus;
-import org.tio.core.ChannelContext;
 import org.jim.common.http.HttpConst;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.RespBody;
 import org.jim.common.packets.User;
 import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
+import org.tio.core.ChannelContext;
 import org.tio.utils.lock.SetWithLock;
 /**
  * @author WChao
@@ -128,6 +129,10 @@ public class ChatKit {
       * @return
       */
      public static boolean isOnline(String userid){
+    	 boolean isStore = Const.ON.equals(ImConfig.isStore);
+		 if(isStore){
+			return ImConfig.getMessageHelper().isOnline(userid);
+		 }
     	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(userid);
     	 if(toChannleContexts != null && toChannleContexts.size() > 0){
     		 return true;

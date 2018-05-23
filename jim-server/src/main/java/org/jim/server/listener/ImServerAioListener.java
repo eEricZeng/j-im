@@ -64,6 +64,8 @@ public class ImServerAioListener implements ServerAioListener {
 		IMesssageHelper messageHelper = ImConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+			if(imSessionContext == null)
+				return;
 			Client client = imSessionContext.getClient();
 			if(client == null)
 				return;

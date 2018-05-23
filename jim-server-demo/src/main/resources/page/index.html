@@ -23,9 +23,9 @@ var socket ;
 var logDiv;
 var username;
 var onSelected;
-var onlineUserCmd = "{\"cmd\":17,\"type\":\"1\"}";
 var curUser;
-var onlineUserArray = [];
+var friends = [];
+var groups = [];
 function connect(){
 	if(curUser){
 		alert("当前已登录,请先退出登录!");
@@ -87,6 +87,7 @@ function connect(){
 }
 function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
 	var exitGroupNotify = data.data;
+	var onlineUserCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+curUser.id+"\"}";
 	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+exitGroupNotify.user.nick+"("+exitGroupNotify.user.id+")退出群聊...</font><br>";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
@@ -94,6 +95,7 @@ function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
 function COMMAND_JOIN_GROUP_NOTIFY_RESP(data){
 	var joinGroupNotify = data.data;
 	logDiv.innerHTML+="<font color='#A3A3A3' size='1'>"+joinGroupNotify.user.nick+"("+joinGroupNotify.user.id+")加入群聊...</font><br>";
+	var onlineUserCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+curUser.id+"\"}";
 	socket.send(onlineUserCmd);//获取在线用户列表;
 }
 //加入群组响应状态处理;
@@ -106,16 +108,9 @@ function COMMAND_CHAT_RESP_SEND_STATUS(data){
 }
 //获取用户信息响应处理;
 function COMMAND_GET_USER_RESP(data){
-   	var onlineUsers =  data.data;
-   	if(data.code == 10003){
-   		curUser = onlineUsers[0];
-   	}else if(data.code == 10005){
-   		onlineUserArray = [];
-   	   	for(var i = 0 ; i < onlineUsers.length ; i++){
-   	   		onlineUserArray.push(onlineUsers[i]);
-   	   	}
-   	 	initOnlineUsers();
-   	}
+   	var user =  data.data;
+   	curUser = user;
+	initOnlineUsers();
 }
 //接收到聊天响应处理;
 function COMMAND_CHAT_RESP(data){
@@ -172,20 +167,35 @@ function OTHER(data){
 	logDiv.innerHTML+="<font color='green' size='1'>"+data+"</font><br>";
 }
 function getOnlineUserById(id){
-  	for(var i = 0 ; i < onlineUserArray.length ; i++){
-		var user = onlineUserArray[i];
-		if(user.id == id){
-			return user;
-		}
+	var groups = curUser.groups;
+	var onlineUserStr = "";
+	for(var g = 0 ; g < groups.length ; g++){
+		var group = groups[g];
+		var users = group.users;
+	   	for(var u = 0 ; u < users.length ; u++){
+			var user = users[u];
+			if(user.id == id){
+				return user;
+			}
+	   	}
 	}
 }
 function initOnlineUsers(){
-	var onlineUserStr = "&nbsp;在线成员("+onlineUserArray.length+"/"+onlineUserArray.length+")";
-   	for(var i = 0 ; i < onlineUserArray.length ; i++){
-		var user = onlineUserArray[i];
-		onlineUserStr +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
-   	}
-   	document.getElementById("onlinePanel").innerHTML=onlineUserStr;
+	var groups = curUser.groups;
+	var onlineUserStr = "";
+	for(var g = 0 ; g < groups.length ; g++){
+		var group = groups[g];
+		var users = group.users;
+		onlineUserStr += "&nbsp;"+group.name+"在线成员("+users.length+"/"+users.length+")";
+	   	for(var u = 0 ; u < users.length ; u++){
+			var user = users[u];
+			onlineUserStr +="<div id=\""+user.id+"\" nick=\""+user.nick+"\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\""+user.id+"\" src=\""+user.avatar+"\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>"+user.nick+"("+user.id+")</font></div>";
+	   	}
+	}
+	if(!onlineUserStr){
+		onlineUserStr = "&nbsp;在线成员(0/0)";
+	}
+	document.getElementById("onlinePanel").innerHTML = onlineUserStr;
 }
 function disConnect(){
 	socket.close(); 

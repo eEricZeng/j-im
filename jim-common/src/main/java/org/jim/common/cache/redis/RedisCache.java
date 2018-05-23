@@ -81,7 +81,24 @@ public class RedisCache implements ICache {
 		}
 		return value;
 	}
-
+	@Override
+	public <T> T get(String key, Class<T> clazz) {
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		T value = null;
+		try {
+			value = JedisTemplate.me().get(cacheKey(cacheName, key),clazz);
+			if (timeToIdleSeconds != null) {
+				if (value != null) {
+					RedisExpireUpdateTask.add(cacheName, key, (Serializable) value ,timeout);
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.toString(),e);
+		}
+		return value;
+	}
 	@Override
 	public Collection<String> keys() {
 		try {
@@ -144,7 +161,7 @@ public class RedisCache implements ICache {
 		if(StringUtils.isBlank(key) || StringUtils.isBlank(value))
 			return 0L;
 		try {
-			return JedisTemplate.me().listRemove(key, 0, value);
+			return JedisTemplate.me().listRemove(cacheKey(cacheName, key), 0, value);
 		} catch (Exception e) {
 			log.error(e.toString(),e);
 		}
@@ -227,12 +244,6 @@ public class RedisCache implements ICache {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T get(String key, Class<T> clazz) {
-		return (T)get(cacheKey(cacheName, key));
-	}
-
 	public String getCacheName() {
 		return cacheName;
 	}

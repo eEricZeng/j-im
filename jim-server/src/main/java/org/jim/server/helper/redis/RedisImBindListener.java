@@ -1,16 +1,20 @@
 package org.jim.server.helper.redis;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.common.ImSessionContext;
-import org.tio.core.ChannelContext;
 import org.jim.common.cache.redis.RedisCache;
 import org.jim.common.cache.redis.RedisCacheManager;
 import org.jim.common.listener.ImBindListener;
+import org.jim.common.packets.Client;
+import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
+import org.jim.common.utils.ImKit;
+import org.tio.core.ChannelContext;
 /**
  * @author WChao
  * @date 2018年4月8日 下午4:12:31
@@ -38,10 +42,12 @@ public class RedisImBindListener implements ImBindListener,Const{
 	public void onAfterGroupBind(ChannelContext channelContext, String group) throws Exception {
 		if(!isStore())
 			return;
-		String userid = channelContext.getUserid();
-		initGroupUsers(group,userid);
+		initGroupUsers(group,channelContext);
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		User onlineUser = imSessionContext.getClient().getUser();
+		Client client = imSessionContext.getClient();
+		if(client == null)
+			return;
+		User onlineUser = client.getUser();
 		if(onlineUser != null){
 			initUserTerminal(channelContext,onlineUser.getTerminal(),ONLINE);
 			initUserInfo(onlineUser);
@@ -53,7 +59,8 @@ public class RedisImBindListener implements ImBindListener,Const{
 		if(!isStore())
 			return;
 		String userid = channelContext.getUserid();
-		groupCache.listRemove(group, userid);//移除群组成员;
+		groupCache.listRemove(group+SUBFIX+USER, userid);//移除群组成员;
+		userCache.listRemove(userid+SUBFIX+GROUP, group);//移除成员群组;
 		RedisCacheManager.getCache(PUSH).remove(GROUP+SUBFIX+group+SUBFIX+userid);
 	}
 
@@ -74,16 +81,35 @@ public class RedisImBindListener implements ImBindListener,Const{
 	 * @param group
 	 * @param userid
 	 */
-	public void initGroupUsers(String group ,String userid){
+	public void initGroupUsers(String groupid ,ChannelContext channelContext){
 		if(!isStore())
 			return;
-		if(StringUtils.isEmpty(group) || StringUtils.isEmpty(userid))
+		String userid = channelContext.getUserid();
+		if(StringUtils.isEmpty(groupid) || StringUtils.isEmpty(userid))
 			return;
-		List<String> users = groupCache.listGetAll(group);
+		String group_user_key = groupid+SUBFIX+USER;
+		List<String> users = groupCache.listGetAll(group_user_key);
 		if(!users.contains(userid)){
-			groupCache.listPushTail(group, userid);
+			groupCache.listPushTail(group_user_key, userid);
 		}
-		initUserGroups(userid, group);
+		initUserGroups(userid, groupid);
+		
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		Client client = imSessionContext.getClient();
+		if(client == null)
+			return;
+		User onlineUser = client.getUser();
+		if(onlineUser == null)
+			return;
+		List<Group> groups = onlineUser.getGroups();
+		if(groups == null)
+			return;
+		for(Group group : groups){
+			if(groupid.equals(group.getGroup_id())){
+				groupCache.put(groupid+SUBFIX+INFO, group);
+				break;
+			}
+		}
 	}
 	/**
 	 * 初始化用户拥有哪些群组;
@@ -124,7 +150,12 @@ public class RedisImBindListener implements ImBindListener,Const{
 		String userid = user.getId();
 		if(StringUtils.isEmpty(userid))
 			return;
-		userCache.put(userid+SUBFIX+INFO, user);
+		User userCopy = ImKit.copyUserWithoutFriendsGroups(user);
+		userCache.put(userid+SUBFIX+INFO, userCopy);
+		List<Group> friends = user.getFriends();
+		if(friends != null){
+			userCache.put(userid+SUBFIX+FRIENDS, (Serializable) friends);
+		}
 	}
 	//是否开启持久化;
 	public boolean isStore(){

@@ -3,8 +3,6 @@
  */
 package org.jim.server.http.api;
 
-import java.util.List;
-
 import org.jim.common.ImAio;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
@@ -52,8 +50,8 @@ public class HttpApiController {
 			return HttpResps.json(request, new RespBody(ImStatus.C10020));
 		}
 		String userid = params[0].toString();
-		List<User> users = ImAio.getUser(userid);
-		if(users.size() > 0){
+		User user = ImAio.getUser(userid);
+		if(user != null){
 			return HttpResps.json(request, new RespBody(ImStatus.C10019));
 		}else{
 			return HttpResps.json(request, new RespBody(ImStatus.C10001));

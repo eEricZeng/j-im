@@ -4,7 +4,9 @@
 package org.jim.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
@@ -20,7 +22,6 @@ import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.utils.lock.SetWithLock;
-import cn.hutool.core.bean.BeanUtil;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -38,23 +39,26 @@ public class ImAio {
 	 * @param userid
 	 * @return
 	 */
-	public static List<User> getUser(String userid){
+	public static User getUser(String userid){
 		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(userid);
-		List<User> users = new ArrayList<User>();
 		if(userChannelContexts == null)
-			return users;
+			return null;
 		ReadLock readLock = userChannelContexts.getLock().readLock();
 		readLock.lock();
 		try{
 			Set<ChannelContext> userChannels = userChannelContexts.getObj();
 			if(userChannels == null )
-				return users;
+				return null;
+			User user = null;
 			for(ChannelContext channelContext : userChannels){
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 				Client client = imSessionContext.getClient();
-				users.add(client.getUser());
+				user = client.getUser();
+				if(user != null){
+					return user;
+				}
 			}
-			return users;
+			return user;
 		}finally {
 			readLock.unlock();
 		}
@@ -95,8 +99,7 @@ public class ImAio {
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 				Client client = imSessionContext.getClient();
 				if(client != null && client.getUser() != null){
-					User user = new User();
-					BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
+					User user = ImKit.copyUserWithoutUsers(client.getUser());
 					users.add(user);
 				}
 			}
@@ -127,8 +130,7 @@ public class ImAio {
 				if(imSessionContext != null){
 					Client client = imSessionContext.getClient();
 					if(client != null && client.getUser() != null){
-						User user = new User();
-						BeanUtil.copyProperties(client.getUser(), user,"friends","groups");
+						User user = ImKit.copyUserWithoutUsers(client.getUser());
 						users.add(user);
 					}
 				}
@@ -137,6 +139,41 @@ public class ImAio {
 			readLock.unlock();
 		}
 		return users;
+	}
+	/**
+	 * 根据群组获取所有用户;
+	 * @param group
+	 * @return
+	 */
+	public static List<User> getAllUserByGroup(String group){
+		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
+		if(withLockChannels == null){
+			return null;
+		}
+		ReadLock readLock = withLockChannels.getLock().readLock();
+		readLock.lock();
+		try{
+			Set<ChannelContext> channels = withLockChannels.getObj();
+			if(channels != null && channels.size() > 0){
+				List<User> users = new ArrayList<User>();
+				Map<String,User> userMaps = new HashMap<String,User>();
+				for(ChannelContext channelContext : channels){
+					String userid = channelContext.getUserid();
+					User user = getUser(userid);
+					if(user != null){
+						if(userMaps.get(userid) == null){
+							userMaps.put(userid, user);
+							users.add(user);
+						}
+					}
+				}
+				userMaps = null;
+				return users;
+			}
+			return null;
+		}finally{
+			readLock.unlock();
+		}
 	}
 	/**
 	 * 功能描述：[发送到群组(所有不同协议端)]
@@ -149,8 +186,13 @@ public class ImAio {
 		if(packet.getBody() == null)
 			return;
 		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
-		if(withLockChannels == null)
+		if(withLockChannels == null){
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToGroup(groupContext, group, packet);
+			}
 			return;
+		}
 		ReadLock readLock = withLockChannels.getLock().readLock();
 		readLock.lock();
 		try{
@@ -212,8 +254,13 @@ public class ImAio {
 		if(StringUtils.isEmpty(userid))
 			return;
 		SetWithLock<ChannelContext> toChannleContexts = getChannelContextsByUserid(userid);
-		if(toChannleContexts == null || toChannleContexts.size() < 1)
+		if(toChannleContexts == null || toChannleContexts.size() < 1){
+			ImCluster cluster = ImConfig.cluster;
+			if (cluster != null && !packet.isFromCluster()) {
+				cluster.clusterToUser(groupContext, userid, packet);
+			}
 			return;
+		}
 		ReadLock readLock = toChannleContexts.getLock().readLock();
 		readLock.lock();
 		try{

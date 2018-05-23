@@ -33,9 +33,8 @@ public class CloseReqHandler extends AbCmdHandler
 		}else{
 			String userid = closeReqBody.getUserid();
 			ImAio.remove(userid, "收到关闭请求!");
-			return ImKit.ConvertRespPacket(new RespBody(Command.COMMAND_CLOSE_REQ, ImStatus.C10021), channelContext);
 		}
-		return null;
+		return ImKit.ConvertRespPacket(new RespBody(Command.COMMAND_CLOSE_REQ, ImStatus.C10021), channelContext);
 	}
 
 	@Override

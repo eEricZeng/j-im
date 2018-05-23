@@ -5,6 +5,8 @@ import java.util.List;
 import org.jim.common.listener.ImBindListener;
 import org.jim.common.message.IMesssageHelper;
 import org.jim.common.packets.ChatBody;
+import org.jim.common.packets.Group;
+import org.jim.common.packets.User;
 import org.jim.common.packets.UserMessageData;
 
 /**
@@ -70,6 +72,48 @@ public class MysqlMessageHelper implements IMesssageHelper {
 
 	@Override
 	public UserMessageData getGroupHistoryMessage(String userid, String groupid,Double beginTime,Double endTime,Integer offset,Integer count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isOnline(String userid) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Group getGroupUsers(String group_id, Integer type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Group> getAllGroupUsers(String user_id, Integer type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Group getFriendUsers(String user_id, String friend_group_id, Integer type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Group> getAllFriendUsers(String user_id, Integer type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getUserByType(String userid, Integer type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getGroups(String user_id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

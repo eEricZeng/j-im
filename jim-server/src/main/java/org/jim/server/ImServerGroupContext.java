@@ -39,6 +39,7 @@ public class ImServerGroupContext extends ServerGroupContext{
 		this.imConfig = imConfig;
 		this.setHeartbeatTimeout(imConfig.getHeartbeatTimeout());
 		if(Const.ON.equals(ImConfig.isCluster)){//是否开启集群
+			ImConfig.isStore = Const.ON;
 			if(ImConfig.cluster == null){
 				try{
 					ImConfig.cluster = new RedisCluster(RedisClusterConfig.newInstance("REDIS_", RedissonTemplate.me().getRedissonClient(), this));

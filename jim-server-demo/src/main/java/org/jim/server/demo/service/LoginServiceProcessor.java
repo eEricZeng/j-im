@@ -82,7 +82,7 @@ public class LoginServiceProcessor implements LoginProcessorIntf{
 	public List<Group> initGroups(User user){
 		//模拟的群组;正式根据业务去查数据库或者缓存;
 		List<Group> groups = new ArrayList<Group>();
-		groups.add(new Group("100","tio-im朋友圈"));
+		groups.add(new Group("100","J-IM朋友圈"));
 		return groups;
 	}
 	public List<Group> initFriends(User user){

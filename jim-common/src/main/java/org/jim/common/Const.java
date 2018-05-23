@@ -39,6 +39,8 @@ public interface Const
 	
 	public static final String INFO = "info";
 	
+	public static final String FRIENDS = "friends";
+	
 	public static final String ONLINE = "online";
 	
 	public static final String OFFLINE = "offline";

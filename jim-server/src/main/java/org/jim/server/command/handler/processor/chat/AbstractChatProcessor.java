@@ -61,7 +61,12 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 		List<String> users = messsageHelper.getGroupUsers(group_id);
 		//通过写扩散模式将群消息同步到所有的群成员
 		for(String userid : users){
-			boolean isOnline = ChatKit.isOnline(userid);
+			boolean isOnline = false;
+			if(ON.equals(ImConfig.isStore) && ON.equals(ImConfig.isCluster)){
+				isOnline = messsageHelper.isOnline(userid);
+			}else{
+				isOnline = ChatKit.isOnline(userid);
+			}
 			if(!isOnline){
 				writeMessage(pushTable, GROUP+":"+group_id+":"+userid, chatBody);
 			}

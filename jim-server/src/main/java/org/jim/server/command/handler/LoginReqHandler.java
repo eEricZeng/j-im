@@ -2,11 +2,13 @@ package org.jim.server.command.handler;
 
 import java.util.List;
 
+import org.jim.common.Const;
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
 import org.jim.common.ImStatus;
+import org.jim.common.message.IMesssageHelper;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.LoginReqBody;
@@ -58,9 +60,30 @@ public class LoginReqHandler extends AbCmdHandler {
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
 		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
+		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
+		loginRespBodyBuilder.setUser(user);
+		loginRespBodyBuilder.setToken(token);
+		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);
+		return ImKit.ConvertRespPacket(respBody, channelContext);
+	}
+	/**
+	 * 初始化绑定或者解绑群组;
+	 */
+	public void bindUnbindGroup(ChannelContext channelContext , User user)throws Exception{
+		String userid = user.getId();
 		List<Group> groups = user.getGroups();
 		if( groups != null){
+			boolean isStore = Const.ON.equals(ImConfig.isStore);
+			IMesssageHelper messageHelper = null;
+			List<String> groupIds = null;
+			if(isStore){
+				messageHelper = ImConfig.getMessageHelper();
+				groupIds = messageHelper.getGroups(userid);
+			}
 			for(Group group : groups){//绑定群组
+				if(isStore && groupIds != null){
+					groupIds.remove(group.getGroup_id());
+				}
 				ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
 				try {
 					JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
@@ -69,13 +92,13 @@ public class LoginReqHandler extends AbCmdHandler {
 					log.error(e.toString(),e);
 				}
 			}
+			if(isStore && groupIds != null){
+				for(String groupid : groupIds){
+					messageHelper.getBindListener().onAfterGroupUnbind(channelContext, groupid);
+				}
+			}
 		}
-		loginRespBodyBuilder.setUser(user);
-		loginRespBodyBuilder.setToken(token);
-		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);
-		return ImKit.ConvertRespPacket(respBody, channelContext);
 	}
-	
 	@Override
 	public Command command() {
 		return Command.COMMAND_LOGIN_REQ;
