@@ -114,7 +114,7 @@
 <dependency>
     <groupId>org.j-im</groupId>
     <artifactId>jim-server</artifactId>
-    <version>1.0.1.v20180515-RELEASE</version>
+    <version>2.0.0.v20180520-RELEASE</version>
 </dependency>
 ```
 
