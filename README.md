@@ -145,8 +145,6 @@
    个人QQ:1241503759<br>
    个人Email:wchaojava@163.com
 
-   进群先确认是否已经star了J-IM，进群会审核，否则会审核不通过！
-
    官方QQ群号：245513673 <a target="_blank"  href="//shang.qq.com/wpa/qunwpa?idkey=c876012ca4131bfdb6a32c9e5b4cde730b686fa1d20cc2ebd795a0fe2760b5d8"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="J-IM朋友圈" title="J-IM朋友圈"></a>
 
 ![群二维码](https://gitee.com/uploads/images/2018/0415/131601_e2cf7bde_410355.png "1523769300727.png")
