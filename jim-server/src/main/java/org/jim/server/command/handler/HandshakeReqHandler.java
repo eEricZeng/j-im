@@ -22,6 +22,7 @@ public class HandshakeReqHandler extends AbCmdHandler {
 		ImPacket handShakePacket = handShakeProCmdHandler.handshake(packet, channelContext);
 		if (handShakePacket == null) {
 			Aio.remove(channelContext, "业务层不同意握手");
+			return null;
 		}
 		ImAio.send(channelContext, handShakePacket);
 		handShakeProCmdHandler.onAfterHandshaked(packet, channelContext);
