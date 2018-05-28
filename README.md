@@ -131,9 +131,8 @@
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
 ## 近期发布
-- 集群支持(已完成)
-- J-IM开发文档编写(已完成)
-- 官网开发(开发中)
+- 支持Https、Wss
+- 官网开发
 
 ## 更多
 更多相关信息持续关注这家伙：**[t-io不仅仅百万并发框架](http://gitee.com/tywo45/t-io)** 
