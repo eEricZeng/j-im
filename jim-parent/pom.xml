@@ -28,8 +28,10 @@
 	  <url>git@gitee.com:xchao/j-im.git</url>
 	</scm>
 	<modules>
+  		<module>../jim-client</module>
 		<module>../jim-common</module>
 		<module>../jim-server</module>
+		<module>../jim-server-demo</module>
 	</modules>
 	<properties>
 		<jim.version>2.0.0.v20180520-RELEASE</jim.version>
