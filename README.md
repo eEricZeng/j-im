@@ -3,8 +3,7 @@
 [![maven最新版本](https://maven-badges.herokuapp.com/maven-central/org.j-im/jim-server/badge.svg "maven最新版本")](https://maven-badges.herokuapp.com/maven-central/org.j-im/jim-server)
 ## J-IM简介
 
- J-IM 是用JAVA语言,基于t-io开发的轻量、高性能、单机支持几十万至百万在线用户IM，主要目标降低即时通讯门槛，快速打造低成本接入在线IM系统，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如内置(Http、Websocket、Tcp自定义IM协议)等，并提供通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！
-
+ J-IM 是用JAVA语言,基于t-io开发的轻量、高性能、单机支持几十万至百万在线用户IM，主要目标降低即时通讯门槛，快速打造低成本接入在线IM系统，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如内置(Http、Websocket、Tcp自定义IM协议)等，并提供通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！                                                                        
 JavaDoc https://apidoc.gitee.com/xchao/j-im/
 
 ## 主要特点
