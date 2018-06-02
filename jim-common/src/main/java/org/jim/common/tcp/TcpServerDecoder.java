@@ -4,6 +4,7 @@
 package org.jim.common.tcp;
 
 import java.nio.ByteBuffer;
+
 import org.apache.log4j.Logger;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
@@ -22,7 +23,7 @@ public class TcpServerDecoder {
 	private static Logger logger = Logger.getLogger(TcpServerDecoder.class);
 	
 	public static TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException{
-		if(!isCompletePacket(buffer))
+		if(!isHeaderLength(buffer))//校验协议头
 			return null;
 		//获取第一个字节协议版本号;
 		byte version = buffer.get();
@@ -41,14 +42,23 @@ public class TcpServerDecoder {
 			throw new AioDecodeException(ImStatus.C10014.getText());
 		}
 		int bodyLen = buffer.getInt();
-		int readableLength = buffer.limit() - buffer.position();
 		//数据不正确，则抛出AioDecodeException异常
-		if (readableLength < bodyLen)
+		if (bodyLen < 0)
 		{
 			throw new AioDecodeException("bodyLength [" + bodyLen + "] is not right, remote:" + channelContext.getClientNode());
 		}
+		int readableLength = buffer.limit() - buffer.position();
+		int validateBodyLen = readableLength - bodyLen;
+		if (validateBodyLen < 0) // 不够消息体长度(剩下的buffe组不了消息体)
+		{
+			return null;
+		}
 		byte[] body = new byte[bodyLen];
-		buffer.get(body,0,bodyLen);
+		try{
+			buffer.get(body,0,bodyLen);
+		}catch(Exception e){
+			logger.error(e.toString());
+		}
 		logger.info("TCP解码成功...");
 		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte同步序列号(如果是同步发送则多4byte同步序列号,否则无4byte序列号)+1byte命令码+4byte消息的长度+消息体的长度
 		TcpPacket tcpPacket = new TcpPacket(Command.forNumber(cmdByte), body);
@@ -65,40 +75,36 @@ public class TcpServerDecoder {
 		return tcpPacket;
 	}
 	/**
-	 * 判断是否完整的包
+	 * 判断是否符合协议头长度
 	 * @param buffer
 	 * @return
 	 * @throws AioDecodeException
 	 */
-	private static boolean isCompletePacket(ByteBuffer buffer)throws AioDecodeException{
+	private static boolean isHeaderLength(ByteBuffer buffer) throws AioDecodeException{
+		int readableLength = buffer.limit() - buffer.position();
+		if(readableLength == 0)
+			return false;
 		//协议头索引;
-		int index = 0;
-		//获取第一个字节协议版本号;
-		byte version = buffer.get(index);
-		if(version != Protocol.VERSION){
-			throw new AioDecodeException(ImStatus.C10013.getText());
-		}
-		index++;
-		//标志位
-		byte maskByte = buffer.get(index);
-		if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+		int index = buffer.position();
+		try{
+			//获取第一个字节协议版本号;
+			buffer.get(index);
+			index++;
+			//标志位
+			byte maskByte = buffer.get(index);
+			if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+				index += 4;
+			}
+			index++;
+			//cmd命令码
+			buffer.get(index);
+			index++;
+			//消息体长度
+			buffer.getInt(index);
 			index += 4;
-		}
-		index++;
-		//cmd命令码
-		byte cmdByte = buffer.get(index);
-		if(Command.forNumber(cmdByte) == null){
-			throw new AioDecodeException(ImStatus.C10014.getText());
-		}
-		index++;
-		//消息体长度
-		int bodyLen = buffer.getInt(index);
-		index += 4;
-		int readableLength = buffer.limit() - buffer.position() ;
-		if (readableLength < bodyLen + index)
-		{
+			return true;
+		}catch(Exception e){
 			return false;
 		}
-		return true;
 	}
 }
