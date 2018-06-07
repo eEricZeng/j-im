@@ -61,7 +61,7 @@ public class ImConfig {
 	/**
 	 *  默认的接收数据的buffer size
 	 */
-	private long readBufferSize = 1024 * 1024;
+	private long readBufferSize = 1024 * 2;
 	
 	
 	public ImConfig(String bindIp,Integer bindPort){
