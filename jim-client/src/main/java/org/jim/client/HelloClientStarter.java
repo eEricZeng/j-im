@@ -21,7 +21,7 @@ import org.tio.core.Node;
  */
 public class HelloClientStarter {
 	//服务器节点
-	public static Node serverNode = new Node("127.0.0.1", Const.SERVER_PORT);
+	public static Node serverNode = new Node("localhost", Const.SERVER_PORT);
 
 	//handler, 包括编码、解码、消息处理
 	public static ClientAioHandler aioClientHandler = new HelloClientAioHandler();

@@ -13,6 +13,7 @@ import org.tio.core.intf.GroupListener;
  * @author WChao
  *
  */
+import org.tio.core.ssl.SslConfig;
 public class ImConfig {
 	
 	private String bindIp = null;
@@ -53,6 +54,14 @@ public class ImConfig {
 	 * 是否开启集群;
 	 */
 	public static String isCluster = "off";
+	/**
+	 * 是否开启SSL加密
+	 */
+	public static String isSSL = "off";
+	/**
+	 * SSL配置
+	 */
+	private SslConfig sslConfig;
 	/**
 	 * 集群配置
 	 * 如果此值不为null，就表示要集群
@@ -116,4 +125,11 @@ public class ImConfig {
 	public void setImGroupListener(GroupListener imGroupListener) {
 		this.imGroupListener = imGroupListener;
 	}
+	public SslConfig getSslConfig() {
+		return sslConfig;
+	}
+	public void setSslConfig(SslConfig sslConfig) {
+		this.sslConfig = sslConfig;
+	}
+	
 }

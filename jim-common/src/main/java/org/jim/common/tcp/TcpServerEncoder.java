@@ -4,6 +4,7 @@
 package org.jim.common.tcp;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import org.jim.common.ImPacket;
 import org.jim.common.Protocol;
@@ -50,7 +51,8 @@ public class TcpServerEncoder {
 		allLen += 1+4+bodyLen;
 		ByteBuffer buffer = ByteBuffer.allocate(allLen);
 		//设置字节序
-		buffer.order(groupContext.getByteOrder());
+		ByteOrder byteOrder = groupContext == null ? ByteOrder.BIG_ENDIAN : groupContext.getByteOrder();
+		buffer.order(byteOrder);
 		buffer.put(tcpPacket.getVersion());
 		buffer.put(tcpPacket.getMask());
 		if(isHasSynSeq){//同步发送设置4byte，同步序列号;

@@ -5,12 +5,14 @@ package org.jim.server;
 
 import java.io.IOException;
 
+import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.server.handler.ImServerAioHandler;
 import org.jim.server.helper.redis.RedisMessageHelper;
 import org.jim.server.listener.ImGroupListener;
 import org.jim.server.listener.ImServerAioListener;
 import org.tio.core.intf.GroupListener;
+import org.tio.core.ssl.SslConfig;
 import org.tio.server.AioServer;
 
 /**
@@ -53,6 +55,11 @@ public class ImServerStarter {
 		imServerGroupContext.setGroupListener(imGroupListener);
 		if(imConfig.getMessageHelper() == null){
 			imConfig.setMessageHelper(new RedisMessageHelper());
+		}
+		if(Const.ON.equals(imConfig.isSSL)){//开启SSL
+			SslConfig sslConfig = imConfig.getSslConfig();
+			if(sslConfig != null)
+			imServerGroupContext.setSslConfig(sslConfig);
 		}
 		aioServer = new AioServer(imServerGroupContext);
 	}

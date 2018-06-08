@@ -26,18 +26,20 @@ public class ImDemoAioListener extends ImServerAioListener{
 	
 	@Override
 	public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) {
-		ImPacket imPacket = (ImPacket)packet;
-		if(imPacket.getCommand() == Command.COMMAND_LOGIN_RESP || imPacket.getCommand() == Command.COMMAND_HANDSHAKE_RESP){//首次登陆;
-			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			User user = imSessionContext.getClient().getUser();
-			if(user.getGroups() != null){
-				for(Group group : user.getGroups()){//发送加入群组通知
-					ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
-					try {
-						JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
-						joinGroupReqHandler.joinGroupNotify(groupPacket, channelContext);
-					} catch (Exception e) {
-						log.error(e.toString(),e);
+		if(packet instanceof ImPacket){
+			ImPacket imPacket = (ImPacket)packet;
+			if(imPacket.getCommand() == Command.COMMAND_LOGIN_RESP || imPacket.getCommand() == Command.COMMAND_HANDSHAKE_RESP){//首次登陆;
+				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+				User user = imSessionContext.getClient().getUser();
+				if(user.getGroups() != null){
+					for(Group group : user.getGroups()){//发送加入群组通知
+						ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
+						try {
+							JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
+							joinGroupReqHandler.joinGroupNotify(groupPacket, channelContext);
+						} catch (Exception e) {
+							log.error(e.toString(),e);
+						}
 					}
 				}
 			}
