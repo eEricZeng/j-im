@@ -10,11 +10,12 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
         1、高性能(单机可支持几十万至百万人同时在线)
         2、轻量、可扩展性极强
         3、支持集群多机部署
-        4、消息格式极其简洁(JSON)
-        5、支持多种协议(Socket自定义IM协议、Websocket、Http),可分别独立部署。
-        6、内置消息持久化(离线、历史、漫游)，保证消息可靠性，高性能存储
-        7、各种丰富的API接口。
-        8、零成本部署，一键启动。
+        4、支持SSL/TLS加密传输
+        5、消息格式极其简洁(JSON)
+        6、支持多种协议(Socket自定义IM协议、Websocket、Http),可分别独立部署。
+        7、内置消息持久化(离线、历史、漫游)，保证消息可靠性，高性能存储
+        8、各种丰富的API接口。
+        9、零成本部署，一键启动。
 
 ## 消息格式
 
@@ -132,9 +133,9 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
   ![输入图片说明](https://gitee.com/uploads/images/2017/0830/190428_474270ae_410355.jpeg "tio-im-3.jpg")
 
 ## 近期发布
-- 支持Https、Wss
-- 支持图片、语音、视频发送等
+- 支持Https、Wss  **(已完成)** 
 - 支持J-PUSH消息推送
+- 支持图片、语音、视频发送等
 - 官网开发
 
 ## 更多
