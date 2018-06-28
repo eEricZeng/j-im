@@ -43,15 +43,6 @@ public class RedisImBindListener implements ImBindListener,Const{
 		if(!isStore())
 			return;
 		initGroupUsers(group,channelContext);
-		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		Client client = imSessionContext.getClient();
-		if(client == null)
-			return;
-		User onlineUser = client.getUser();
-		if(onlineUser != null){
-			initUserTerminal(channelContext,onlineUser.getTerminal(),ONLINE);
-			initUserInfo(onlineUser);
-		}
 	}
 
 	@Override
@@ -68,6 +59,15 @@ public class RedisImBindListener implements ImBindListener,Const{
 	public void onAfterUserBind(ChannelContext channelContext, String userid) throws Exception {
 		if(!isStore())
 			return;
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		Client client = imSessionContext.getClient();
+		if(client == null)
+			return;
+		User onlineUser = client.getUser();
+		if(onlineUser != null){
+			initUserTerminal(channelContext,onlineUser.getTerminal(),ONLINE);
+			initUserInfo(onlineUser);
+		}
 	}
 
 	@Override
