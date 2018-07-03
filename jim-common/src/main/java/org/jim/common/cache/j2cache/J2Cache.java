@@ -6,8 +6,7 @@ package org.jim.common.cache.j2cache;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.tio.utils.cache.ICache;
-
+import org.jim.common.cache.ICache;
 import net.oschina.j2cache.CacheChannel;
 import net.oschina.j2cache.CacheObject;
 
@@ -83,7 +82,6 @@ public class J2Cache implements ICache {
 		throw new RuntimeException("不支持防缓存穿透");
 	}
 
-	@Override
 	public long ttl(String key) {
 		throw new RuntimeException("不支持ttl");
 	}
