@@ -72,6 +72,10 @@
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.oschina.j2cache</groupId>
+			<artifactId>j2cache-core</artifactId>
+		</dependency>
     </dependencies>
     <build>
 		<plugins>
