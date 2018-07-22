@@ -1,5 +1,7 @@
 package org.jim.common.packets;
 
+import org.jim.common.utils.DynamicEnumUtil;
+
 public enum Command{
   /**
    * <code>COMMAND_UNKNOW = 0;</code>
@@ -176,32 +178,18 @@ public enum Command{
   }
 
   public static Command forNumber(int value) {
-    switch (value) {
-      case 0: return COMMAND_UNKNOW;
-      case 1: return COMMAND_HANDSHAKE_REQ;
-      case 2: return COMMAND_HANDSHAKE_RESP;
-      case 3: return COMMAND_AUTH_REQ;
-      case 4: return COMMAND_AUTH_RESP;
-      case 5: return COMMAND_LOGIN_REQ;
-      case 6: return COMMAND_LOGIN_RESP;
-      case 7: return COMMAND_JOIN_GROUP_REQ;
-      case 8: return COMMAND_JOIN_GROUP_RESP;
-      case 9: return COMMAND_JOIN_GROUP_NOTIFY_RESP;
-      case 10: return COMMAND_EXIT_GROUP_NOTIFY_RESP;
-      case 11: return COMMAND_CHAT_REQ;
-      case 12: return COMMAND_CHAT_RESP;
-      case 13: return COMMAND_HEARTBEAT_REQ;
-      case 14: return COMMAND_CLOSE_REQ;
-      case 15: return COMMAND_CANCEL_MSG_REQ;
-      case 16: return COMMAND_CANCEL_MSG_RESP;
-      case 17: return COMMAND_GET_USER_REQ;
-      case 18: return COMMAND_GET_USER_RESP;
-      case 19: return COMMAND_GET_MESSAGE_REQ;
-      case 20: return COMMAND_GET_MESSAGE_RESP;
-      default: return null;
-    }
+	  for(Command command : Command.values()){
+	   	   if(command.getNumber() == value){
+	   		   return command;
+	   	   }
+      }
+	  return null;
   }
 
+  public static Command addAndGet(String name , int value){
+	  return DynamicEnumUtil.addEnum(Command.class, name,new Class[]{int.class}, new Object[]{value});
+  }
+  
   private final int value;
 
   private Command(int value) {

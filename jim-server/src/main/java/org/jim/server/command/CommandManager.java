@@ -19,7 +19,7 @@ import org.jim.server.command.handler.processor.ProcessorIntf;
 @SuppressWarnings("unchecked")
 public class CommandManager{
 	
-	private static  Map<Command, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
+	private static  Map<Integer, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
 	private static Logger LOG = LoggerFactory.getLogger(CommandManager.class);
 	
 	private CommandManager(){};
@@ -54,9 +54,9 @@ public class CommandManager{
 		int cmd_number = imCommandHandler.command().getNumber();
 		if(Command.forNumber(cmd_number) == null)
 			throw new Exception("注册cmd处理器失败,不合法的cmd命令码:"+cmd_number+",请在Command枚举类中添加!");
-		if(handlerMap.get(imCommandHandler.command()) == null)
+		if(handlerMap.get(cmd_number) == null)
 		{
-			return handlerMap.put(imCommandHandler.command(),imCommandHandler);
+			return handlerMap.put(cmd_number,imCommandHandler);
 		}
 		return null;
 	}
@@ -64,9 +64,10 @@ public class CommandManager{
 	public static AbCmdHandler removeCommand(Command command){
 		if(command == null)
 			return null;
-		if(handlerMap.get(command) != null)
+		int cmd_value = command.getNumber();
+		if(handlerMap.get(cmd_value) != null)
 		{
-			return handlerMap.remove(command);
+			return handlerMap.remove(cmd_value);
 		}
 		return null;
 	}
@@ -82,7 +83,6 @@ public class CommandManager{
 	public static AbCmdHandler getCommand(Command command){
 		if(command == null)
 			return null;
-		
-		return handlerMap.get(command);
+		return handlerMap.get(command.getNumber());
 	}
 }

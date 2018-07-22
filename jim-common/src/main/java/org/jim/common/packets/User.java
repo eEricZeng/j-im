@@ -6,6 +6,8 @@ package org.jim.common.packets;
 import java.io.Serializable;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -22,6 +24,7 @@ public class User implements Serializable{
 	private String terminal;//用户所属终端;
 	private List<Group> friends;//好友列表;
 	private List<Group> groups;//群组列表;
+	private JSONObject extFields;//扩展预留字段;
 	
 	public User(){}
 	public User(String id , String nick){
@@ -76,5 +79,11 @@ public class User implements Serializable{
 	}
 	public void setTerminal(String terminal) {
 		this.terminal = terminal;
+	}
+	public JSONObject getExtFields() {
+		return extFields;
+	}
+	public void setExtFields(JSONObject extFields) {
+		this.extFields = extFields;
 	}
 }

@@ -396,7 +396,7 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 			Group group = JSONObject.toJavaObject(groupJson, Group.class);
 			List<User> users = group.getUsers();
 			if(users == null || users.isEmpty())
-				return null;
+				continue;
 			List<User> userResults = new ArrayList<User>();
 			for(User user : users){
 				initUserStatus(user);
