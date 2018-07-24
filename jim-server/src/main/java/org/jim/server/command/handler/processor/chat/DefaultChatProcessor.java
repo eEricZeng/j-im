@@ -14,6 +14,5 @@ public class DefaultChatProcessor extends AbstractChatProcessor{
 	
 	@Override
 	public void doHandler(ChatBody chatBody, ChannelContext channelContext){
-		
 	}
 }

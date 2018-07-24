@@ -27,13 +27,13 @@ public class SslDemoStarter {
 		TcpPacket loginPacket = new TcpPacket(Command.COMMAND_LOGIN_REQ,loginBody);
 		ByteBuffer loginByteBuffer = TcpServerEncoder.encode(loginPacket, null, null);
 		client.write(loginByteBuffer.array());
-		ChatBody chatBody = new ChatBody()
+		ChatBody chatBody =  ChatBody.newBuilder()
 				.setFrom("hello_client")
 				.setTo("admin")
 				.setMsgType(0)
 				.setChatType(1)
 				.setGroup_id("100")
-				.setContent("Socket普通客户端消息测试!");
+				.setContent("Socket普通客户端消息测试!").build();
 		TcpPacket chatPacket = new TcpPacket(Command.COMMAND_CHAT_REQ,chatBody.toByte());
 		ByteBuffer chatByteBuffer = TcpServerEncoder.encode(chatPacket,null, null);
 		client.write(chatByteBuffer.array());

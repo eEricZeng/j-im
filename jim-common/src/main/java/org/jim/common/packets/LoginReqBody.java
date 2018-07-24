@@ -20,8 +20,6 @@ public class LoginReqBody extends Message {
 	
 	private String token;
 	
-	private String reserved;//预留字段;
-	
 	public LoginReqBody(){}
 	
 	public LoginReqBody(String token){
@@ -52,13 +50,5 @@ public class LoginReqBody extends Message {
 	}
 	public void setToken(String token) {
 		this.token = token;
-	}
-
-	public String getReserved() {
-		return reserved;
-	}
-
-	public void setReserved(String reserved) {
-		this.reserved = reserved;
 	}
 }
