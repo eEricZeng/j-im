@@ -30,7 +30,7 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
     "chatType":"聊天类型int类型(0:未知,1:公聊,2:私聊)",
     "group_id":"群组id仅在chatType为(1)时需要,String类型",
     "content": "内容",
-    "extras" : "JSON对象格式如：{"扩展字段名称":"扩展字段value"}"
+    "extras" : "JSON对象格式如：{\"扩展字段名称\":\"扩展字段value\"}"
 }
 ```
 请求:COMMAND_CHAT_REQ(11) 响应:COMMAND_CHAT_RESP(12)
