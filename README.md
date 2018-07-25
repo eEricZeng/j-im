@@ -29,7 +29,8 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
     "msgType": "消息类型int类型(0:text、1:image、2:voice、3:vedio、4:music、5:news)",
     "chatType":"聊天类型int类型(0:未知,1:公聊,2:私聊)",
     "group_id":"群组id仅在chatType为(1)时需要,String类型",
-    "content": "内容"
+    "content": "内容",
+    "extras" : {"扩展字段名称":"扩展字段value"}
 }
 ```
 请求:COMMAND_CHAT_REQ(11) 响应:COMMAND_CHAT_RESP(12)
@@ -116,7 +117,7 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
 <dependency>
     <groupId>org.j-im</groupId>
     <artifactId>jim-server</artifactId>
-    <version>2.1.0.v20180611-RELEASE</version>
+    <version>2.2.0.v20180725-RELEASE</version>
 </dependency>
 ```
 
