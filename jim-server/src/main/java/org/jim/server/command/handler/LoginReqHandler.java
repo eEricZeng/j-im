@@ -49,6 +49,7 @@ public class LoginReqHandler extends AbCmdHandler {
 		User user = loginServiceHandler.getUser(loginReqBody,channelContext);
 		if (user == null ) {
 			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
+			loginServiceHandler.onFailed(channelContext);
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}
@@ -63,6 +64,7 @@ public class LoginReqHandler extends AbCmdHandler {
 		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
 		loginRespBodyBuilder.setUser(user);
 		loginRespBodyBuilder.setToken(token);
+		loginServiceHandler.onSuccess(channelContext);
 		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);
 		return ImKit.ConvertRespPacket(respBody, channelContext);
 	}

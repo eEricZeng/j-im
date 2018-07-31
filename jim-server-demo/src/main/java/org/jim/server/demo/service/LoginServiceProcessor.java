@@ -11,7 +11,14 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.Const;
+import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
+import org.jim.common.packets.Command;
+import org.jim.common.utils.JsonKit;
+import org.jim.server.command.CommandManager;
+import org.jim.server.command.handler.JoinGroupReqHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.jim.common.http.HttpConst;
 import org.jim.common.packets.Group;
@@ -27,6 +34,8 @@ import cn.hutool.core.util.RandomUtil;
  *
  */
 public class LoginServiceProcessor implements LoginProcessorIntf{
+
+	private Logger logger = LoggerFactory.getLogger(LoginServiceProcessor.class);
 
 	public static final Map<String, User> tokenMap = new HashMap<>();
 
@@ -118,7 +127,30 @@ public class LoginServiceProcessor implements LoginProcessorIntf{
 		}
 		return this.getUser(loginname, password);
 	}
-	
+
+	@Override
+	public void onSuccess(ChannelContext channelContext) {
+		logger.info("登录成功回调方法");
+		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
+		User user = imSessionContext.getClient().getUser();
+		if(user.getGroups() != null){
+			for(Group group : user.getGroups()){//发送加入群组通知
+				ImPacket groupPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_REQ,JsonKit.toJsonBytes(group));
+				try {
+					JoinGroupReqHandler joinGroupReqHandler = CommandManager.getCommand(Command.COMMAND_JOIN_GROUP_REQ, JoinGroupReqHandler.class);
+					joinGroupReqHandler.joinGroupNotify(groupPacket, channelContext);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onFailed(ChannelContext channelContext) {
+		logger.info("登录失败回调方法");
+	}
+
 	@Override
 	public boolean isProtocol(ChannelContext channelContext) {
 		 
