@@ -79,6 +79,8 @@ function connect(){
 		   }else{//没有历史消息;
 			   OTHER(data);
 		   }
+	   }else if(dataObj.command == 6){//登陆命令返回状态处理
+		   //暂时不处理...
 	   }else{
 		   OTHER(data);
 	   }

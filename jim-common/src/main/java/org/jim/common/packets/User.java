@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class User implements Serializable{
 	
-	private static final long serialVersionUID = -1615307434369316605L;
+	private static final long serialVersionUID = 1L;
 	private String id;//用户id;
 	private String nick; //user nick
 	private String avatar; //用户头像

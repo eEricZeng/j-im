@@ -64,6 +64,6 @@ public enum ImStatus implements Status{
 
 	@Override
 	public String getMsg() {
-		return this.getStatus()+" "+this.getDescription()+" "+this.getText();
+		return this.getDescription()+" "+this.getText();
 	}
 }

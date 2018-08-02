@@ -95,9 +95,9 @@ public class WsProtocolHandler extends AbProtocolHandler{
 			ImAio.send(channelContext, imPacket);
 			return;
 		}
-		Object response = cmdHandler.handler(wsRequestPacket, channelContext);
+		ImPacket response = cmdHandler.handler(wsRequestPacket, channelContext);
 		if(response != null){
-			ImAio.send(channelContext, (ImPacket)response);
+			ImAio.send(channelContext, response);
 		}
 	}
 

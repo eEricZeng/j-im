@@ -1,19 +1,18 @@
 package org.jim.server.command.handler;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jim.common.Const;
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
-import org.jim.common.ImStatus;
 import org.jim.common.message.IMesssageHelper;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.LoginReqBody;
 import org.jim.common.packets.LoginRespBody;
-import org.jim.common.packets.RespBody;
 import org.jim.common.packets.User;
 import org.jim.common.protocol.IProtocol;
 import org.jim.common.utils.ImKit;
@@ -46,27 +45,29 @@ public class LoginReqHandler extends AbCmdHandler {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		LoginReqBody loginReqBody = JsonKit.toBean(packet.getBody(),LoginReqBody.class);
 		
-		User user = loginServiceHandler.getUser(loginReqBody,channelContext);
-		if (user == null ) {
+		LoginRespBody loginRespBody = loginServiceHandler.doLogin(loginReqBody,channelContext);
+		if (loginRespBody == null || loginRespBody.getUser() == null) {
 			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
-			loginServiceHandler.onFailed(channelContext);
+			if(loginRespBody != null){
+				loginRespBody.clear();
+				ImAio.send(channelContext, new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte()));
+				TimeUnit.MILLISECONDS.sleep(1);//这里暂时先这样，需要优化
+			}
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}
+		User user = loginRespBody.getUser();
 		String userid = user.getId();
-		LoginRespBody loginRespBodyBuilder = new LoginRespBody();
-		String token = imSessionContext.getToken();
 		IProtocol protocol = ImKit.protocol(null, channelContext);
 		String terminal = protocol == null ? "" : protocol.name();
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
 		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
 		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
-		loginRespBodyBuilder.setUser(user);
-		loginRespBodyBuilder.setToken(token);
 		loginServiceHandler.onSuccess(channelContext);
-		RespBody respBody = new RespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007).setData(loginRespBodyBuilder);
-		return ImKit.ConvertRespPacket(respBody, channelContext);
+		loginRespBody.clear();
+		ImPacket loginRespPacket = new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte());
+		return loginRespPacket;
 	}
 	/**
 	 * 初始化绑定或者解绑群组;

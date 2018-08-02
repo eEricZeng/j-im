@@ -3,15 +3,20 @@
  */
 package org.jim.common.packets;
 
+import java.io.Serializable;
+
 import org.jim.common.ImStatus;
+import org.jim.common.Status;
 import org.jim.common.utils.JsonKit;
 /**
  * 版本: [1.0]
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年7月26日 上午11:31:48
  */
-public class RespBody{
+public class RespBody implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	private Integer code;//响应状态码;
 	
 	private String msg;//响应状态信息提示;
@@ -28,10 +33,10 @@ public class RespBody{
 		this(command);
 		this.data = data;
 	}
-	public RespBody(Command command , ImStatus status){
+	public RespBody(Command command , Status status){
 		this(command);
 		this.code = status.getCode();
-		this.msg = status.getText();
+		this.msg = status.getMsg();
 	}
 	public RespBody(ImStatus status){
 		this.code = status.getCode();
@@ -79,4 +84,5 @@ public class RespBody{
 		return JsonKit.toJSONBytesEnumNoUsingName(this);
 	}
 	
+	public void clear(){};
 }

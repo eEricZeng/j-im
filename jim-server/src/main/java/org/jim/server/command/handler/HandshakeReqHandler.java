@@ -4,7 +4,9 @@ import org.jim.common.ImAio;
 import org.jim.common.ImPacket;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.jim.common.http.HttpRequest;
 import org.jim.common.packets.Command;
+import org.jim.common.ws.WsSessionContext;
 import org.jim.server.command.AbCmdHandler;
 import org.jim.server.command.handler.processor.ProcessorIntf;
 import org.jim.server.command.handler.processor.handshake.HandshakeProcessorIntf;
@@ -25,7 +27,9 @@ public class HandshakeReqHandler extends AbCmdHandler {
 			return null;
 		}
 		ImAio.send(channelContext, handShakePacket);
-		handShakeProCmdHandler.onAfterHandshaked(packet, channelContext);
+		WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
+		HttpRequest request = wsSessionContext.getHandshakeRequestPacket();
+		handShakeProCmdHandler.onAfterHandshaked(request, channelContext);
 		return null;
 	}
 

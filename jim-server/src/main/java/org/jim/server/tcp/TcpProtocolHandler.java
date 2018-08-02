@@ -52,9 +52,9 @@ public class TcpProtocolHandler extends AbProtocolHandler{
 			ImAio.send(channelContext, imPacket);
 			return;
 		}
-		Object response = cmdHandler.handler(tcpPacket, channelContext);
+		ImPacket response = cmdHandler.handler(tcpPacket, channelContext);
 		if(response != null && tcpPacket.getSynSeq() < 1){
-			ImAio.send(channelContext,(ImPacket)response);
+			ImAio.send(channelContext,response);
 		}
 	}
 

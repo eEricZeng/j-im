@@ -24,10 +24,12 @@ public class LoginReqBody extends Message {
 	
 	public LoginReqBody(String token){
 		this.token = token;
+		this.cmd = Command.COMMAND_LOGIN_REQ.getNumber();
 	}
 	public LoginReqBody(String loginname,String password){
 		this.loginname = loginname;
 		this.password = password;
+		this.cmd = Command.COMMAND_LOGIN_REQ.getNumber();
 	}
 	public LoginReqBody(String loginname,String password,String token){
 		this(loginname,password);

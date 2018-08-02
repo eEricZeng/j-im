@@ -13,7 +13,6 @@ import org.jim.server.command.handler.HandshakeReqHandler;
 import org.jim.server.command.handler.LoginReqHandler;
 import org.jim.server.demo.command.DemoWsHandshakeProcessor;
 import org.jim.server.demo.init.HttpServerInit;
-import org.jim.server.demo.listener.ImDemoAioListener;
 import org.jim.server.demo.listener.ImDemoGroupListener;
 import org.jim.server.demo.service.LoginServiceProcessor;
 import org.tio.core.ssl.SslConfig;
@@ -35,7 +34,7 @@ public class ImServerDemoStart {
 		initSsl(imConfig);//初始化SSL;(开启SSL之前,你要保证你有SSL证书哦...)
 		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;
 		imConfig.setImGroupListener(new ImDemoGroupListener());//设置群组监听器，非必须，根据需要自己选择性实现;
-		ImServerStarter imServerStarter = new ImServerStarter(imConfig,new ImDemoAioListener());
+		ImServerStarter imServerStarter = new ImServerStarter(imConfig);
 		/*****************start 以下处理器根据业务需要自行添加与扩展，每个Command都可以添加扩展,此处为demo中处理**********************************/
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getCommand(Command.COMMAND_HANDSHAKE_REQ,HandshakeReqHandler.class);
 		handshakeReqHandler.addProcessor(new DemoWsHandshakeProcessor());//添加自定义握手处理器;
