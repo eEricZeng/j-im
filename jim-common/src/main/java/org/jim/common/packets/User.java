@@ -24,7 +24,7 @@ public class User implements Serializable{
 	private String terminal;//用户所属终端;
 	private List<Group> friends;//好友列表;
 	private List<Group> groups;//群组列表;
-	private JSONObject extFields;//扩展预留字段;
+	private JSONObject extras;//扩展预留字段;
 	
 	public User(){}
 	public User(String id , String nick){
@@ -80,10 +80,11 @@ public class User implements Serializable{
 	public void setTerminal(String terminal) {
 		this.terminal = terminal;
 	}
-	public JSONObject getExtFields() {
-		return extFields;
+	public JSONObject getExtras() {
+		return extras;
 	}
-	public void setExtFields(JSONObject extFields) {
-		this.extFields = extFields;
+	public void setExtras(JSONObject extras) {
+		this.extras = extras;
 	}
+	
 }
