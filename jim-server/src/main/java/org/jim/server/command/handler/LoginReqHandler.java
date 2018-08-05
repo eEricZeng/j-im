@@ -1,8 +1,6 @@
 package org.jim.server.command.handler;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.jim.common.Const;
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
@@ -48,11 +46,10 @@ public class LoginReqHandler extends AbCmdHandler {
 		LoginRespBody loginRespBody = loginServiceHandler.doLogin(loginReqBody,channelContext);
 		if (loginRespBody == null || loginRespBody.getUser() == null) {
 			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
-			if(loginRespBody != null){
+			/*if(loginRespBody != null){
 				loginRespBody.clear();
 				ImAio.send(channelContext, new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte()));
-				TimeUnit.MILLISECONDS.sleep(1);//这里暂时先这样，需要优化
-			}
+			}*/
 			Aio.remove(channelContext, "loginname and token is null");
 			return null;
 		}

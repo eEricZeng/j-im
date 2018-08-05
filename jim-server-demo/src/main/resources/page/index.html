@@ -38,12 +38,7 @@ function connect(){
 	logDiv = document.getElementById('logs');
 	socket = new WebSocket("ws:"+ip+":"+port+"?username="+username+"&password="+password);
 	socket.onopen = function(e){
-		logDiv.innerHTML+="<font color='green' size='1'>登录成功...</font><br>";
-		var userCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+username+"\"}";
-		var msgCmd = "{\"cmd\":19,\"type\":\"0\",\"userId\":\""+username+"\"}";
-		socket.send(userCmd);//获取登录用户信息;
-		socket.send(msgCmd);//获取用户离线消息(好友+群组);
-		scrollToBottom();
+		
 	};
 	socket.onerror = function(e){
 		logDiv.innerHTML+="<font color='red' size='1'>异常:"+e+"</font><br>";
@@ -51,7 +46,7 @@ function connect(){
 	};
 	socket.onclose = function(e){
 		curUser = null;
-		logDiv.innerHTML+="<font color='green' size='1'>退出登录...</font><br>";
+		logDiv.innerHTML+="<font color='green' size='1'>关闭连接...</font><br>";
 		document.getElementById("onlinePanel").innerHTML="&nbsp;在线成员(0/0)";
 		scrollToBottom();
 	};
@@ -68,6 +63,9 @@ function connect(){
 		   COMMAND_JOIN_GROUP_NOTIFY_RESP(dataObj);
 	   }else if(dataObj.command == 10){
 		   COMMAND_EXIT_GROUP_NOTIFY_RESP(dataObj);
+	   }else if(dataObj.command == 20 && dataObj.code == 10015){
+		   //获取消息失败，未开启持久化处理
+		   //...
 	   }else if(dataObj.command == 20 && dataObj.code == 10016){//处理离线消息;
 		   var msgFlag = "离线消息";
 		   COMMAND_GET_MESSAGE_RESP(dataObj,msgFlag);
@@ -80,12 +78,23 @@ function connect(){
 			   OTHER(data);
 		   }
 	   }else if(dataObj.command == 6){//登陆命令返回状态处理
-		   //暂时不处理...
+		   COMMAND_LOGIN_RESP(dataObj);
 	   }else{
 		   OTHER(data);
 	   }
 	   scrollToBottom();
 	};
+}
+//登陆通知处理
+function COMMAND_LOGIN_RESP(dataObj){
+	 if(10007 == dataObj.code){//登陆成功;
+		logDiv.innerHTML+="<font color='green' size='1'>连接成功...</font><br>";
+		var userCmd = "{\"cmd\":17,\"type\":\"0\",\"userid\":\""+username+"\"}";
+		var msgCmd = "{\"cmd\":19,\"type\":\"0\",\"userId\":\""+username+"\"}";
+		socket.send(userCmd);//获取登录用户信息;
+		socket.send(msgCmd);//获取用户离线消息(好友+群组);
+		scrollToBottom();
+	 }
 }
 function COMMAND_EXIT_GROUP_NOTIFY_RESP(data){
 	var exitGroupNotify = data.data;

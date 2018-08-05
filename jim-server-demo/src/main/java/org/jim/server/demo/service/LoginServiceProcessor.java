@@ -141,7 +141,6 @@ public class LoginServiceProcessor implements LoginProcessorIntf{
 			loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10008,null);
 		}else{
 			loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007,user);
-			loginRespBody.setData(user);
 		}
 		return loginRespBody;
 	}
