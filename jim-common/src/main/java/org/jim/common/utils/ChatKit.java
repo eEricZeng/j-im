@@ -59,8 +59,9 @@ public class ChatKit {
 			String text = new String(body,HttpConst.CHARSET_NAME);
 		    chatReqBody = JsonKit.toBean(text,ChatBody.class);
 			if(chatReqBody != null){
-				if(chatReqBody.getCreateTime() == null || "".equals(chatReqBody.getCreateTime()))
+				if(chatReqBody.getCreateTime() == null) {
 					chatReqBody.setCreateTime(System.currentTimeMillis());
+				}
 				chatReqBody.setId(UUIDSessionIdGenerator.instance.sessionId(null));
 				return chatReqBody;
 			}
