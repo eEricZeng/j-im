@@ -301,7 +301,7 @@ public class ImAio {
 		Lock lock = setWithLock.getLock().readLock();
 		lock.lock();
 		try {
-			Set<ChannelContext> sets = (Set) setWithLock.getObj();
+			Set<ChannelContext> sets = (Set<ChannelContext>) setWithLock.getObj();
 			for (ChannelContext channelContext : sets) {
 				SetWithLock<ChannelContext> convertSet = new SetWithLock<ChannelContext>(new HashSet<ChannelContext>());
 				convertSet.add(channelContext);
