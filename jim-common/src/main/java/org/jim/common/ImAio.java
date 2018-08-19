@@ -3,11 +3,8 @@
  */
 package org.jim.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
+import org.tio.core.ChannelContextFilter;
 import org.tio.core.GroupContext;
 import org.tio.utils.lock.SetWithLock;
 /**
@@ -212,59 +210,50 @@ public class ImAio {
 	}
 	/**
 	 * 发送到指定通道;
-	 * @param toChannleContexts
+	 * @param channelContext
 	 * @param packet
 	 */
 	public static boolean send(ChannelContext channelContext,ImPacket packet){
-		if(channelContext == null)
-			return false;
-		ImPacket rspPacket = ImKit.ConvertRespPacket(packet, packet.getCommand(), channelContext);
-		if(rspPacket == null){
-			log.error("转换协议包为空,请检查协议！");
+		ImPacket respPacket = initAndSetConvertPacket(channelContext , packet);
+		if(respPacket == null){
 			return false;
 		}
-		rspPacket.setSynSeq(packet.getSynSeq());
-		if(groupContext == null){
-			groupContext = channelContext.getGroupContext();
-		}
-		return sendToId(channelContext.getId(), rspPacket);
+		return Aio.send(channelContext,respPacket);
 	}
+
 	/**
-	 * 发消息给指定ChannelContext id
-	 * @param channelId
+	 * 阻塞发送（确认把packet发送到对端后再返回）
+	 * @param channelContext
 	 * @param packet
 	 * @return
 	 */
-	public static Boolean sendToId(String channelId, ImPacket packet) {
-		ChannelContext channelContext = Aio.getChannelContextById(groupContext, channelId);
-		if (channelContext == null) {
-			ImCluster cluster = ImConfig.cluster;
-			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToChannelId(groupContext, channelId, packet);
-			}
+	public static boolean bSend(ChannelContext channelContext , ImPacket packet){
+		ImPacket respPacket = initAndSetConvertPacket(channelContext , packet);
+		if(respPacket == null){
+			return false;
 		}
-		return Aio.sendToId(groupContext, channelId, packet);
+		return Aio.bSend(channelContext,respPacket);
 	}
 	/**
 	 * 发送到指定用户;
-	 * @param toChannleContexts
+	 * @param userId
 	 * @param packet
 	 */
-	public static void sendToUser(String userid,ImPacket packet){
-		if(StringUtils.isEmpty(userid))
+	public static void sendToUser(String userId,ImPacket packet){
+		if(StringUtils.isEmpty(userId))
 			return;
-		SetWithLock<ChannelContext> toChannleContexts = getChannelContextsByUserid(userid);
-		if(toChannleContexts == null || toChannleContexts.size() < 1){
+		SetWithLock<ChannelContext> toChannelContexts = getChannelContextsByUserid(userId);
+		if(toChannelContexts == null || toChannelContexts.size() < 1){
 			ImCluster cluster = ImConfig.cluster;
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToUser(groupContext, userid, packet);
+				cluster.clusterToUser(groupContext, userId, packet);
 			}
 			return;
 		}
-		ReadLock readLock = toChannleContexts.getLock().readLock();
+		ReadLock readLock = toChannelContexts.getLock().readLock();
 		readLock.lock();
 		try{
-			Set<ChannelContext> channels = toChannleContexts.getObj();
+			Set<ChannelContext> channels = toChannelContexts.getObj();
 			for(ChannelContext channelContext : channels){
 				send(channelContext, packet);
 			}
@@ -272,7 +261,7 @@ public class ImAio {
 			readLock.unlock();
 			ImCluster cluster = ImConfig.cluster;
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToUser(groupContext, userid, packet);
+				cluster.clusterToUser(groupContext, userId, packet);
 			}
 		}
 	}
@@ -281,17 +270,68 @@ public class ImAio {
 	 * @param groupContext
 	 * @param ip
 	 * @param packet
-	 * @author: tanyaowu
+	 * @author: WChao
 	 */
 	public static void sendToIp(GroupContext groupContext, String ip, ImPacket packet) {
+		 sendToIp(groupContext, ip, packet, null);
+	}
+	public static void sendToIp(GroupContext groupContext, String ip, ImPacket packet, ChannelContextFilter channelContextFilter) {
+		 sendToIp(groupContext, ip, packet, channelContextFilter, false);
+	}
+
+	private static Boolean sendToIp(GroupContext groupContext, String ip, ImPacket packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
 		try{
-			Aio.sendToIp(groupContext, ip, packet, null);
+			SetWithLock<ChannelContext> setWithLock = groupContext.ips.clients(groupContext, ip);
+			if (setWithLock == null) {
+				log.info("{}, 没有ip为[{}]的对端", groupContext.getName(), ip);
+				return false;
+			} else {
+				Boolean ret = sendToSet(groupContext, setWithLock, packet, channelContextFilter, isBlock);
+				return ret;
+			}
 		}finally{
 			ImCluster cluster = ImConfig.cluster;
 			if (cluster != null && !packet.isFromCluster()) {
 				cluster.clusterToIp(groupContext, ip, packet);
 			}
 		}
+	}
+
+	public static Boolean sendToSet(GroupContext groupContext, SetWithLock<ChannelContext> setWithLock, ImPacket packet, ChannelContextFilter channelContextFilter, boolean isBlock){
+		Lock lock = setWithLock.getLock().readLock();
+		lock.lock();
+		try {
+			Set<ChannelContext> sets = (Set) setWithLock.getObj();
+			for (ChannelContext channelContext : sets) {
+				SetWithLock<ChannelContext> convertSet = new SetWithLock<ChannelContext>(new HashSet<ChannelContext>());
+				convertSet.add(channelContext);
+				ImPacket resPacket = ImKit.ConvertRespPacket(packet, packet.getCommand(), channelContext);
+				Aio.sendToSet(groupContext, convertSet, resPacket, channelContextFilter);
+			}
+		}finally {
+			lock.unlock();
+		}
+		return true;
+	}
+	/**
+	 * 转换协议包同时设置Packet包信息;
+	 * @param channelContext
+	 * @param packet
+	 * @return
+	 */
+	private static ImPacket initAndSetConvertPacket(ChannelContext channelContext , ImPacket packet){
+		if(channelContext == null)
+			return null;
+		ImPacket respPacket = ImKit.ConvertRespPacket(packet,packet.getCommand(),channelContext);
+		if(respPacket == null){
+			log.error("转换协议包为空,请检查协议！");
+			return null;
+		}
+		respPacket.setSynSeq(packet.getSynSeq());
+		if(groupContext == null){
+			groupContext = channelContext.getGroupContext();
+		}
+		return respPacket;
 	}
 	/**
 	 * 绑定用户;

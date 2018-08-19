@@ -27,7 +27,6 @@ public class WsMsgHandler implements IWsMsgHandler{
 
 	/**
 	 * 
-	 * @param websocketPacket
 	 * @param text
 	 * @param channelContext
 	 * @return 可以是WsResponsePacket、String、null
@@ -66,7 +65,6 @@ public class WsMsgHandler implements IWsMsgHandler{
 	}
 
 	/** 
-	 * @param packet
 	 * @param channelContext
 	 * @return
 	 * @throws Exception

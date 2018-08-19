@@ -17,7 +17,11 @@ public class LoginRespBody extends RespBody {
 	
 	private String token;
 	private User user;
-	
+
+	public LoginRespBody(Command command , Status status){
+		this(command,status,null);
+	}
+
 	public LoginRespBody(Command command , Status status , User user){
 		super(command, status);
 		this.user = user;

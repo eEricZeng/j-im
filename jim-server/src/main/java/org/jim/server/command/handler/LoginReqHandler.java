@@ -1,11 +1,8 @@
 package org.jim.server.command.handler;
 
 import java.util.List;
-import org.jim.common.Const;
-import org.jim.common.ImAio;
-import org.jim.common.ImConfig;
-import org.jim.common.ImPacket;
-import org.jim.common.ImSessionContext;
+
+import org.jim.common.*;
 import org.jim.common.message.IMesssageHelper;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.Group;
@@ -46,20 +43,22 @@ public class LoginReqHandler extends AbCmdHandler {
 		LoginRespBody loginRespBody = loginServiceHandler.doLogin(loginReqBody,channelContext);
 		if (loginRespBody == null || loginRespBody.getUser() == null) {
 			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
-			/*if(loginRespBody != null){
-				loginRespBody.clear();
-				ImAio.send(channelContext, new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte()));
-			}*/
-			Aio.remove(channelContext, "loginname and token is null");
+			if(loginRespBody == null){
+				loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP, ImStatus.C10008);
+			}
+			loginRespBody.clear();
+			ImPacket loginRespPacket = new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte());
+			ImAio.bSend(channelContext,loginRespPacket);
+			ImAio.remove(channelContext, "loginname and token is incorrect");
 			return null;
 		}
 		User user = loginRespBody.getUser();
-		String userid = user.getId();
+		String userId = user.getId();
 		IProtocol protocol = ImKit.protocol(null, channelContext);
 		String terminal = protocol == null ? "" : protocol.name();
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
-		ImAio.bindUser(channelContext,userid,ImConfig.getMessageHelper().getBindListener());
+		ImAio.bindUser(channelContext,userId,ImConfig.getMessageHelper().getBindListener());
 		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
 		loginServiceHandler.onSuccess(channelContext);
 		loginRespBody.clear();

@@ -138,7 +138,7 @@ public class LoginServiceProcessor implements LoginProcessorIntf{
 			user = this.getUser(loginname, password);
 		}
 		if(user == null){
-			loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10008,null);
+			loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10008);
 		}else{
 			loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP,ImStatus.C10007,user);
 		}
