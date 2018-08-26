@@ -36,7 +36,7 @@ public class WsMsgHandler implements IWsMsgHandler{
 	public Object onText(WsRequestPacket wsRequestPacket, String text, ChannelContext channelContext) throws Exception {
 		ChatBody chatBody = ChatKit.toChatBody(wsRequestPacket.getBody(), channelContext);
 		String toId = chatBody.getTo();
-		if(ChatKit.isOnline(toId)){
+		if(ChatKit.isOnline(toId,wsServerConfig)){
 			ImAio.sendToUser(toId, wsRequestPacket);
 			ImPacket sendSuccessPacket = ChatKit.sendSuccessRespPacket(channelContext);
 			text = new String(sendSuccessPacket.getBody(),HttpConst.CHARSET_NAME);

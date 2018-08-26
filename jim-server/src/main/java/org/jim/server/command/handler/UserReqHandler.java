@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.Const;
 import org.jim.common.ImAio;
-import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
 import org.jim.common.message.IMesssageHelper;
@@ -67,10 +66,10 @@ public class UserReqHandler extends AbCmdHandler{
      * @param type(0:所有在线用户,1:所有离线用户,2:所有用户[在线+离线])
      * @return
      */
-    public static User getUserInfo(String userid , Integer type){
+    public User getUserInfo(String userid , Integer type){
     	User user = null;
-    	boolean isStore = Const.ON.equals(ImConfig.isStore);//是否开启持久化;
-    	IMesssageHelper messageHelper = ImConfig.getMessageHelper();//消息持久化助手;
+    	boolean isStore = Const.ON.equals(imConfig.getIsStore());//是否开启持久化;
+    	IMesssageHelper messageHelper = imConfig.getMessageHelper();//消息持久化助手;
     	if(isStore){
     		user = messageHelper.getUserByType(userid, 2);
     		if(user == null)

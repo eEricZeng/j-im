@@ -2,7 +2,6 @@ package org.jim.server.command.handler;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.ImAio;
-import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
 import org.jim.common.ImStatus;
@@ -78,7 +77,7 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 			return null;
 		}
 		
-		ImAio.bindGroup(channelContext, groupId,ImConfig.getMessageHelper().getBindListener());
+		ImAio.bindGroup(channelContext, groupId,imConfig.getMessageHelper().getBindListener());
 
 		//回一条消息，告诉对方进群结果
 		JoinGroupResult joinGroupResult = JoinGroupResult.JOIN_GROUP_RESULT_OK;

@@ -19,6 +19,11 @@ import org.tio.server.intf.ServerAioHandler;
  */
 public class ImServerAioHandler implements ServerAioHandler {
 
+	private ImConfig imConfig;
+	
+	public ImServerAioHandler(ImConfig imConfig) {
+		this.imConfig = imConfig;
+	}
 	/** 
 	 * @see org.tio.core.intf.AioHandler#handler(org.tio.core.intf.Packet)
 	 * 
@@ -73,7 +78,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 		AbProtocolHandler handler = null;
 		if(imSessionContext == null){
 			handler = ProtocolHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
-			ImServerGroupContext imGroupContext = (ImServerGroupContext)ImConfig.groupContext;
+			ImServerGroupContext imGroupContext = (ImServerGroupContext)imConfig.getGroupContext();
 			channelContext.setAttribute(Const.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
 		}else{
 			handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
@@ -84,4 +89,12 @@ public class ImServerAioHandler implements ServerAioHandler {
 			throw new AioDecodeException("不支持的协议类型,无法找到对应的协议解码器!");
 		}
 	}
+	
+	public ImConfig getImConfig() {
+		return imConfig;
+	}
+	public void setImConfig(ImConfig imConfig) {
+		this.imConfig = imConfig;
+	}
+	
 }

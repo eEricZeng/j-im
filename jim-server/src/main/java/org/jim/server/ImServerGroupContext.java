@@ -6,10 +6,12 @@ package org.jim.server;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.jim.common.Const;
+import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.cache.redis.RedissonTemplate;
 import org.jim.common.cluster.redis.RedisCluster;
 import org.jim.common.cluster.redis.RedisClusterConfig;
+import org.jim.server.command.CommandManager;
 import org.jim.server.handler.ImServerAioHandler;
 import org.jim.server.handler.ProtocolHandlerManager;
 import org.jim.server.listener.ImServerAioListener;
@@ -38,17 +40,18 @@ public class ImServerGroupContext extends ServerGroupContext{
 		super(imServerAioHandler, imServerAioListener);
 		this.imConfig = imConfig;
 		this.setHeartbeatTimeout(imConfig.getHeartbeatTimeout());
-		if(Const.ON.equals(ImConfig.isCluster)){//是否开启集群
-			ImConfig.isStore = Const.ON;
-			if(ImConfig.cluster == null){
+		if(Const.ON.equals(imConfig.getIsCluster())){//是否开启集群
+			imConfig.setIsStore(Const.ON);
+			if(imConfig.getCluster() == null){
 				try{
-					ImConfig.cluster = new RedisCluster(RedisClusterConfig.newInstance("REDIS_", RedissonTemplate.me().getRedissonClient(), this));
+					RedisCluster redisCluster = new RedisCluster(RedisClusterConfig.newInstance("REDIS_", RedissonTemplate.me().getRedissonClient(), this));
+					imConfig.setCluster(redisCluster);
 				}catch(Exception e){
 					log.error("连接集群配置出现异常,请检查！",e);
 				}
 			}
 		}else{
-			ImConfig.cluster = null;
+			imConfig.setCluster(null);
 		}
 		if (this.timExecutor == null) {
 			LinkedBlockingQueue<Runnable> timQueue = new LinkedBlockingQueue<>();
@@ -57,8 +60,10 @@ public class ImServerGroupContext extends ServerGroupContext{
 					DefaultThreadFactory.getInstance(timThreadName, Thread.NORM_PRIORITY), timThreadName);
 			this.timExecutor.prestartAllCoreThreads();
 		}
-		ImConfig.groupContext = this;
+		imConfig.setGroupContext(this);
 		ProtocolHandlerManager.init(imConfig);
+		CommandManager.init(imConfig);
+		ImAio.imConfig = imConfig;
 	}
 
 	public SynThreadPoolExecutor getTimExecutor() {

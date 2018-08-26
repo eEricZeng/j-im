@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jim.common.Const;
+import org.jim.common.ImConfig;
 import org.jim.common.cache.redis.JedisTemplate;
 import org.jim.common.cache.redis.RedisCache;
 import org.jim.common.cache.redis.RedisCacheManager;
 import org.jim.common.listener.ImBindListener;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.AbstractMessageHelper;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
@@ -29,7 +29,7 @@ import com.alibaba.fastjson.JSONObject;
  * @date 2018年4月9日 下午4:39:30
  */
 @SuppressWarnings("unchecked")
-public class RedisMessageHelper implements IMesssageHelper,Const {
+public class RedisMessageHelper extends AbstractMessageHelper{
 	
 	private RedisCache groupCache = null;
 	private RedisCache pushCache = null;
@@ -39,12 +39,6 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 	private final String SUBFIX = ":";
 	private Logger log = LoggerFactory.getLogger(RedisMessageHelper.class);
 	
-	public RedisMessageHelper(){
-		this.groupCache = RedisCacheManager.getCache(GROUP);
-		this.pushCache = RedisCacheManager.getCache(PUSH);
-		this.storeCache = RedisCacheManager.getCache(STORE);
-		this.userCache = RedisCacheManager.getCache(USER);
-	}
 	static{
 		RedisCacheManager.register(USER, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		RedisCacheManager.register(GROUP, Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -52,10 +46,21 @@ public class RedisMessageHelper implements IMesssageHelper,Const {
 		RedisCacheManager.register(PUSH, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 	
+	public RedisMessageHelper(){
+		this(null);
+	}
+	public RedisMessageHelper(ImConfig imConfig){
+		this.groupCache = RedisCacheManager.getCache(GROUP);
+		this.pushCache = RedisCacheManager.getCache(PUSH);
+		this.storeCache = RedisCacheManager.getCache(STORE);
+		this.userCache = RedisCacheManager.getCache(USER);
+		this.imConfig = imConfig;
+	}
+	
 	@Override
 	public ImBindListener getBindListener() {
 		
-		return new RedisImBindListener();
+		return new RedisImBindListener(imConfig);
 	}
 	
 	@Override

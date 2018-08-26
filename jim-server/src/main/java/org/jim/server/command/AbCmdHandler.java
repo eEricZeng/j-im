@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.tio.core.ChannelContext;
+import org.jim.common.ImConfig;
 import org.jim.server.command.handler.processor.ProcessorIntf;
 /**
  * 版本: [1.0]
@@ -19,6 +20,14 @@ public abstract class AbCmdHandler implements CmdHandlerIntf {
 	//不同协议cmd处理命令如(ws、socket、自定义协议)握手、心跳命令等.
 	protected Map<String,ProcessorIntf> processors = new HashMap<String,ProcessorIntf>();
 	
+	protected ImConfig imConfig;
+	
+	public AbCmdHandler() {};
+	
+	public AbCmdHandler(ImConfig imConfig) {
+		this.imConfig = imConfig;
+	}
+
 	public AbCmdHandler addProcessor(ProcessorIntf processor){
 		this.processors.put(processor.name(), processor);
 		return this;
@@ -48,4 +57,13 @@ public abstract class AbCmdHandler implements CmdHandlerIntf {
 		
 		return processors.remove(name);
 	}
+	
+	public ImConfig getImConfig() {
+		return imConfig;
+	}
+
+	public void setImConfig(ImConfig imConfig) {
+		this.imConfig = imConfig;
+	}
+	
 }

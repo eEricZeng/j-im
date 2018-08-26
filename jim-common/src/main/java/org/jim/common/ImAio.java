@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.cluster.ImCluster;
+import org.jim.common.config.DefaultImConfigBuilder;
 import org.jim.common.listener.ImBindListener;
 import org.jim.common.packets.Client;
 import org.jim.common.packets.User;
@@ -27,7 +28,7 @@ import org.tio.utils.lock.SetWithLock;
  */
 public class ImAio {
 	
-	private static GroupContext groupContext = ImConfig.groupContext;
+	public static ImConfig imConfig = null;
 	
 	private static Logger log = LoggerFactory.getLogger(ImAio.class);
 	/**
@@ -71,7 +72,7 @@ public class ImAio {
 		 *
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextsByUserid(String userid){
-		SetWithLock<ChannelContext> channelContexts = Aio.getChannelContextsByUserid(groupContext, userid);
+		SetWithLock<ChannelContext> channelContexts = Aio.getChannelContextsByUserid(imConfig.getGroupContext(), userid);
 		return channelContexts;
 	}
 	/**
@@ -84,7 +85,7 @@ public class ImAio {
 	 */
 	public static List<User> getAllUser(){
 		List<User> users = new ArrayList<User>();
-		SetWithLock<ChannelContext> allChannels = Aio.getAllChannelContexts(groupContext);
+		SetWithLock<ChannelContext> allChannels = Aio.getAllChannelContexts(imConfig.getGroupContext());
 		if(allChannels == null)
 			return users;
 		ReadLock readLock = allChannels.getLock().readLock();
@@ -116,7 +117,7 @@ public class ImAio {
 	 */
 	public static List<User> getAllOnlineUser(){
 		List<User> users = new ArrayList<User>();
-		SetWithLock<ChannelContext> onlineChannels = Aio.getAllConnectedsChannelContexts(groupContext);
+		SetWithLock<ChannelContext> onlineChannels = Aio.getAllConnectedsChannelContexts(imConfig.getGroupContext());
 		if(onlineChannels == null)
 			return users;
 		ReadLock readLock = onlineChannels.getLock().readLock();
@@ -144,7 +145,7 @@ public class ImAio {
 	 * @return
 	 */
 	public static List<User> getAllUserByGroup(String group){
-		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
+		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(imConfig.getGroupContext(), group);
 		if(withLockChannels == null){
 			return null;
 		}
@@ -183,11 +184,11 @@ public class ImAio {
 	public static void sendToGroup(String group, ImPacket packet){
 		if(packet.getBody() == null)
 			return;
-		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(groupContext, group);
+		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(imConfig.getGroupContext(), group);
 		if(withLockChannels == null){
-			ImCluster cluster = ImConfig.cluster;
+			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToGroup(groupContext, group, packet);
+				cluster.clusterToGroup(imConfig.getGroupContext(), group, packet);
 			}
 			return;
 		}
@@ -202,9 +203,9 @@ public class ImAio {
 			}
 		}finally{
 			readLock.unlock();
-			ImCluster cluster = ImConfig.cluster;
+			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToGroup(groupContext, group, packet);
+				cluster.clusterToGroup(imConfig.getGroupContext(), group, packet);
 			}
 		}
 	}
@@ -244,9 +245,9 @@ public class ImAio {
 			return;
 		SetWithLock<ChannelContext> toChannelContexts = getChannelContextsByUserid(userId);
 		if(toChannelContexts == null || toChannelContexts.size() < 1){
-			ImCluster cluster = ImConfig.cluster;
+			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToUser(groupContext, userId, packet);
+				cluster.clusterToUser(imConfig.getGroupContext(), userId, packet);
 			}
 			return;
 		}
@@ -259,9 +260,9 @@ public class ImAio {
 			}
 		}finally{
 			readLock.unlock();
-			ImCluster cluster = ImConfig.cluster;
+			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
-				cluster.clusterToUser(groupContext, userId, packet);
+				cluster.clusterToUser(imConfig.getGroupContext(), userId, packet);
 			}
 		}
 	}
@@ -290,7 +291,7 @@ public class ImAio {
 				return ret;
 			}
 		}finally{
-			ImCluster cluster = ImConfig.cluster;
+			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
 				cluster.clusterToIp(groupContext, ip, packet);
 			}
@@ -328,8 +329,8 @@ public class ImAio {
 			return null;
 		}
 		respPacket.setSynSeq(packet.getSynSeq());
-		if(groupContext == null){
-			groupContext = channelContext.getGroupContext();
+		if(imConfig == null){
+			imConfig = new DefaultImConfigBuilder().setGroupContext(channelContext.getGroupContext()).build();
 		}
 		return respPacket;
 	}
@@ -372,7 +373,7 @@ public class ImAio {
 	 * @param bindListener(解绑定监听器回调)
 	 */
 	public static void unbindUser(String userid,ImBindListener bindListener){
-		Aio.unbindUser(groupContext, userid);
+		Aio.unbindUser(imConfig.getGroupContext(), userid);
 		if(bindListener != null){
 			try {
 				SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(userid);

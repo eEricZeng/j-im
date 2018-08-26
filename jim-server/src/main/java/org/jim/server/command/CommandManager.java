@@ -6,9 +6,11 @@ package org.jim.server.command;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.jim.common.ImConfig;
 import org.jim.common.packets.Command;
 import org.jim.server.command.handler.processor.ProcessorIntf;
 /**
@@ -21,6 +23,8 @@ public class CommandManager{
 	
 	private static  Map<Integer, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
 	private static Logger LOG = LoggerFactory.getLogger(CommandManager.class);
+	
+	private static ImConfig imConfig;
 	
 	private CommandManager(){};
 	
@@ -56,6 +60,7 @@ public class CommandManager{
 			throw new Exception("注册cmd处理器失败,不合法的cmd命令码:"+cmd_number+",请在Command枚举类中添加!");
 		if(handlerMap.get(cmd_number) == null)
 		{
+			imCommandHandler.setImConfig(imConfig);
 			return handlerMap.put(cmd_number,imCommandHandler);
 		}
 		return null;
@@ -84,5 +89,19 @@ public class CommandManager{
 		if(command == null)
 			return null;
 		return handlerMap.get(command.getNumber());
+	}
+	
+	public static void init(ImConfig config) {
+		imConfig = config;
+		for(Entry<Integer,AbCmdHandler> entry : handlerMap.entrySet()){
+			try {
+				entry.getValue().setImConfig(imConfig);
+			} catch (Exception e) {
+				LOG.error(e.toString());
+			}
+		}
+	}
+	public static ImConfig getImConfig() {
+		return imConfig;
 	}
 }

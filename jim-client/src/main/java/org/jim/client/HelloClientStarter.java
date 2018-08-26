@@ -37,7 +37,7 @@ public class HelloClientStarter {
 
 	public static AioClient aioClient = null;
 	public static ClientChannelContext clientChannelContext = null;
-
+	
 	/**
 	 * 启动程序入口
 	 */

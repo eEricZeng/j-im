@@ -6,10 +6,10 @@ package org.jim.common.utils;
 import org.apache.log4j.Logger;
 import org.jim.common.Const;
 import org.jim.common.ImAio;
-import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
 import org.jim.common.ImStatus;
+import org.jim.common.config.Config;
 import org.jim.common.http.HttpConst;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Command;
@@ -129,10 +129,10 @@ public class ChatKit {
       * @param userid
       * @return
       */
-     public static boolean isOnline(String userid){
-    	 boolean isStore = Const.ON.equals(ImConfig.isStore);
+     public static boolean isOnline(String userid ,Config imConfig){
+    	 boolean isStore = Const.ON.equals(imConfig.getIsStore());
 		 if(isStore){
-			return ImConfig.getMessageHelper().isOnline(userid);
+			return imConfig.getMessageHelper().isOnline(userid);
 		 }
     	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(userid);
     	 if(toChannleContexts != null && toChannleContexts.size() > 0){
@@ -141,7 +141,7 @@ public class ChatKit {
     	 return false;
      }
      /**
-      * 获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
+      *  获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
       * @param from
       * @param to
       * @return

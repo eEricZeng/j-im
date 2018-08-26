@@ -1,6 +1,8 @@
 package org.jim.common.http;
 
+import org.jim.common.config.Config;
 import org.jim.common.http.handler.IHttpRequestHandler;
+import org.jim.common.http.listener.IHttpServerListener;
 import org.jim.common.session.id.ISessionIdGenerator;
 import org.tio.utils.cache.ICache;
 
@@ -8,7 +10,7 @@ import org.tio.utils.cache.ICache;
  * @author wchao
  * 2017年8月15日 下午1:21:14
  */
-public class HttpConfig {
+public class HttpConfig extends Config{
 
 	//	private static Logger log = LoggerFactory.getLogger(HttpConfig.class);
 
@@ -88,13 +90,13 @@ public class HttpConfig {
 
 	private String page404 = "/404.html";
 
-	//	private HttpSessionManager httpSessionManager;
-
 	private String page500 = "/500.html";
 
 	private ISessionIdGenerator sessionIdGenerator;
 	
 	private IHttpRequestHandler httpRequestHandler;
+	
+	private IHttpServerListener httpServerListener;
 
 	/**
 	 * 示例：
@@ -107,19 +109,6 @@ public class HttpConfig {
 	 */
 	private String[] scanPackages = null;
 
-	//	/**
-	//	 * @return the httpSessionManager
-	//	 */
-	//	public HttpSessionManager getHttpSessionManager() {
-	//		return httpSessionManager;
-	//	}
-	//
-	//	/**
-	//	 * @param httpSessionManager the httpSessionManager to set
-	//	 */
-	//	public void setHttpSessionManager(HttpSessionManager httpSessionManager) {
-	//		this.httpSessionManager = httpSessionManager;
-	//	}
 	
 	public HttpConfig() {}
 	
@@ -134,7 +123,6 @@ public class HttpConfig {
 		}
 	}
 	
-	//	private File rootFile = null;
 
 	/**
 	 * @return the bindIp
@@ -298,6 +286,18 @@ public class HttpConfig {
 
 	public void setScanPackages(String[] scanPackages) {
 		this.scanPackages = scanPackages;
+	}
+
+	public IHttpServerListener getHttpServerListener() {
+		return httpServerListener;
+	}
+
+	public void setHttpServerListener(IHttpServerListener httpServerListener) {
+		this.httpServerListener = httpServerListener;
+	}
+
+	public void setBindPort(Integer bindPort) {
+		this.bindPort = bindPort;
 	}
 	
 }

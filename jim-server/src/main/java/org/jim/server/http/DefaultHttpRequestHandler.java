@@ -87,6 +87,7 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 			//			GuavaCache.register(STATIC_RES_CACHENAME, (long) httpConfig.getMaxLiveTimeOfStaticRes(), null);
 			staticResCache = GuavaCache.register(STATIC_RES_CONTENT_CACHENAME, (long) httpConfig.getMaxLiveTimeOfStaticRes(), null);
 		}
+		this.setHttpServerListener(httpConfig.getHttpServerListener());
 	}
 
 	/**

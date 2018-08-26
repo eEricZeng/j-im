@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.common.ImSessionContext;
 import org.jim.common.cache.redis.RedisCache;
 import org.jim.common.cache.redis.RedisCacheManager;
-import org.jim.common.listener.ImBindListener;
+import org.jim.common.listener.AbstractImBindListener;
 import org.jim.common.packets.Client;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
@@ -19,13 +18,18 @@ import org.tio.core.ChannelContext;
  * @author WChao
  * @date 2018年4月8日 下午4:12:31
  */
-public class RedisImBindListener implements ImBindListener,Const{
+public class RedisImBindListener extends AbstractImBindListener{
 	
 	private RedisCache groupCache = null;
 	private RedisCache userCache = null;
 	private final String SUBFIX = ":";
 	
 	public RedisImBindListener(){
+		this(null);
+	}
+	
+	public RedisImBindListener(ImConfig imConfig){
+		this.imConfig = imConfig;
 		groupCache = RedisCacheManager.getCache(GROUP);
 		userCache = RedisCacheManager.getCache(USER);
 	}
@@ -159,6 +163,6 @@ public class RedisImBindListener implements ImBindListener,Const{
 	}
 	//是否开启持久化;
 	public boolean isStore(){
-		return ON.equals(ImConfig.isStore);
+		return ON.equals(imConfig.getIsStore());
 	}
 }

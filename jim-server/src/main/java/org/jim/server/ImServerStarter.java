@@ -20,7 +20,6 @@ import org.tio.server.AioServer;
  * @author WChao
  *
  */
-@SuppressWarnings("static-access")
 public class ImServerStarter {
 	
 	private ImServerAioHandler imAioHandler = null;
@@ -42,9 +41,9 @@ public class ImServerStarter {
 	
 	public void init(){
 		System.setProperty("tio.default.read.buffer.size", String.valueOf(imConfig.getReadBufferSize()));
-		imAioHandler = new ImServerAioHandler() ;
+		imAioHandler = new ImServerAioHandler(imConfig) ;
 		if(imAioListener == null){
-			imAioListener = new ImServerAioListener();
+			imAioListener = new ImServerAioListener(imConfig);
 		}
 		GroupListener groupListener = imConfig.getImGroupListener();
 		if(groupListener == null){
@@ -54,12 +53,13 @@ public class ImServerStarter {
 		imServerGroupContext = new ImServerGroupContext(imConfig,imAioHandler, imAioListener);
 		imServerGroupContext.setGroupListener(imGroupListener);
 		if(imConfig.getMessageHelper() == null){
-			imConfig.setMessageHelper(new RedisMessageHelper());
+			imConfig.setMessageHelper(new RedisMessageHelper(imConfig));
 		}
-		if(Const.ON.equals(imConfig.isSSL)){//开启SSL
+		if(Const.ON.equals(imConfig.getIsSSL())){//开启SSL
 			SslConfig sslConfig = imConfig.getSslConfig();
-			if(sslConfig != null)
-			imServerGroupContext.setSslConfig(sslConfig);
+			if(sslConfig != null) {
+				imServerGroupContext.setSslConfig(sslConfig);
+			}
 		}
 		aioServer = new AioServer(imServerGroupContext);
 	}

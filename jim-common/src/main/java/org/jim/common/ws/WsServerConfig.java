@@ -1,5 +1,6 @@
 package org.jim.common.ws;
 
+import org.jim.common.config.Config;
 import org.jim.common.http.HttpConst;
 
 /**
@@ -8,7 +9,7 @@ import org.jim.common.http.HttpConst;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月6日 上午11:11:26
  */
-public class WsServerConfig {
+public class WsServerConfig extends Config{
 	
 	private String bindIp = null;
 	

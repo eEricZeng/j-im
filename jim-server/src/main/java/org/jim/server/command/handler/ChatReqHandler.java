@@ -37,7 +37,7 @@ public class ChatReqHandler extends AbCmdHandler {
 		chatPacket.setSynSeq(packet.getSynSeq());//设置同步序列号;
 		if(ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){//私聊
 			String toId = chatBody.getTo();
-			if(ChatKit.isOnline(toId)){
+			if(ChatKit.isOnline(toId,imConfig)){
 				ImAio.sendToUser(toId, chatPacket);
 				return ChatKit.sendSuccessRespPacket(channelContext);//发送成功响应包
 			}else{

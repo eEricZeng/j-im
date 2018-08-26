@@ -20,13 +20,19 @@ public class ImServerAioListener implements ServerAioListener {
 
 	Logger logger = Logger.getLogger(ImServerAioListener.class);
 	
+	private ImConfig imConfig;
+	
 	/**
 	 * @author: WChao
 	 * 2016年12月16日 下午5:52:06
 	 * 
 	 */
 	public ImServerAioListener() {}
+	public ImServerAioListener(ImConfig imConfig) {
+		this.imConfig = imConfig;
+	}
 	/**
+	 * 
 	 * 建链后触发本方法，注：建链不一定成功，需要关注参数isConnected
 	 * @param channelContext
 	 * @param isConnected 是否连接成功,true:表示连接成功，false:表示连接失败
@@ -61,7 +67,7 @@ public class ImServerAioListener implements ServerAioListener {
 	 */
 	@Override
 	public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) {
-		IMesssageHelper messageHelper = ImConfig.getMessageHelper();
+		IMesssageHelper messageHelper = imConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 			if(imSessionContext == null)

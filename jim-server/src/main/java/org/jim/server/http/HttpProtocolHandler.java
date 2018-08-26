@@ -73,7 +73,7 @@ public class HttpProtocolHandler extends AbProtocolHandler{
 		Routes routes = new Routes(httpConfig.getScanPackages());
 		httpRequestHandler = new DefaultHttpRequestHandler(httpConfig, routes);
 		httpConfig.setHttpRequestHandler(httpRequestHandler);
-		ImConfig.groupContext.setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
+		imConfig.getGroupContext().setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
 		long end = SystemTimer.currentTimeMillis();
 		long iv = end - start;
 		log.info("j-im Http Server初始化完毕,耗时:{}ms", iv);

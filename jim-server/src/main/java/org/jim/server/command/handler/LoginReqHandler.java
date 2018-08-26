@@ -58,7 +58,7 @@ public class LoginReqHandler extends AbCmdHandler {
 		String terminal = protocol == null ? "" : protocol.name();
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
-		ImAio.bindUser(channelContext,userId,ImConfig.getMessageHelper().getBindListener());
+		ImAio.bindUser(channelContext,userId,imConfig.getMessageHelper().getBindListener());
 		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
 		loginServiceHandler.onSuccess(channelContext);
 		loginRespBody.clear();
@@ -72,11 +72,11 @@ public class LoginReqHandler extends AbCmdHandler {
 		String userid = user.getId();
 		List<Group> groups = user.getGroups();
 		if( groups != null){
-			boolean isStore = Const.ON.equals(ImConfig.isStore);
+			boolean isStore = Const.ON.equals(imConfig.getIsStore());
 			IMesssageHelper messageHelper = null;
 			List<String> groupIds = null;
 			if(isStore){
-				messageHelper = ImConfig.getMessageHelper();
+				messageHelper = imConfig.getMessageHelper();
 				groupIds = messageHelper.getGroups(userid);
 			}
 			for(Group group : groups){//绑定群组

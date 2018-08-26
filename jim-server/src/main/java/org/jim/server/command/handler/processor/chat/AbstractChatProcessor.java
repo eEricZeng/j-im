@@ -10,6 +10,7 @@ import org.jim.common.message.IMesssageHelper;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.ChatType;
 import org.jim.common.utils.ChatKit;
+import org.jim.server.command.CommandManager;
 /**
  * @author WChao
  * @date 2018年4月3日 下午1:13:32
@@ -17,11 +18,19 @@ import org.jim.common.utils.ChatKit;
 public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 	
 	public static final String BASE_CHAT_PROCESSOR = "base_chat_processor";
-	private IMesssageHelper messsageHelper = ImConfig.getMessageHelper();
+	protected ImConfig imConfig = null;
+	protected IMesssageHelper messsageHelper = null;
 	
     public abstract void doHandler(ChatBody chatBody, ChannelContext channelContext);
 	@Override
 	public boolean isProtocol(ChannelContext channelContext) {
+		if(imConfig == null) {
+			imConfig = CommandManager.getImConfig();
+		}else {
+			if(messsageHelper == null) {
+				messsageHelper = imConfig.getMessageHelper();
+			}
+		}
 		return true;
 	}
 	@Override
@@ -32,7 +41,7 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 	@Override
 	public void handler(ImPacket chatPacket, ChannelContext channelContext) throws Exception {
 		ChatBody chatBody = ChatKit.toChatBody(chatPacket.getBody(), channelContext);
-		if(ON.equals(ImConfig.isStore)){//开启持久化
+		if(ON.equals(imConfig.getIsStore())){//开启持久化
 			if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){//存储群聊消息;
 				pushGroupMessages(PUSH,STORE, chatBody);
 			}else{
@@ -40,7 +49,7 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 				String to = chatBody.getTo();
 				String sessionId = ChatKit.sessionId(from,to);
 				writeMessage(STORE,USER+":"+sessionId,chatBody);
-				boolean isOnline = ChatKit.isOnline(to);
+				boolean isOnline = ChatKit.isOnline(to,imConfig);
 				if(!isOnline){
 					writeMessage(PUSH,USER+":"+to+":"+from,chatBody);
 				}
@@ -62,10 +71,10 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 		//通过写扩散模式将群消息同步到所有的群成员
 		for(String userid : users){
 			boolean isOnline = false;
-			if(ON.equals(ImConfig.isStore) && ON.equals(ImConfig.isCluster)){
+			if(ON.equals(imConfig.getIsStore()) && ON.equals(imConfig.getIsCluster())){
 				isOnline = messsageHelper.isOnline(userid);
 			}else{
-				isOnline = ChatKit.isOnline(userid);
+				isOnline = ChatKit.isOnline(userid,imConfig);
 			}
 			if(!isOnline){
 				writeMessage(pushTable, GROUP+":"+group_id+":"+userid, chatBody);
