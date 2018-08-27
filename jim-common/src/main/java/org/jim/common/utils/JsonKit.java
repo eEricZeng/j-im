@@ -120,7 +120,7 @@ public class JsonKit {
 	
 	/**
 	 * 成指定类型集合;
-	 * @param jsonArray
+	 * @param datas
 	 * @param clazz
 	 * @return
 	 */

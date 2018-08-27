@@ -78,6 +78,7 @@ public class DynamicEnumUtil {
        parms[0] = value;
        parms[1] = Integer.valueOf(ordinal);
        System.arraycopy(additionalValues, 0, parms, 2, additionalValues.length);
+       parms[1] = parms[parms.length-1];
        return enumClass.cast(getConstructorAccessor(enumClass, additionalTypes).newInstance(parms));
    }
  
