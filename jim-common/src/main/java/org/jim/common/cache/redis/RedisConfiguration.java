@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
  * @date 2018年3月9日 上午1:09:03
  */
 public class RedisConfiguration {
+	
 	private  int retryNum =100;
 	private  int maxActive=100;
 	private  int maxIdle=20;
@@ -19,16 +20,16 @@ public class RedisConfiguration {
 	public RedisConfiguration(){}
 	
 	public RedisConfiguration(Properties prop){
-		this.retryNum = Integer.valueOf(prop.getProperty("retrynum", "100"));
-		this.maxActive = Integer.valueOf(prop.getProperty("maxactive","100"));
-		this.maxIdle =  Integer.valueOf(prop.getProperty("maxidle", "20"));
-		this.maxWait =  Long.valueOf(prop.getProperty("maxwait","5000"));
-		this.timeout =  Integer.valueOf(prop.getProperty("timeout", "2000"));
-		this.auth =  prop.getProperty("auth",null);
+		this.retryNum = Integer.valueOf(prop.getProperty("jim.redis.retrynum", "100"));
+		this.maxActive = Integer.valueOf(prop.getProperty("jim.redis.maxactive","100"));
+		this.maxIdle =  Integer.valueOf(prop.getProperty("jim.redis.maxidle", "20"));
+		this.maxWait =  Long.valueOf(prop.getProperty("jim.redis.maxwait","5000"));
+		this.timeout =  Integer.valueOf(prop.getProperty("jim.redis.timeout", "2000"));
+		this.auth =  prop.getProperty("jim.redis.auth",null);
 		if(StringUtils.isEmpty(auth))
 			this.auth = null;
-		this.host = prop.getProperty("host","");
-		this.port =  Integer.valueOf(prop.getProperty("port","0"));
+		this.host = prop.getProperty("jim.redis.host","");
+		this.port =  Integer.valueOf(prop.getProperty("jim.redis.port","0"));
 	}
 	public int getRetryNum() {
 		return retryNum;
