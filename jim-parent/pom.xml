@@ -5,7 +5,7 @@
 	<artifactId>jim-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
-	<version>2.2.0.v20180725-RELEASE</version>
+	<version>2.3.0.v20180830-RELEASE</version>
 	<description>Jim-parent is the dependent parent project of J-IM communication establishment.</description>
 	<url>http://www.j-im.org/</url>
 	<licenses>
@@ -34,7 +34,7 @@
 		<module>../jim-server-demo</module>
 	</modules>
 	<properties>
-		<jim.version>2.2.0.v20180725-RELEASE</jim.version>
+		<jim.version>2.3.0.v20180830-RELEASE</jim.version>
 		<tio-core.version>2.4.0.v20180508-RELEASE</tio-core.version>
 		<tio-utils.version>2.4.0.v20180508-RELEASE</tio-utils.version>
 
@@ -315,7 +315,7 @@
 	</build>
 	<profiles>
         <profile>
-            <id>release</id>
+             <id>release</id>
              <distributionManagement>
                 <snapshotRepository>
                     <id>oss</id>

@@ -5,7 +5,6 @@ package org.jim.common.packets;
 
 import java.io.Serializable;
 
-import org.jim.common.ImStatus;
 import org.jim.common.Status;
 import org.jim.common.utils.JsonKit;
 /**
@@ -38,9 +37,9 @@ public class RespBody implements Serializable{
 		this.code = status.getCode();
 		this.msg = status.getMsg();
 	}
-	public RespBody(ImStatus status){
+	public RespBody(Status status){
 		this.code = status.getCode();
-		this.msg = status.getText();
+		this.msg = status.getMsg();
 	}
 	public Integer getCode() {
 		return code;
