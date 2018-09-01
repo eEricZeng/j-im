@@ -117,7 +117,7 @@ JavaDoc https://apidoc.gitee.com/xchao/j-im/
 <dependency>
     <groupId>org.j-im</groupId>
     <artifactId>jim-server</artifactId>
-    <version>2.2.0.v20180725-RELEASE</version>
+    <version>2.3.0.v20180830-RELEASE</version>
 </dependency>
 ```
 
