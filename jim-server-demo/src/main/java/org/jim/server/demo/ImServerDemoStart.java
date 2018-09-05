@@ -18,9 +18,9 @@ import org.jim.server.demo.service.LoginServiceProcessor;
 import org.tio.core.ssl.SslConfig;
 import com.jfinal.kit.PropKit;
 /**
- * 
+ * IM服务端DEMO演示启动类;
  * @author WChao
- *
+ * @date 2018-04-05 23:50:25
  */
 public class ImServerDemoStart {
 
