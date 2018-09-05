@@ -42,16 +42,13 @@ public class HttpRequest extends HttpPacket {
 	private List<Cookie> cookies = null;
 	private Map<String, Cookie> cookieMap = null;
 	private int contentLength;
-	//	private byte[] bodyBytes;
 	private String bodyString;
-	//	private UserAgent userAgent;
 	private RequestBodyFormat bodyFormat;
 	private String charset = HttpConst.CHARSET_NAME;
 	private Boolean isAjax = null;
 	private Boolean isSupportGzip = null;
 	private HttpSession httpSession;
 	private Node remote = null;
-	//	private HttpSession httpSession = null;
 	private ChannelContext channelContext;
 
 	private HttpConfig httpConfig;
@@ -119,11 +116,11 @@ public class HttpRequest extends HttpPacket {
 		return contentLength;
 	}
 
-	public Cookie getCookie(String cooiename) {
+	public Cookie getCookie(String cooieName) {
 		if (cookieMap == null) {
 			return null;
 		}
-		return cookieMap.get(cooiename);
+		return cookieMap.get(cooieName);
 	}
 
 	/**
@@ -132,34 +129,6 @@ public class HttpRequest extends HttpPacket {
 	public Map<String, Cookie> getCookieMap() {
 		return cookieMap;
 	}
-
-	//	/**
-	//	 * @return the bodyBytes
-	//	 */
-	//	public byte[] getBodyBytes() {
-	//		return bodyBytes;
-	//	}
-	//
-	//	/**
-	//	 * @param bodyBytes the bodyBytes to set
-	//	 */
-	//	public void setBodyBytes(byte[] bodyBytes) {
-	//		this.bodyBytes = bodyBytes;
-	//	}
-
-	//	/**
-	//	 * @return the userAgent
-	//	 */
-	//	public UserAgent getUserAgent() {
-	//		return userAgent;
-	//	}
-	//
-	//	/**
-	//	 * @param userAgent the userAgent to set
-	//	 */
-	//	public void setUserAgent(UserAgent userAgent) {
-	//		this.userAgent = userAgent;
-	//	}
 
 	/**
 	 * @return the cookies
@@ -250,13 +219,13 @@ public class HttpRequest extends HttpPacket {
 	}
 
 	public void parseCookie() {
-		String cookieline = headers.get(HttpConst.RequestHeaderKey.Cookie);
-		if (StringUtils.isNotBlank(cookieline)) {
+		String cookieLine = headers.get(HttpConst.RequestHeaderKey.Cookie);
+		if (StringUtils.isNotBlank(cookieLine)) {
 			cookies = new ArrayList<>();
 			cookieMap = new HashMap<>();
-			Map<String, String> _cookiemap = Cookie.getEqualMap(cookieline);
+			Map<String, String> _cookieMap = Cookie.getEqualMap(cookieLine);
 			List<Map<String, String>> cookieListMap = new ArrayList<>();
-			for (Entry<String, String> cookieMapEntry : _cookiemap.entrySet()) {
+			for (Entry<String, String> cookieMapEntry : _cookieMap.entrySet()) {
 				HashMap<String, String> cookieOneMap = new HashMap<>();
 				cookieOneMap.put(cookieMapEntry.getKey(), cookieMapEntry.getValue());
 				cookieListMap.add(cookieOneMap);
@@ -264,13 +233,9 @@ public class HttpRequest extends HttpPacket {
 				Cookie cookie = Cookie.buildCookie(cookieOneMap);
 				cookies.add(cookie);
 				cookieMap.put(cookie.getName(), cookie);
-				//				log.error("{}, 收到cookie:{}", channelContext, cookie.toString());
+				//log.error("{}, 收到cookie:{}", channelContext, cookie.toString());
 			}
 		}
-	}
-
-	public void setBody(byte[] body) {
-		this.body = body;
 	}
 
 	/**
@@ -333,12 +298,6 @@ public class HttpRequest extends HttpPacket {
 		if (headers != null) {
 			parseCookie();
 		}
-
-		//		String Sec_WebSocket_Key = headers.get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key);
-		//		if (StringUtils.isNoneBlank(Sec_WebSocket_Key)) {
-		//			ImSessionContext httpSession = channelContext.getAttribute();
-		//			httpSession.setWebsocket(true);
-		//		}
 	}
 
 	/**
@@ -386,19 +345,5 @@ public class HttpRequest extends HttpPacket {
 	public void setRequestLine(RequestLine requestLine) {
 		this.requestLine = requestLine;
 	}
-
-	//	/**
-	//	 * @return the httpSession
-	//	 */
-	//	public HttpSession getHttpSession() {
-	//		return httpSession;
-	//	}
-	//
-	//	/**
-	//	 * @param httpSession the httpSession to set
-	//	 */
-	//	public void setHttpSession(HttpSession httpSession) {
-	//		this.httpSession = httpSession;
-	//	}
 
 }

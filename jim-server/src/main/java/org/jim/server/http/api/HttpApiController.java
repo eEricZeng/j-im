@@ -13,6 +13,7 @@ import org.jim.common.packets.CloseReqBody;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.RespBody;
 import org.jim.common.packets.User;
+import org.jim.server.command.CommandManager;
 import org.jim.server.command.handler.ChatReqHandler;
 import org.jim.server.command.handler.CloseReqHandler;
 import org.jim.server.http.annotation.RequestPath;
@@ -20,8 +21,8 @@ import org.jim.server.util.HttpResps;
 import org.tio.core.ChannelContext;
 /**
  * 版本: [1.0]
- * 功能说明: 
- * 作者: WChao 创建时间: 2017年8月8日 上午9:08:48
+ * 功能说明: Http协议消息发送控制器类
+ * @author : WChao 创建时间: 2017年8月8日 上午9:08:48
  */
 @RequestPath(value = "/api")
 public class HttpApiController {
@@ -29,7 +30,8 @@ public class HttpApiController {
 	@RequestPath(value = "/message/send")
 	public HttpResponse chat(HttpRequest request, HttpConfig httpConfig, ChannelContext channelContext)throws Exception {
 		HttpResponse response = new HttpResponse(request,httpConfig);
-		ImPacket chatPacket = new ChatReqHandler().handler(request, channelContext);
+		ChatReqHandler chatReqHandler = CommandManager.getCommand(Command.COMMAND_CHAT_REQ,ChatReqHandler.class);
+		ImPacket chatPacket = chatReqHandler.handler(request, channelContext);
 		if(chatPacket != null){
 			response = (HttpResponse)chatPacket;
 		}
@@ -49,8 +51,8 @@ public class HttpApiController {
 		if(params == null || params.length == 0){
 			return HttpResps.json(request, new RespBody(ImStatus.C10020));
 		}
-		String userid = params[0].toString();
-		User user = ImAio.getUser(userid);
+		String userId = params[0].toString();
+		User user = ImAio.getUser(userId);
 		if(user != null){
 			return HttpResps.json(request, new RespBody(ImStatus.C10019));
 		}else{
@@ -71,9 +73,10 @@ public class HttpApiController {
 		if(params == null || params.length == 0){
 			return HttpResps.json(request, new RespBody(ImStatus.C10020));
 		}
-		String userid = params[0].toString();
-		ImPacket closePacket = new ImPacket(Command.COMMAND_CLOSE_REQ,new CloseReqBody(userid).toByte());
-		new CloseReqHandler().handler(closePacket, channelContext);
+		String userId = params[0].toString();
+		ImPacket closePacket = new ImPacket(Command.COMMAND_CLOSE_REQ,new CloseReqBody(userId).toByte());
+		CloseReqHandler closeReqHandler = CommandManager.getCommand(Command.COMMAND_CLOSE_REQ,CloseReqHandler.class);
+		closeReqHandler.handler(closePacket, channelContext);
 		return HttpResps.json(request, new RespBody(ImStatus.C10021));
 	}
 }

@@ -54,10 +54,6 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 		return data;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	/**
 	 *
 	 * @param key
@@ -83,9 +79,5 @@ public class HttpSession extends ImSessionContext implements java.io.Serializabl
 
 	public void setData(Map<String, Serializable> data) {
 		this.data = data;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 }

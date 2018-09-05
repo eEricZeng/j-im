@@ -125,6 +125,7 @@ public class HttpResponse extends HttpPacket {
 	/**
 	 * @return the status
 	 */
+	@Override
 	public HttpResponseStatus getStatus() {
 		return status;
 	}

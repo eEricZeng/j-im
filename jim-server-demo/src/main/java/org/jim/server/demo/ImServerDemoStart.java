@@ -23,7 +23,7 @@ import com.jfinal.kit.PropKit;
  *
  */
 public class ImServerDemoStart {
-	
+
 	public static void main(String[] args)throws Exception{
 		ImConfig imConfig = new PropertyImConfigBuilder("jim.properties").build();
 		initSsl(imConfig);//初始化SSL;(开启SSL之前,你要保证你有SSL证书哦...)

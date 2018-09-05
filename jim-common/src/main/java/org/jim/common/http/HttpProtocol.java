@@ -15,7 +15,8 @@ import org.jim.common.utils.ImUtils;
 import org.tio.core.ChannelContext;
 
 /**
- * 
+ *
+ * Http协议校验器
  * @author WChao
  *
  */
@@ -27,10 +28,11 @@ public class HttpProtocol extends AbProtocol {
 	}
 
 	@Override
-	public boolean isProtoc(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
+	public boolean isProtocolByBuffer(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		if(imSessionContext != null && imSessionContext instanceof HttpSession)
+		if(imSessionContext != null && imSessionContext instanceof HttpSession) {
 			return true;
+		}
 		if(buffer != null){
 			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
 			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) == null)
@@ -44,14 +46,15 @@ public class HttpProtocol extends AbProtocol {
 	}
 
 	@Override
-	public IConvertProtocolPacket convertor() {
+	public IConvertProtocolPacket converter() {
 		return new HttpConvertPacket();
 	}
 
 	@Override
 	public boolean isProtocol(ImPacket imPacket,ChannelContext channelContext) throws Throwable {
-		if(imPacket == null)
+		if(imPacket == null) {
 			return false;
+		}
 		if(imPacket instanceof HttpPacket){
 			Object sessionContext = channelContext.getAttribute();
 			if(sessionContext == null){

@@ -26,14 +26,16 @@ public class TcpProtocol extends AbProtocol {
 	}
 
 	@Override
-	public boolean isProtoc(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
+	public boolean isProtocolByBuffer(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		if(imSessionContext != null && imSessionContext instanceof TcpSessionContext)
+		if(imSessionContext != null && imSessionContext instanceof TcpSessionContext) {
 			return true;
+		}
 		if(buffer != null){
 			//获取第一个字节协议版本号;
 			byte version = buffer.get();
-			if(version == Protocol.VERSION){//TCP协议;
+			//TCP协议;
+			if(version == Protocol.VERSION){
 				channelContext.setAttribute(new TcpSessionContext());
 				ImUtils.setClient(channelContext);
 				return true;
@@ -43,14 +45,15 @@ public class TcpProtocol extends AbProtocol {
 	}
 
 	@Override
-	public IConvertProtocolPacket convertor() {
+	public IConvertProtocolPacket converter() {
 		return new TcpConvertPacket();
 	}
 	
 	@Override
 	public boolean isProtocol(ImPacket imPacket,ChannelContext channelContext) throws Throwable {
-		if(imPacket == null)
+		if(imPacket == null) {
 			return false;
+		}
 		if(imPacket instanceof TcpPacket){
 			Object sessionContext = channelContext.getAttribute();
 			if(sessionContext == null){

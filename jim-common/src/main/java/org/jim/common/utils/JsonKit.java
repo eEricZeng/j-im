@@ -125,8 +125,9 @@ public class JsonKit {
 	 * @return
 	 */
 	public static <T> List<T> toArray(List<String> datas, Class<T> clazz){
-		if(datas == null)
+		if(datas == null) {
 			return null;
+		}
 		List<T> result  = new ArrayList<T>();
 		for(String obj : datas){
 			result.add(toBean(obj, clazz));

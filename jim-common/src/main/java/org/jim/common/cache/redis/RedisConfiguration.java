@@ -26,8 +26,9 @@ public class RedisConfiguration {
 		this.maxWait =  Long.valueOf(prop.getProperty("jim.redis.maxwait","5000"));
 		this.timeout =  Integer.valueOf(prop.getProperty("jim.redis.timeout", "2000"));
 		this.auth =  prop.getProperty("jim.redis.auth",null);
-		if(StringUtils.isEmpty(auth))
+		if(StringUtils.isEmpty(auth)) {
 			this.auth = null;
+		}
 		this.host = prop.getProperty("jim.redis.host","");
 		this.port =  Integer.valueOf(prop.getProperty("jim.redis.port","0"));
 	}

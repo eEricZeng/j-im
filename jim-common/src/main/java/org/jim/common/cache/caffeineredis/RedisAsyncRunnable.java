@@ -65,7 +65,7 @@ public class RedisAsyncRunnable implements Runnable{
 					count = 0;
 				}else if(count == 0 && redisL2Vo == null){
 					try {
-						Thread.currentThread().sleep(1000L);
+						Thread.sleep(1000L);
 					} catch (InterruptedException e) {
 						LOG.error(e.toString(),e);
 					}

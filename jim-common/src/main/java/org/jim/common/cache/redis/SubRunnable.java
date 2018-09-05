@@ -22,7 +22,7 @@ public class SubRunnable implements Runnable {
 		}
 		this.subChannel = subChannel;
 	}
-	
+	@Override
 	public void run() {
 		log.debug("订阅 redis , chanel {} , 线程将阻塞",subChannel);
 		while(true){

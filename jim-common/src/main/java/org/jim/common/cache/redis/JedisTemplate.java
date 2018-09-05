@@ -682,8 +682,9 @@ public  class JedisTemplate implements  Serializable{
     * @param pairDatas
     */
    public void batchSetExpire(List<PairEx<String,Void,Integer>> pairDatas){
-	   if(pairDatas == null || pairDatas.size() == 0)
-		   return;
+	   if(pairDatas == null || pairDatas.size() == 0) {
+           return;
+       }
        new Executor<Void>(jedisPool) {  
            @Override
            Void execute() {
@@ -1075,8 +1076,9 @@ public  class JedisTemplate implements  Serializable{
     * @param List<message> 要发布的信息 
     */  
    public void publishAll(final String channel, final List<String> messages) {
-	   if(messages == null || messages.size() == 0)
- 		  return;
+	   if(messages == null || messages.size() == 0) {
+           return;
+       }
        new Executor<Void>(jedisPool) {  
            @Override  
            Void execute() {

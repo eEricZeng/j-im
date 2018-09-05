@@ -57,13 +57,6 @@ public class HttpConfig extends Config{
 
 	}
 
-	private String bindIp = null;//"127.0.0.1";
-
-	/**
-	 * 监听端口
-	 */
-	private Integer bindPort = 80;
-
 	private String serverInfo = HttpConst.SERVER_INFO;
 
 	private String charset = HttpConst.CHARSET_NAME;
@@ -102,8 +95,9 @@ public class HttpConfig extends Config{
 	 * 示例：
 	 * 1、classpath中：page
 	 * 2、绝对路径：/page
+	 * //FileUtil.getAbsolutePath("page");//"/page";
 	 */
-	private String pageRoot = null;//FileUtil.getAbsolutePath("page");//"/page";
+	private String pageRoot = null;
 	/**
 	 * mvc扫描包路径;
 	 */
@@ -123,21 +117,6 @@ public class HttpConfig extends Config{
 		}
 	}
 	
-
-	/**
-	 * @return the bindIp
-	 */
-	public String getBindIp() {
-		return bindIp;
-	}
-
-	/**
-	 * @return the bindPort
-	 */
-	public Integer getBindPort() {
-		return bindPort;
-	}
-
 	/**
 	 * @return the charset
 	 */
@@ -185,10 +164,6 @@ public class HttpConfig extends Config{
 		return sessionCookieName;
 	}
 
-	//	public void setSessionTimeout(long sessionTimeout) {
-	//		this.sessionTimeout = sessionTimeout;
-	//	}
-
 	public ISessionIdGenerator getSessionIdGenerator() {
 		return sessionIdGenerator;
 	}
@@ -199,13 +174,6 @@ public class HttpConfig extends Config{
 
 	public long getSessionTimeout() {
 		return sessionTimeout;
-	}
-
-	/**
-	 * @param bindIp the bindIp to set
-	 */
-	public void setBindIp(String bindIp) {
-		this.bindIp = bindIp;
 	}
 
 	/**
@@ -296,8 +264,4 @@ public class HttpConfig extends Config{
 		this.httpServerListener = httpServerListener;
 	}
 
-	public void setBindPort(Integer bindPort) {
-		this.bindPort = bindPort;
-	}
-	
 }

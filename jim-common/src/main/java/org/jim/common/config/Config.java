@@ -162,6 +162,11 @@ public class Config {
 	}
 	
 	public interface Builder {
+		/**
+		 * 配置构建接口
+		 * @return
+		 * @throws Exception
+		 */
         Config build() throws Exception;
     }
 }

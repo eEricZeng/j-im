@@ -18,7 +18,7 @@ import org.tio.core.GroupContext;
  */
 public class HttpResponseEncoder {
 	public static enum Step {
-		firstline, header, body
+		firstLine, header, body
 	}
 
 	private static Logger log = LoggerFactory.getLogger(HttpResponseEncoder.class);

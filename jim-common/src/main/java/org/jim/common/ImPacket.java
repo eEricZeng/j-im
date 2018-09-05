@@ -11,12 +11,18 @@ import org.jim.common.packets.Command;
 public class ImPacket extends Packet
 {
 	private static final long serialVersionUID = 2000118564569232098L;
-
-	protected Status status;//包状态码;
-	
-	protected byte[] body;//消息体;
-	
-	private Command command;//消息命令;
+	/**
+	 * 包状态码;
+	 */
+	protected Status status;
+	/**
+	 * 消息体;
+	 */
+	protected byte[] body;
+	/**
+	 * 消息命令;
+	 */
+	private Command command;
 	/**
 	 * 消息是否是另外一台机器通过topic转过来的，如果是就不要死循环地再一次转发啦
 	 * 这个属性是j-im内部使用，业务层的用户请务使用
@@ -104,10 +110,7 @@ public class ImPacket extends Packet
 	/**
 	 * 计算消息头占用了多少字节数
 	 * @return
-	 *
-	 * @author: wchao
 	 * 2017年1月31日 下午5:32:26
-	 *
 	 */
 	public int calcHeaderLength(boolean is4byteLength)
 	{
@@ -150,11 +153,8 @@ public class ImPacket extends Packet
 
 	/** 
 	 * @see org.tio.core.intf.Packet#logstr()
-	 * 
 	 * @return
-	 * @author: wchao
 	 * 2017年2月22日 下午3:15:18
-	 * 
 	 */
 	@Override
 	public String logstr()
@@ -170,11 +170,4 @@ public class ImPacket extends Packet
 		this.status = status;
 	}
 
-	public boolean isFromCluster() {
-		return isFromCluster;
-	}
-
-	public void setFromCluster(boolean isFromCluster) {
-		this.isFromCluster = isFromCluster;
-	}
 }

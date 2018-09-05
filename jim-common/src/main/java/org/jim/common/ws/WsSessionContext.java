@@ -79,20 +79,6 @@ public class WsSessionContext extends ImSessionContext {
 	}
 
 	/**
-	 * @return the requestRateLimiter
-	 */
-	public RateLimiterWrap getRequestRateLimiter() {
-		return requestRateLimiter;
-	}
-
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-		return token;
-	}
-
-	/**
 	 * @return the isHandshaked
 	 */
 	public boolean isHandshaked() {
@@ -125,20 +111,6 @@ public class WsSessionContext extends ImSessionContext {
 	 */
 	public void setLastParts(List<byte[]> lastParts) {
 		this.lastParts = lastParts;
-	}
-
-	/**
-	 * @param requestRateLimiter the requestRateLimiter to set
-	 */
-	public void setRequestRateLimiter(RateLimiterWrap requestRateLimiter) {
-		this.requestRateLimiter = requestRateLimiter;
-	}
-
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public WsRequestPacket getWsRequestPacket() {

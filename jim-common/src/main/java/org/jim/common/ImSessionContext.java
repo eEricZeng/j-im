@@ -14,11 +14,11 @@ public class ImSessionContext extends SessionContext
 	/**
 	 * 消息请求频率控制器
 	 */
-	private RateLimiterWrap requestRateLimiter = null;
+	protected RateLimiterWrap requestRateLimiter = null;
 	
-	private Client client = null;
+	protected Client client = null;
 	
-	private String token = null;
+	protected String token = null;
 	/**
 	 * 通道所属协议处理器;
 	 */

@@ -24,7 +24,7 @@ import org.tio.utils.lock.SetWithLock;
 /**
  * 版本: [1.0]
  * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月22日 上午9:07:18
+ * @author : WChao 创建时间: 2017年9月22日 上午9:07:18
  */
 public class ImAio {
 	
@@ -33,21 +33,23 @@ public class ImAio {
 	private static Logger log = LoggerFactory.getLogger(ImAio.class);
 	/**
 	 * 功能描述：[根据用户ID获取当前用户]
-	 * 创建者：WChao 创建时间: 2017年9月18日 下午4:34:39
+	 * @author：WChao 创建时间: 2017年9月18日 下午4:34:39
 	 * @param groupContext
-	 * @param userid
+	 * @param userId
 	 * @return
 	 */
-	public static User getUser(String userid){
-		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(userid);
-		if(userChannelContexts == null)
+	public static User getUser(String userId){
+		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);
+		if(userChannelContexts == null) {
 			return null;
+		}
 		ReadLock readLock = userChannelContexts.getLock().readLock();
 		readLock.lock();
 		try{
 			Set<ChannelContext> userChannels = userChannelContexts.getObj();
-			if(userChannels == null )
+			if(userChannels == null ) {
 				return null;
+			}
 			User user = null;
 			for(ChannelContext channelContext : userChannels){
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
@@ -63,37 +65,35 @@ public class ImAio {
 		}
 	}
 	/**
-	 * 
-		 * 功能描述：[根据用户ID获取当前用户所在通道集合]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:34:39
-		 * @param groupContext
-		 * @param userid
-		 * @return
-		 *
+	 * 功能描述：[根据用户ID获取当前用户所在通道集合]
+	 * @author：WChao 创建时间: 2017年9月18日 下午4:34:39
+	 * @param groupContext
+	 * @param userId
+	 * @return
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextsByUserid(String userid){
-		SetWithLock<ChannelContext> channelContexts = Aio.getChannelContextsByUserid(imConfig.getGroupContext(), userid);
+	public static SetWithLock<ChannelContext> getChannelContextsByUserId(String userId){
+		SetWithLock<ChannelContext> channelContexts = Aio.getChannelContextsByUserid(imConfig.getGroupContext(), userId);
 		return channelContexts;
 	}
 	/**
-	 * 
-		 * 功能描述：[获取所有用户(在线+离线)]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:31:54
-		 * @param groupContext
-		 * @return
-		 *
+	 * 功能描述：[获取所有用户(在线+离线)]
+	 * @author：WChao 创建时间: 2017年9月18日 下午4:31:54
+	 * @param groupContext
+	 * @return
 	 */
 	public static List<User> getAllUser(){
 		List<User> users = new ArrayList<User>();
 		SetWithLock<ChannelContext> allChannels = Aio.getAllChannelContexts(imConfig.getGroupContext());
-		if(allChannels == null)
+		if(allChannels == null) {
 			return users;
+		}
 		ReadLock readLock = allChannels.getLock().readLock();
 		readLock.lock();
 		try{
 			Set<ChannelContext> userChannels = allChannels.getObj();
-			if(userChannels == null)
+			if(userChannels == null) {
 				return users;
+			}
 			for(ChannelContext channelContext : userChannels){
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 				Client client = imSessionContext.getClient();
@@ -108,18 +108,17 @@ public class ImAio {
 		return users;
 	}
 	/**
-	 * 
-		 * 功能描述：[获取所有在线用户]
-		 * 创建者：WChao 创建时间: 2017年9月18日 下午4:31:42
-		 * @param groupContext
-		 * @return
-		 *
+	 * 功能描述：[获取所有在线用户]
+	 * @author：WChao 创建时间: 2017年9月18日 下午4:31:42
+	 * @param groupContext
+	 * @return
 	 */
 	public static List<User> getAllOnlineUser(){
 		List<User> users = new ArrayList<User>();
 		SetWithLock<ChannelContext> onlineChannels = Aio.getAllConnectedsChannelContexts(imConfig.getGroupContext());
-		if(onlineChannels == null)
+		if(onlineChannels == null) {
 			return users;
+		}
 		ReadLock readLock = onlineChannels.getLock().readLock();
 		readLock.lock();
 		try{
@@ -157,11 +156,11 @@ public class ImAio {
 				List<User> users = new ArrayList<User>();
 				Map<String,User> userMaps = new HashMap<String,User>();
 				for(ChannelContext channelContext : channels){
-					String userid = channelContext.getUserid();
-					User user = getUser(userid);
+					String userId = channelContext.getUserid();
+					User user = getUser(userId);
 					if(user != null){
-						if(userMaps.get(userid) == null){
-							userMaps.put(userid, user);
+						if(userMaps.get(userId) == null){
+							userMaps.put(userId, user);
 							users.add(user);
 						}
 					}
@@ -176,14 +175,15 @@ public class ImAio {
 	}
 	/**
 	 * 功能描述：[发送到群组(所有不同协议端)]
-	 * 创建者：WChao 创建时间: 2017年9月21日 下午3:26:57
+	 * @author：WChao 创建时间: 2017年9月21日 下午3:26:57
 	 * @param groupContext
 	 * @param group
 	 * @param packet
 	 */
 	public static void sendToGroup(String group, ImPacket packet){
-		if(packet.getBody() == null)
+		if(packet.getBody() == null) {
 			return;
+		}
 		SetWithLock<ChannelContext> withLockChannels = Aio.getChannelContextsByGroup(imConfig.getGroupContext(), group);
 		if(withLockChannels == null){
 			ImCluster cluster = imConfig.getCluster();
@@ -241,9 +241,10 @@ public class ImAio {
 	 * @param packet
 	 */
 	public static void sendToUser(String userId,ImPacket packet){
-		if(StringUtils.isEmpty(userId))
+		if(StringUtils.isEmpty(userId)) {
 			return;
-		SetWithLock<ChannelContext> toChannelContexts = getChannelContextsByUserid(userId);
+		}
+		SetWithLock<ChannelContext> toChannelContexts = getChannelContextsByUserId(userId);
 		if(toChannelContexts == null || toChannelContexts.size() < 1){
 			ImCluster cluster = imConfig.getCluster();
 			if (cluster != null && !packet.isFromCluster()) {
@@ -271,11 +272,11 @@ public class ImAio {
 	 * @param groupContext
 	 * @param ip
 	 * @param packet
-	 * @author: WChao
 	 */
 	public static void sendToIp(GroupContext groupContext, String ip, ImPacket packet) {
 		 sendToIp(groupContext, ip, packet, null);
 	}
+
 	public static void sendToIp(GroupContext groupContext, String ip, ImPacket packet, ChannelContextFilter channelContextFilter) {
 		 sendToIp(groupContext, ip, packet, channelContextFilter, false);
 	}
@@ -321,8 +322,9 @@ public class ImAio {
 	 * @return
 	 */
 	private static ImPacket initAndSetConvertPacket(ChannelContext channelContext , ImPacket packet){
-		if(channelContext == null)
+		if(channelContext == null) {
 			return null;
+		}
 		ImPacket respPacket = ImKit.ConvertRespPacket(packet,packet.getCommand(),channelContext);
 		if(respPacket == null){
 			log.error("转换协议包为空,请检查协议！");
@@ -337,22 +339,22 @@ public class ImAio {
 	/**
 	 * 绑定用户;
 	 * @param channelContext
-	 * @param userid
+	 * @param userId
 	 */
-	public static void bindUser(ChannelContext channelContext,String userid){
-		bindUser(channelContext, userid,null);
+	public static void bindUser(ChannelContext channelContext,String userId){
+		bindUser(channelContext, userId,null);
 	}
 	/**
 	 * 绑定用户,同时可传递监听器执行回调函数
 	 * @param channelContext
-	 * @param userid
+	 * @param userId
 	 * @param bindListener(绑定监听器回调)
 	 */
-	public static void bindUser(ChannelContext channelContext,String userid,ImBindListener bindListener){
-		Aio.bindUser(channelContext, userid);
+	public static void bindUser(ChannelContext channelContext,String userId,ImBindListener bindListener){
+		Aio.bindUser(channelContext, userId);
 		if(bindListener != null){
 			try {
-				bindListener.onAfterUserBind(channelContext, userid);
+				bindListener.onAfterUserBind(channelContext, userId);
 			} catch (Exception e) {
 				log.error(e.toString(),e);
 			}
@@ -361,30 +363,31 @@ public class ImAio {
 	/**
 	 * 解绑用户
 	 * @param groupContext
-	 * @param userid
+	 * @param userId
 	 */
-	public static void unbindUser(String userid){
-		unbindUser(userid, null);
+	public static void unbindUser(String userId){
+		unbindUser(userId, null);
 	}
 	/**
 	 * 解除绑定用户,同时可传递监听器执行回调函数
 	 * @param channelContext
-	 * @param userid
+	 * @param userId
 	 * @param bindListener(解绑定监听器回调)
 	 */
-	public static void unbindUser(String userid,ImBindListener bindListener){
-		Aio.unbindUser(imConfig.getGroupContext(), userid);
+	public static void unbindUser(String userId,ImBindListener bindListener){
+		Aio.unbindUser(imConfig.getGroupContext(), userId);
 		if(bindListener != null){
 			try {
-				SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(userid);
-				if(userChannelContexts == null || userChannelContexts.size() == 0)
-					return ;
+				SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);
+				if(userChannelContexts == null || userChannelContexts.size() == 0) {
+					return;
+				}
 				ReadLock readLock = userChannelContexts.getLock().readLock();
 				readLock.lock();
 				try{
 					Set<ChannelContext> channels = userChannelContexts.getObj();
 					for(ChannelContext channelContext : channels){
-						bindListener.onAfterUserBind(channelContext, userid);
+						bindListener.onAfterUserBind(channelContext, userId);
 					}
 				}finally{
 					readLock.unlock();
@@ -420,23 +423,24 @@ public class ImAio {
 	}
 	/**
 	 * 与指定群组解除绑定
-	 * @param userid
+	 * @param userId
 	 * @param group
 	 * @param bindListener
 	 */
-	public static void unbindGroup(String userid,String group){
-		unbindGroup(userid, group, null);
+	public static void unbindGroup(String userId,String group){
+		unbindGroup(userId, group, null);
 	}
 	/**
 	 * 与指定群组解除绑定,同时可传递监听器执行回调函数
-	 * @param channelContext
+	 * @param userId
 	 * @param group
 	 * @param binListener(解绑定监听器回调)
 	 */
-	public static void unbindGroup(String userid,String group,ImBindListener bindListener){
-		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserid(userid);
-		if(userChannelContexts == null || userChannelContexts.size() == 0)
-			return ;
+	public static void unbindGroup(String userId,String group,ImBindListener bindListener){
+		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);
+		if(userChannelContexts == null || userChannelContexts.size() == 0) {
+			return;
+		}
 		ReadLock readLock = userChannelContexts.getLock().readLock();
 		readLock.lock();
 		try{
@@ -457,11 +461,11 @@ public class ImAio {
 	}
 	/**
 	 * 移除用户, 和close方法一样，只不过不再进行重连等维护性的操作
-	 * @param userid
+	 * @param userId
 	 * @param remark
 	 */
-	public static void remove(String userid,String remark){
-		SetWithLock<ChannelContext> userChannelContexts = getChannelContextsByUserid(userid);
+	public static void remove(String userId,String remark){
+		SetWithLock<ChannelContext> userChannelContexts = getChannelContextsByUserId(userId);
 		if(userChannelContexts != null && userChannelContexts.size() > 0){
 			ReadLock readLock = userChannelContexts.getLock().readLock();
 			readLock.lock();
@@ -477,7 +481,7 @@ public class ImAio {
 	}
 	/**
 	 * 移除指定channel, 和close方法一样，只不过不再进行重连等维护性的操作
-	 * @param userid
+	 * @param channelContext
 	 * @param remark
 	 */
 	public static void remove(ChannelContext channelContext,String remark){

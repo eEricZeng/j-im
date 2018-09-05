@@ -31,7 +31,7 @@ public abstract class ImConfigBuilder implements Config.Builder {
 		this.conf.bindIp = bindIp;
 		return this;
 	}
-	
+
 	public ImConfigBuilder setBindPort(Integer bindPort) {
 		this.conf.bindPort = bindPort;
 		return this;
@@ -86,8 +86,9 @@ public abstract class ImConfigBuilder implements Config.Builder {
 		this.conf.readBufferSize = readBufferSize;
 		return this;
 	}
-	 
-	public ImConfig build() {
+
+	@Override
+    public ImConfig build() {
         this.configHttp(conf.getHttpConfig());
         this.configWs(conf.getWsServerConfig());
         return conf;

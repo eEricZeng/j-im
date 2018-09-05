@@ -21,12 +21,17 @@ public class PropertyImConfigBuilder extends ImConfigBuilder {
 	
 	@Override
 	public ImConfigBuilder configHttp(HttpConfig httpConfig) {
-		String pageRoot = PropKit.get("jim.http.page");//html/css/js等的根目录，支持classpath:，也支持绝对路径
-		String[] scanPackages = PropKit.get("jim.http.scan.packages").split(",");//j-im mvc需要扫描的根目录包
+		//html/css/js等的根目录，支持classpath:，也支持绝对路径
+		String pageRoot = PropKit.get("jim.http.page");
+		//j-im mvc需要扫描的根目录包
+		String[] scanPackages = PropKit.get("jim.http.scan.packages").split(",");
 		httpConfig.setBindPort((PropKit.getInt("jim.port")));
-		httpConfig.setPageRoot(pageRoot);//设置web访问路径;
-		httpConfig.setMaxLiveTimeOfStaticRes(PropKit.getInt("jim.http.max.live.time"));//不缓存资源;
-		httpConfig.setScanPackages(scanPackages);//设置j-im mvc扫描目录;
+		//设置web访问路径;
+		httpConfig.setPageRoot(pageRoot);
+		//不缓存资源;
+		httpConfig.setMaxLiveTimeOfStaticRes(PropKit.getInt("jim.http.max.live.time"));
+		//设置j-im mvc扫描目录;
+		httpConfig.setScanPackages(scanPackages);
 		return this;
 	}
 
@@ -36,7 +41,7 @@ public class PropertyImConfigBuilder extends ImConfigBuilder {
 		return this;
 	}
 
-
+	@Override
 	public ImConfig build() {
 		super.build();
 		this.setBindIp(PropKit.get("jim.bind.ip"));

@@ -9,25 +9,35 @@ import org.tio.core.ChannelContext;
 
 /**
  * @author WChao
- *
+ * @date 2018-09-05 23:52:00
  */
 public abstract class AbProtocol implements IProtocol {
-	//协议包转化器;
-	private IConvertProtocolPacket convertor;
+	/**
+	 * 协议包转化器;
+	 */
+	private IConvertProtocolPacket converter;
 	
 	public AbProtocol(){
-		this.convertor = convertor();
+		this.converter = converter();
 	}
-	public abstract boolean isProtoc(ByteBuffer buffer,ChannelContext channelContext) throws Throwable;
-	@Override
+
+	/**
+	 * 根据buffer判断是否属于指定协议
+	 * @param buffer
+	 * @param channelContext
+	 * @return
+	 * @throws Throwable
+	 */
+	public abstract boolean isProtocolByBuffer(ByteBuffer buffer,ChannelContext channelContext) throws Throwable;
+
 	public boolean isProtocol(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
 		ByteBuffer copyByteBuffer = null;
 		if(buffer != null && channelContext.getAttribute() == null){
 			copyByteBuffer = ByteBuffer.wrap(buffer.array());
 		}
-		return isProtoc(copyByteBuffer, channelContext);
+		return isProtocolByBuffer(copyByteBuffer, channelContext);
 	}
-	public IConvertProtocolPacket getConvertor() {
-		return convertor;
+	public IConvertProtocolPacket getConverter() {
+		return converter;
 	}
 }

@@ -17,7 +17,7 @@ import org.jim.common.utils.ImUtils;
 import org.tio.core.ChannelContext;
 
 /**
- * Websocket协议
+ * WebSocket协议判断器
  * @author WChao
  *
  */
@@ -29,11 +29,13 @@ public class WsProtocol extends AbProtocol {
 	}
 	
 	@Override
-	public boolean isProtoc(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
+	public boolean isProtocolByBuffer(ByteBuffer buffer,ChannelContext channelContext) throws Throwable {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		if(imSessionContext != null && imSessionContext instanceof WsSessionContext)
+		if(imSessionContext != null && imSessionContext instanceof WsSessionContext) {
 			return true;
-		if(buffer != null){//第一次连接;
+		}
+		//第一次连接;
+		if(buffer != null){
 			HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,false);
 			if(request.getHeaders().get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key) != null)
 			{
@@ -46,14 +48,15 @@ public class WsProtocol extends AbProtocol {
 	}
 
 	@Override
-	public IConvertProtocolPacket convertor() {
+	public IConvertProtocolPacket converter() {
 		return new WsConvertPacket();
 	}
 	
 	@Override
 	public boolean isProtocol(ImPacket imPacket,ChannelContext channelContext) throws Throwable {
-		if(imPacket == null)
+		if(imPacket == null) {
 			return false;
+		}
 		if(imPacket instanceof WsPacket){
 			Object sessionContext = channelContext.getAttribute();
 			if(sessionContext == null){

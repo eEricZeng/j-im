@@ -158,8 +158,9 @@ public class RedisCache implements ICache {
 		return null;
 	}
 	public Long listRemove(String key ,String value){
-		if(StringUtils.isBlank(key) || StringUtils.isBlank(value))
+		if(StringUtils.isBlank(key) || StringUtils.isBlank(value)) {
 			return 0L;
+		}
 		try {
 			return JedisTemplate.me().listRemove(cacheKey(cacheName, key), 0, value);
 		} catch (Exception e) {
@@ -183,10 +184,11 @@ public class RedisCache implements ICache {
 			return null;
 		}
 		try {
-			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),Double.MIN_VALUE,Double.MAX_VALUE);
-			if(datas == null)
+			Set<String> dataSet = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),Double.MIN_VALUE,Double.MAX_VALUE);
+			if(dataSet == null) {
 				return null;
-			return new ArrayList<String>(datas);
+			}
+			return new ArrayList<String>(dataSet);
 		}catch (Exception e) {
 			log.error(e.toString(),e);
 		}
@@ -197,10 +199,11 @@ public class RedisCache implements ICache {
 			return null;
 		}
 		try {
-			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max);
-			if(datas == null)
+			Set<String> dataSet = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max);
+			if(dataSet == null) {
 				return null;
-			return new ArrayList<String>(datas);
+			}
+			return new ArrayList<String>(dataSet);
 		}catch (Exception e) {
 			log.error(e.toString(),e);
 		}
@@ -211,10 +214,11 @@ public class RedisCache implements ICache {
 			return null;
 		}
 		try {
-			Set<String> datas = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max,offset,count);
-			if(datas == null)
+			Set<String> dataSet = JedisTemplate.me().sorSetRangeByScore(cacheKey(cacheName, key),min,max,offset,count);
+			if(dataSet == null) {
 				return null;
-			return new ArrayList<String>(datas);
+			}
+			return new ArrayList<String>(dataSet);
 		}catch (Exception e) {
 			log.error(e.toString(),e);
 		}

@@ -19,12 +19,15 @@ import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
 import org.tio.core.ChannelContext;
 import org.tio.utils.lock.SetWithLock;
 /**
+ * IM聊天命令工具类
+ * @date 2018-09-05 23:29:30
  * @author WChao
  *
  */
 public class ChatKit {
 	
 	private static Logger log = Logger.getLogger(ChatKit.class);
+
 	/**
 	 * 转换为聊天消息结构;
 	 * @param body
@@ -46,14 +49,16 @@ public class ChatKit {
 		}
 		return chatReqBody;
 	}
+
 	/**
 	 * 判断是否属于指定格式聊天消息;
-	 * @param packet
+	 * @param body
 	 * @return
 	 */
 	private static ChatBody parseChatBody(byte[] body){
-		if(body == null)
+		if(body == null) {
 			return null;
+		}
 		ChatBody chatReqBody = null;
 		try{
 			String text = new String(body,HttpConst.CHARSET_NAME);
@@ -66,18 +71,20 @@ public class ChatKit {
 				return chatReqBody;
 			}
 		}catch(Exception e){
-			
+			log.error(e.toString());
 		}
 		return chatReqBody;
 	}
+
 	/**
 	 * 判断是否属于指定格式聊天消息;
-	 * @param packet
+	 * @param bodyStr
 	 * @return
 	 */
 	public static ChatBody parseChatBody(String bodyStr){
-		if(bodyStr == null)
+		if(bodyStr == null) {
 			return null;
+		}
 		try {
 			return parseChatBody(bodyStr.getBytes(HttpConst.CHARSET_NAME));
 		} catch (Exception e) {
@@ -85,24 +92,24 @@ public class ChatKit {
 		}
 		return null;
 	}
-  /**
-   * 聊天数据格式不正确响应包
-   * @param chatBody
-   * @param channelContext
-   * @return
-   * @throws Exception
-   */
+
+    /**
+	  * 聊天数据格式不正确响应包
+	  * @param channelContext
+	  * @return imPacket
+	  * @throws Exception
+    */
    public static ImPacket  dataInCorrectRespPacket(ChannelContext channelContext) throws Exception{
 	   RespBody chatDataInCorrectRespPacket = new RespBody(Command.COMMAND_CHAT_RESP,ImStatus.C10002);
 	   ImPacket respPacket = ImKit.ConvertRespPacket(chatDataInCorrectRespPacket, channelContext);
 	   respPacket.setStatus(ImStatus.C10002);
 	   return respPacket;
    }
+
    /**
     * 聊天发送成功响应包
-    * @param chatBody
     * @param channelContext
-    * @return
+    * @return imPacket
     * @throws Exception
     */
     public static ImPacket  sendSuccessRespPacket(ChannelContext channelContext) throws Exception{
@@ -111,9 +118,9 @@ public class ChatKit {
  	   respPacket.setStatus(ImStatus.C10000);
  	   return respPacket;
     }
+
     /**
      * 聊天用户不在线响应包
-     * @param chatBody
      * @param channelContext
      * @return
      * @throws Exception
@@ -124,24 +131,27 @@ public class ChatKit {
   	   respPacket.setStatus(ImStatus.C10001);
   	   return respPacket;
      }
+
      /**
-      * 判断用户是否在线;
-      * @param userid
+      * 判断用户是否在线
+      * @param userId
+	  * @param imConfig
       * @return
       */
-     public static boolean isOnline(String userid ,Config imConfig){
+     public static boolean isOnline(String userId ,Config imConfig){
     	 boolean isStore = Const.ON.equals(imConfig.getIsStore());
 		 if(isStore){
-			return imConfig.getMessageHelper().isOnline(userid);
+			return imConfig.getMessageHelper().isOnline(userId);
 		 }
-    	 SetWithLock<ChannelContext> toChannleContexts = ImAio.getChannelContextsByUserid(userid);
-    	 if(toChannleContexts != null && toChannleContexts.size() > 0){
+    	 SetWithLock<ChannelContext> toChannelContexts = ImAio.getChannelContextsByUserId(userId);
+    	 if(toChannelContexts != null && toChannelContexts.size() > 0){
     		 return true;
     	 }
     	 return false;
      }
+
      /**
-      *  获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
+      * 获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
       * @param from
       * @param to
       * @return
@@ -149,29 +159,29 @@ public class ChatKit {
      public static String sessionId(String from , String to){
     	 String sessionId = "";
     	 try{
-	    	 byte[] fbytes = from.getBytes(Const.CHARSET);
-	    	 byte[] tbytes = to.getBytes(Const.CHARSET);
-	    	 boolean isfmax = fbytes.length > tbytes.length;
-	    	 boolean isequal = fbytes.length == tbytes.length;
-	    	 if(isfmax){
-	    		 for(int i = 0 ; i < fbytes.length ; i++){
-		    		 for(int j = 0 ; j < tbytes.length ; j++){
-		    			 fbytes[i] = (byte) (fbytes[i]^tbytes[j]);
+	    	 byte[] fBytes = from.getBytes(Const.CHARSET);
+	    	 byte[] tBytes = to.getBytes(Const.CHARSET);
+	    	 boolean isFromMax = fBytes.length > tBytes.length;
+	    	 boolean isEqual = fBytes.length == tBytes.length;
+	    	 if(isFromMax){
+	    		 for(int i = 0 ; i < fBytes.length ; i++){
+		    		 for(int j = 0 ; j < tBytes.length ; j++){
+						 fBytes[i] = (byte) (fBytes[i]^tBytes[j]);
 		    		 }
 		    	 }
-	    		 sessionId = new String(fbytes);
-	    	 }else if(isequal){
-	    		 for(int i = 0 ; i < fbytes.length ; i++){
-		    		  fbytes[i] = (byte) (fbytes[i]^tbytes[i]);
+	    		 sessionId = new String(fBytes);
+	    	 }else if(isEqual){
+	    		 for(int i = 0 ; i < fBytes.length ; i++){
+					 fBytes[i] = (byte) (fBytes[i]^tBytes[i]);
 		    	 }
-	    		 sessionId = new String(fbytes);
+	    		 sessionId = new String(fBytes);
 	    	 }else{
-	    		 for(int i = 0 ; i < tbytes.length ; i++){
-		    		 for(int j = 0 ; j < fbytes.length ; j++){
-		    			 tbytes[i] = (byte) (tbytes[i]^fbytes[j]);
+	    		 for(int i = 0 ; i < tBytes.length ; i++){
+		    		 for(int j = 0 ; j < fBytes.length ; j++){
+						 tBytes[i] = (byte) (tBytes[i]^fBytes[j]);
 		    		 }
 		    	 }
-	    		 sessionId = new String(tbytes);
+	    		 sessionId = new String(tBytes);
 	    	 }
     	 }catch (Exception e) {
 			log.error(e.toString(),e);

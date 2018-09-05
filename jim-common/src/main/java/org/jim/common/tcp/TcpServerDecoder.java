@@ -16,15 +16,17 @@ import org.jim.common.packets.Command;
 /**
  * 版本: [1.0]
  * 功能说明: 
- * 作者: WChao 创建时间: 2017年8月21日 下午3:08:04
+ * @author : WChao 创建时间: 2017年8月21日 下午3:08:04
  */
 public class TcpServerDecoder {
 	
 	private static Logger logger = Logger.getLogger(TcpServerDecoder.class);
 	
 	public static TcpPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException{
-		if(!isHeaderLength(buffer))//校验协议头
+		//校验协议头
+		if(!isHeaderLength(buffer)) {
 			return null;
+		}
 		//获取第一个字节协议版本号;
 		byte version = buffer.get();
 		if(version != Protocol.VERSION){
@@ -33,7 +35,8 @@ public class TcpServerDecoder {
 		//标志位
 		byte maskByte = buffer.get();
 		Integer synSeq = 0;
-		if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+		//同步发送;
+		if(ImPacket.decodeHasSynSeq(maskByte)){
 			synSeq = buffer.getInt();
 		}
 		//cmd命令码
@@ -49,7 +52,8 @@ public class TcpServerDecoder {
 		}
 		int readableLength = buffer.limit() - buffer.position();
 		int validateBodyLen = readableLength - bodyLen;
-		if (validateBodyLen < 0) // 不够消息体长度(剩下的buffe组不了消息体)
+		// 不够消息体长度(剩下的buffer组不了消息体)
+		if (validateBodyLen < 0)
 		{
 			return null;
 		}
@@ -60,11 +64,12 @@ public class TcpServerDecoder {
 			logger.error(e.toString());
 		}
 		logger.info("TCP解码成功...");
-		//bytebuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte同步序列号(如果是同步发送则多4byte同步序列号,否则无4byte序列号)+1byte命令码+4byte消息的长度+消息体的长度
+		//byteBuffer的总长度是 = 1byte协议版本号+1byte消息标志位+4byte同步序列号(如果是同步发送则多4byte同步序列号,否则无4byte序列号)+1byte命令码+4byte消息的长度+消息体的长度
 		TcpPacket tcpPacket = new TcpPacket(Command.forNumber(cmdByte), body);
 		tcpPacket.setVersion(version);
 		tcpPacket.setMask(maskByte);
-		if(synSeq > 0){//同步发送设置同步序列号
+		//同步发送设置同步序列号
+		if(synSeq > 0){
 			tcpPacket.setSynSeq(synSeq);
 			try {
 				channelContext.getGroupContext().getAioHandler().handler(tcpPacket, channelContext);
@@ -82,8 +87,9 @@ public class TcpServerDecoder {
 	 */
 	private static boolean isHeaderLength(ByteBuffer buffer) throws AioDecodeException{
 		int readableLength = buffer.limit() - buffer.position();
-		if(readableLength == 0)
+		if(readableLength == 0) {
 			return false;
+		}
 		//协议头索引;
 		int index = buffer.position();
 		try{
@@ -92,7 +98,8 @@ public class TcpServerDecoder {
 			index++;
 			//标志位
 			byte maskByte = buffer.get(index);
-			if(ImPacket.decodeHasSynSeq(maskByte)){//同步发送;
+			//同步发送;
+			if(ImPacket.decodeHasSynSeq(maskByte)){
 				index += 4;
 			}
 			index++;

@@ -7,7 +7,7 @@ import org.jim.common.http.HttpConst;
  * 
  * 版本: [1.0]
  * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月6日 上午11:11:26
+ * @author : WChao 创建时间: 2017年9月6日 上午11:11:26
  */
 public class WsServerConfig extends Config{
 	
@@ -20,35 +20,10 @@ public class WsServerConfig extends Config{
 	private IWsMsgHandler wsMsgHandler;
 	
 	public WsServerConfig(){};
-	/**
-	 * 
-	 * @author: WChao
-	 */
+
 	public WsServerConfig(Integer bindPort) {
-		
 		this.bindPort = bindPort;
 	}
-	/**
-	 * @return the bindIp
-	 */
-	public String getBindIp() {
-		return bindIp;
-	}
-
-	/**
-	 * @param bindIp the bindIp to set
-	 */
-	public void setBindIp(String bindIp) {
-		this.bindIp = bindIp;
-	}
-
-	/**
-	 * @return the bindPort
-	 */
-	public Integer getBindPort() {
-		return bindPort;
-	}
-
 	/**
 	 * @return the charset
 	 */
@@ -67,8 +42,5 @@ public class WsServerConfig extends Config{
 	}
 	public void setWsMsgHandler(IWsMsgHandler wsMsgHandler) {
 		this.wsMsgHandler = wsMsgHandler;
-	}
-	public void setBindPort(Integer bindPort) {
-		this.bindPort = bindPort;
 	}
 }
