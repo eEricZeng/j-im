@@ -41,8 +41,10 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 	@Override
 	public void handler(ImPacket chatPacket, ChannelContext channelContext) throws Exception {
 		ChatBody chatBody = ChatKit.toChatBody(chatPacket.getBody(), channelContext);
-		if(ON.equals(imConfig.getIsStore())){//开启持久化
-			if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){//存储群聊消息;
+		//开启持久化
+		if(ON.equals(imConfig.getIsStore())){
+			//存储群聊消息;
+			if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
 				pushGroupMessages(PUSH,STORE, chatBody);
 			}else{
 				String from = chatBody.getFrom();
@@ -67,17 +69,17 @@ public abstract class AbstractChatProcessor implements ChatProcessorIntf,Const {
 		String group_id = chatBody.getGroup_id();
 		//先将群消息持久化到存储Timeline;
 		writeMessage(storeTable,GROUP+":"+group_id,chatBody);
-		List<String> users = messsageHelper.getGroupUsers(group_id);
+		List<String> userIds = messsageHelper.getGroupUsers(group_id);
 		//通过写扩散模式将群消息同步到所有的群成员
-		for(String userid : users){
+		for(String userId : userIds){
 			boolean isOnline = false;
 			if(ON.equals(imConfig.getIsStore()) && ON.equals(imConfig.getIsCluster())){
-				isOnline = messsageHelper.isOnline(userid);
+				isOnline = messsageHelper.isOnline(userId);
 			}else{
-				isOnline = ChatKit.isOnline(userid,imConfig);
+				isOnline = ChatKit.isOnline(userId,imConfig);
 			}
 			if(!isOnline){
-				writeMessage(pushTable, GROUP+":"+group_id+":"+userid, chatBody);
+				writeMessage(pushTable, GROUP+":"+group_id+":"+userId, chatBody);
 			}
 		}
 	}
