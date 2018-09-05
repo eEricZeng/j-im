@@ -26,15 +26,18 @@ public class ImServerDemoStart {
 
 	public static void main(String[] args)throws Exception{
 		ImConfig imConfig = new PropertyImConfigBuilder("jim.properties").build();
-		initSsl(imConfig);//初始化SSL;(开启SSL之前,你要保证你有SSL证书哦...)
-		//ImgMnService.start();//启动爬虫爬取模拟在线人头像;
-		imConfig.setImGroupListener(new ImDemoGroupListener());//设置群组监听器，非必须，根据需要自己选择性实现;
+		//初始化SSL;(开启SSL之前,你要保证你有SSL证书哦...)
+		initSsl(imConfig);
+		//设置群组监听器，非必须，根据需要自己选择性实现;
+		imConfig.setImGroupListener(new ImDemoGroupListener());
 		ImServerStarter imServerStarter = new ImServerStarter(imConfig);
 		/*****************start 以下处理器根据业务需要自行添加与扩展，每个Command都可以添加扩展,此处为demo中处理**********************************/
 		HandshakeReqHandler handshakeReqHandler = CommandManager.getCommand(Command.COMMAND_HANDSHAKE_REQ, HandshakeReqHandler.class);
-		handshakeReqHandler.addProcessor(new DemoWsHandshakeProcessor());//添加自定义握手处理器;
+		//添加自定义握手处理器;
+		handshakeReqHandler.addProcessor(new DemoWsHandshakeProcessor());
 		LoginReqHandler loginReqHandler = CommandManager.getCommand(Command.COMMAND_LOGIN_REQ,LoginReqHandler.class);
-		loginReqHandler.addProcessor(new LoginServiceProcessor());//添加登录业务处理器;
+		//添加登录业务处理器;
+		loginReqHandler.addProcessor(new LoginServiceProcessor());
 		/*****************end *******************************************************************************************/
 		imServerStarter.start();
 	}
@@ -44,7 +47,8 @@ public class ImServerDemoStart {
 	 * @throws Exception
 	 */
 	private static void initSsl(ImConfig imConfig) throws Exception {
-		if(Const.ON.equals(imConfig.getIsSSL())){//开启SSL
+		//开启SSL
+		if(Const.ON.equals(imConfig.getIsSSL())){
 			String keyStorePath = PropKit.get("jim.key.store.path");
 			String keyStoreFile = keyStorePath;
 			String trustStoreFile = keyStorePath;
