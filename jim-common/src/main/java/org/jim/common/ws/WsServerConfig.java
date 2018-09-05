@@ -11,10 +11,6 @@ import org.jim.common.http.HttpConst;
  */
 public class WsServerConfig extends Config{
 	
-	private String bindIp = null;
-	
-	private Integer bindPort = 9322;
-	
 	private String charset = HttpConst.CHARSET_NAME;
 	
 	private IWsMsgHandler wsMsgHandler;

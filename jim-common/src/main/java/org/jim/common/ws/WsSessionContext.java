@@ -5,7 +5,6 @@ import java.util.List;
 import org.jim.common.ImSessionContext;
 import org.jim.common.http.HttpRequest;
 import org.jim.common.http.HttpResponse;
-import org.tio.monitor.RateLimiterWrap;
 
 /**
  *
@@ -13,11 +12,6 @@ import org.tio.monitor.RateLimiterWrap;
  *
  */
 public class WsSessionContext extends ImSessionContext {
-	/**
-	 * 消息请求频率控制器
-	 */
-	private RateLimiterWrap requestRateLimiter = null;
-
 	/**
 	 * 是否已经握过手
 	 */
@@ -40,8 +34,6 @@ public class WsSessionContext extends ImSessionContext {
 	 * ws响应状态包;
 	 */
 	private WsResponsePacket wsResponsPacket = null;
-
-	private String token = null;
 
 	//websocket 协议用到的，有时候数据包是分几个到的，注意那个fin字段，本im暂时不支持
 	private List<byte[]> lastParts = null;

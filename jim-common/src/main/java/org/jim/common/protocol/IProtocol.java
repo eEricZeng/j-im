@@ -3,8 +3,6 @@
  */
 package org.jim.common.protocol;
 
-import java.nio.ByteBuffer;
-
 import org.jim.common.ImPacket;
 import org.tio.core.ChannelContext;
 
