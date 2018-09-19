@@ -37,7 +37,7 @@ public class HttpResponse extends HttpPacket {
 	private boolean isStaticRes = false;
 
 	private HttpRequest request = null;
-	private List<Cookie> cookies = null;
+	private volatile List<Cookie> cookies = null;
 
 	//	private int contentLength;
 	//	private byte[] bodyBytes;
