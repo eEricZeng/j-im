@@ -29,9 +29,9 @@ public  class JedisTemplate implements  Serializable{
 	
 	private static final long serialVersionUID = 9135301078135982677L;
 	private static final Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
-	private static JedisTemplate instance = null;
+	private static volatile JedisTemplate instance = null;
 	private static JedisPool jedisPool = null;
-	private static Jedis jedis = null;
+	private static volatile Jedis jedis = null;
 	private static RedisConfiguration redisConfig = null;
 	private JedisTemplate (){}
 	

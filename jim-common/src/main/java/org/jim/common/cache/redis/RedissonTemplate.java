@@ -16,7 +16,7 @@ public class RedissonTemplate implements Serializable{
 
 	private static final long serialVersionUID = -4528751601700736437L;
 	private static final Logger logger = LoggerFactory.getLogger(RedissonTemplate.class);
-	private static RedissonTemplate instance = null;
+	private static volatile RedissonTemplate instance = null;
 	private static RedisConfiguration redisConfig = null;
 	private static final String REDIS = "redis";
 	private static RedissonClient redissonClient = null;
