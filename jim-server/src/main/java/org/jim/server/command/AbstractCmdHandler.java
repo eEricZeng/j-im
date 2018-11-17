@@ -84,7 +84,7 @@ public abstract class AbstractCmdHandler implements CmdHandler {
 	 * @param clazz
 	 * @return
 	 */
-	public <T> List<T> getProcessorAndNotEqualName(Set<String> names, Class<T> clazz){
+	public <T> List<T> getProcessorNotEqualName(Set<String> names, Class<T> clazz){
 		List<T> processorList = null;
 		for(Entry<String,CmdProcessor> processorEntry : processors.entrySet()){
 			CmdProcessor processor = processorEntry.getValue();

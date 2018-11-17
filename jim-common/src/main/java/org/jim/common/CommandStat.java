@@ -1,10 +1,10 @@
 package org.jim.common;
 
+import org.jim.common.packets.Command;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.jim.common.packets.Command;
 
 /**
  * 
@@ -53,17 +53,6 @@ public class CommandStat
 	 * 
 	 */
 	public CommandStat()
-	{
-	}
-
-	/**
-	 * @param args
-	 *
-	 * @author: wchao
-	 * 2016年12月6日 下午5:32:31
-	 * 
-	 */
-	public static void main(String[] args)
 	{
 	}
 

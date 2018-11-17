@@ -17,7 +17,7 @@ import org.jim.common.tcp.TcpServerDecoder;
 import org.jim.common.tcp.TcpServerEncoder;
 import org.jim.server.command.AbstractCmdHandler;
 import org.jim.server.command.CommandManager;
-import org.jim.server.handler.AbProtocolHandler;
+import org.jim.server.handler.AbstractProtocolHandler;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
@@ -27,9 +27,9 @@ import java.nio.ByteBuffer;
 /**
  * 版本: [1.0]
  * 功能说明: 
- * 作者: WChao 创建时间: 2017年8月3日 下午7:44:48
+ * @author : WChao 创建时间: 2017年8月3日 下午7:44:48
  */
-public class TcpProtocolHandler extends AbProtocolHandler{
+public class TcpProtocolHandler extends AbstractProtocolHandler {
 	
 	Logger logger = Logger.getLogger(TcpProtocolHandler.class);
 	

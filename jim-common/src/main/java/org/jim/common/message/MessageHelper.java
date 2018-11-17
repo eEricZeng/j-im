@@ -1,12 +1,12 @@
 package org.jim.common.message;
 
-import java.util.List;
-
 import org.jim.common.listener.ImBindListener;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
 import org.jim.common.packets.UserMessageData;
+
+import java.util.List;
 /**
  * @author WChao
  * @date 2018年4月9日 下午4:31:51
@@ -19,10 +19,10 @@ public interface MessageHelper {
 	public ImBindListener getBindListener();
 	/**
 	 * 判断用户是否在线
-	 * @param userid
+	 * @param userId
 	 * @return
 	 */
-	public boolean isOnline(String userid);
+	public boolean isOnline(String userId);
 	/**
 	 * 获取群组所有成员信息(根据type区分在线还是离线)
 	 * @param group_id
@@ -39,6 +39,7 @@ public interface MessageHelper {
 	public List<Group> getAllGroupUsers(String user_id,Integer type);
 	/**
 	 * 获取好友分组所有成员信息
+	 * @param user_id
 	 * @param friend_group_id
 	 * @param type(0:所有在线用户,1:所有离线用户,2:所有用户[在线+离线])
 	 * @return
@@ -85,44 +86,45 @@ public interface MessageHelper {
 	public void writeMessage(String timelineTable , String timelineId , ChatBody chatBody);
 	/**
 	 * 移除群组用户
-	 * @param userid
+	 * @param userId
 	 * @param group_id
 	 */
-	public void removeGroupUser(String userid,String group_id);
+	public void removeGroupUser(String userId,String group_id);
 	/**
 	 * 获取与指定用户离线消息;
-	 * @param userid
-	 * @param groupid
+	 * @param userId
+	 * @param fromUserId
 	 * @return
 	 */
-	public UserMessageData getFriendsOfflineMessage(String userid,String fromUserId);
+	public UserMessageData getFriendsOfflineMessage(String userId,String fromUserId);
 	/**
 	 * 获取与所有用户离线消息;
-	 * @param userid
+	 * @param userId
 	 * @return
 	 */
-	public UserMessageData getFriendsOfflineMessage(String userid);
+	public UserMessageData getFriendsOfflineMessage(String userId);
 	/**
 	 * 获取用户指定群组离线消息;
-	 * @param userid
+	 * @param userId
+	 * @param groupId
 	 * @return
 	 */
-	public UserMessageData getGroupOfflineMessage(String userid,String groupid);
+	public UserMessageData getGroupOfflineMessage(String userId,String groupId);
 	/**
 	 * 获取与指定用户历史消息;
-	 * @param userid
-	 * @param fromUerId
+	 * @param userId
+	 * @param fromUserId
 	 * @param beginTime 消息区间开始时间
 	 * @param endTime 消息区间结束时间
 	 * @param offset 分页偏移量
 	 * @param count 数量
 	 * @return
 	 */
-	public UserMessageData getFriendHistoryMessage(String userid, String fromUerId,Double beginTime,Double endTime,Integer offset,Integer count);
+	public UserMessageData getFriendHistoryMessage(String userId, String fromUserId,Double beginTime,Double endTime,Integer offset,Integer count);
 	
 	/**
 	 * 获取与指定群组历史消息;
-	 * @param userid
+	 * @param userId
 	 * @param groupid
 	 * @param beginTime 消息区间开始时间
 	 * @param endTime 消息区间结束时间
@@ -130,5 +132,5 @@ public interface MessageHelper {
 	 * @param count 数量
 	 * @return
 	 */
-	public UserMessageData getGroupHistoryMessage(String userid, String groupid,Double beginTime,Double endTime,Integer offset,Integer count);
+	public UserMessageData getGroupHistoryMessage(String userId, String groupid,Double beginTime,Double endTime,Integer offset,Integer count);
 }

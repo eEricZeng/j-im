@@ -37,7 +37,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbProtocolHandler handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
+		AbstractProtocolHandler handler = (AbstractProtocolHandler)imSessionContext.getProtocolHandler();
 		if(handler != null){
 			handler.handler(packet, channelContext);
 		}
@@ -55,7 +55,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbProtocolHandler handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
+		AbstractProtocolHandler handler = (AbstractProtocolHandler)imSessionContext.getProtocolHandler();
 		if(handler != null){
 			return handler.encode(packet, groupContext, channelContext);
 		}
@@ -75,13 +75,13 @@ public class ImServerAioHandler implements ServerAioHandler {
 	@Override
 	public Packet decode(ByteBuffer buffer,int limit, int position, int readableLength,ChannelContext channelContext) throws AioDecodeException {
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-		AbProtocolHandler handler = null;
+		AbstractProtocolHandler handler = null;
 		if(imSessionContext == null){
 			handler = ProtocolHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
 			ImServerGroupContext imGroupContext = (ImServerGroupContext)imConfig.getGroupContext();
 			channelContext.setAttribute(ImConst.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
 		}else{
-			handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
+			handler = (AbstractProtocolHandler)imSessionContext.getProtocolHandler();
 		}
 		if(handler != null){
 			return handler.decode(buffer, channelContext);

@@ -3,18 +3,10 @@
  */
 package org.jim.server.ws;
 
-import java.nio.ByteBuffer;
-
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
-import org.tio.core.GroupContext;
-import org.tio.core.exception.AioDecodeException;
-import org.tio.core.intf.Packet;
 import org.jim.common.http.HttpRequest;
 import org.jim.common.http.HttpRequestDecoder;
 import org.jim.common.http.HttpResponse;
@@ -35,13 +27,21 @@ import org.jim.common.ws.WsServerEncoder;
 import org.jim.common.ws.WsSessionContext;
 import org.jim.server.command.AbstractCmdHandler;
 import org.jim.server.command.CommandManager;
-import org.jim.server.handler.AbProtocolHandler;
+import org.jim.server.handler.AbstractProtocolHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.tio.core.ChannelContext;
+import org.tio.core.GroupContext;
+import org.tio.core.exception.AioDecodeException;
+import org.tio.core.intf.Packet;
+
+import java.nio.ByteBuffer;
 /**
  * 版本: [1.0]
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午6:38:36
  */
-public class WsProtocolHandler extends AbProtocolHandler{
+public class WsProtocolHandler extends AbstractProtocolHandler {
 	
 	private Logger logger = LoggerFactory.getLogger(WsProtocolHandler.class);
 	
@@ -89,8 +89,10 @@ public class WsProtocolHandler extends AbProtocolHandler{
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		AbstractCmdHandler cmdHandler = CommandManager.getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
-			if(!wsRequestPacket.isWsEof())//是否ws分片发包尾帧包
+			//是否ws分片发包尾帧包
+			if(!wsRequestPacket.isWsEof()) {
 				return;
+			}
 			ImPacket imPacket = new ImPacket(Command.COMMAND_UNKNOW, new RespBody(Command.COMMAND_UNKNOW,ImStatus.C10017).toByte());
 			ImAio.send(channelContext, imPacket);
 			return;
@@ -104,10 +106,12 @@ public class WsProtocolHandler extends AbProtocolHandler{
 	@Override
 	public ImPacket decode(ByteBuffer buffer, ChannelContext channelContext) throws AioDecodeException {
 		WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();
-		if(!wsSessionContext.isHandshaked()){//握手
+		//握手
+		if(!wsSessionContext.isHandshaked()){
 			HttpRequest  httpRequest = HttpRequestDecoder.decode(buffer,channelContext,true);
-			if(httpRequest == null)
+			if(httpRequest == null) {
 				return null;
+			}
 			//升级到WebSocket协议处理
 			HttpResponse httpResponse = WsServerDecoder.updateWebSocketProtocol(httpRequest,channelContext);
 			if (httpResponse == null) {
@@ -122,8 +126,9 @@ public class WsProtocolHandler extends AbProtocolHandler{
 			return wsRequestPacket;
 		}else{
 			WsRequestPacket wsRequestPacket = WsServerDecoder.decode(buffer, channelContext);
-			if(wsRequestPacket == null)
+			if(wsRequestPacket == null) {
 				return null;
+			}
 			Command command = null;
 			if(wsRequestPacket.getWsOpcode() == Opcode.CLOSE){
 				command = Command.COMMAND_CLOSE_REQ;

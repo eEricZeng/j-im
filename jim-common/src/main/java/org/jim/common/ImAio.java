@@ -1,12 +1,6 @@
-/**
- * 
- */
 package org.jim.common;
 
-import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jim.common.cluster.ImCluster;
 import org.jim.common.config.DefaultImConfigBuilder;
@@ -21,6 +15,15 @@ import org.tio.core.ChannelContext;
 import org.tio.core.ChannelContextFilter;
 import org.tio.core.GroupContext;
 import org.tio.utils.lock.SetWithLock;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 /**
  * 版本: [1.0]
  * 功能说明: 
@@ -34,7 +37,6 @@ public class ImAio {
 	/**
 	 * 功能描述：[根据用户ID获取当前用户]
 	 * @author：WChao 创建时间: 2017年9月18日 下午4:34:39
-	 * @param groupContext
 	 * @param userId
 	 * @return
 	 */
@@ -47,7 +49,7 @@ public class ImAio {
 		readLock.lock();
 		try{
 			Set<ChannelContext> userChannels = userChannelContexts.getObj();
-			if(userChannels == null ) {
+			if(CollectionUtils.isEmpty(userChannels)) {
 				return null;
 			}
 			User user = null;
@@ -67,7 +69,6 @@ public class ImAio {
 	/**
 	 * 功能描述：[根据用户ID获取当前用户所在通道集合]
 	 * @author：WChao 创建时间: 2017年9月18日 下午4:34:39
-	 * @param groupContext
 	 * @param userId
 	 * @return
 	 */
@@ -78,7 +79,6 @@ public class ImAio {
 	/**
 	 * 功能描述：[获取所有用户(在线+离线)]
 	 * @author：WChao 创建时间: 2017年9月18日 下午4:31:54
-	 * @param groupContext
 	 * @return
 	 */
 	public static List<User> getAllUser(){
@@ -91,7 +91,7 @@ public class ImAio {
 		readLock.lock();
 		try{
 			Set<ChannelContext> userChannels = allChannels.getObj();
-			if(userChannels == null) {
+			if(CollectionUtils.isEmpty(userChannels)) {
 				return users;
 			}
 			for(ChannelContext channelContext : userChannels){
@@ -110,7 +110,6 @@ public class ImAio {
 	/**
 	 * 功能描述：[获取所有在线用户]
 	 * @author：WChao 创建时间: 2017年9月18日 下午4:31:42
-	 * @param groupContext
 	 * @return
 	 */
 	public static List<User> getAllOnlineUser(){
@@ -152,23 +151,21 @@ public class ImAio {
 		readLock.lock();
 		try{
 			Set<ChannelContext> channels = withLockChannels.getObj();
-			if(channels != null && channels.size() > 0){
-				List<User> users = new ArrayList<User>();
-				Map<String,User> userMaps = new HashMap<String,User>();
-				for(ChannelContext channelContext : channels){
-					String userId = channelContext.getUserid();
-					User user = getUser(userId);
-					if(user != null){
-						if(userMaps.get(userId) == null){
-							userMaps.put(userId, user);
-							users.add(user);
-						}
-					}
-				}
-				userMaps = null;
-				return users;
+			if(CollectionUtils.isEmpty(channels)){
+				return null;
 			}
-			return null;
+			List<User> users = new ArrayList<User>();
+			Map<String,User> userMaps = new HashMap<String,User>();
+			for(ChannelContext channelContext : channels){
+				String userId = channelContext.getUserid();
+				User user = getUser(userId);
+				if(user != null && userMaps.get(userId) == null){
+					userMaps.put(userId, user);
+					users.add(user);
+				}
+			}
+			userMaps = null;
+			return users;
 		}finally{
 			readLock.unlock();
 		}
@@ -176,7 +173,6 @@ public class ImAio {
 	/**
 	 * 功能描述：[发送到群组(所有不同协议端)]
 	 * @author：WChao 创建时间: 2017年9月21日 下午3:26:57
-	 * @param groupContext
 	 * @param group
 	 * @param packet
 	 */
@@ -196,7 +192,7 @@ public class ImAio {
 		readLock.lock();
 		try{
 			Set<ChannelContext> channels = withLockChannels.getObj();
-			if(channels != null && channels.size() > 0){
+			if(CollectionUtils.isNotEmpty(channels)){
 				for(ChannelContext channelContext : channels){
 					send(channelContext,packet);
 				}
@@ -362,7 +358,6 @@ public class ImAio {
 	}
 	/**
 	 * 解绑用户
-	 * @param groupContext
 	 * @param userId
 	 */
 	public static void unbindUser(String userId){
@@ -370,7 +365,6 @@ public class ImAio {
 	}
 	/**
 	 * 解除绑定用户,同时可传递监听器执行回调函数
-	 * @param channelContext
 	 * @param userId
 	 * @param bindListener(解绑定监听器回调)
 	 */
@@ -409,7 +403,7 @@ public class ImAio {
 	 * 绑定群组,同时可传递监听器执行回调函数
 	 * @param channelContext
 	 * @param group
-	 * @param binListener(绑定监听器回调)
+	 * @param bindListener(绑定监听器回调)
 	 */
 	public static void bindGroup(ChannelContext channelContext,String group,ImBindListener bindListener){
 		Aio.bindGroup(channelContext, group);
@@ -425,7 +419,6 @@ public class ImAio {
 	 * 与指定群组解除绑定
 	 * @param userId
 	 * @param group
-	 * @param bindListener
 	 */
 	public static void unbindGroup(String userId,String group){
 		unbindGroup(userId, group, null);
@@ -434,7 +427,7 @@ public class ImAio {
 	 * 与指定群组解除绑定,同时可传递监听器执行回调函数
 	 * @param userId
 	 * @param group
-	 * @param binListener(解绑定监听器回调)
+	 * @param bindListener(解绑定监听器回调)
 	 */
 	public static void unbindGroup(String userId,String group,ImBindListener bindListener){
 		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);

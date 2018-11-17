@@ -36,7 +36,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
-		List<ChatCmdProcessor> chatProcessors = this.getProcessorAndNotEqualName(Sets.newHashSet(ImConst.BASE_ASYNC_CHAT_MESSAGE_PROCESSOR),ChatCmdProcessor.class);
+		List<ChatCmdProcessor> chatProcessors = this.getProcessorNotEqualName(Sets.newHashSet(ImConst.BASE_ASYNC_CHAT_MESSAGE_PROCESSOR),ChatCmdProcessor.class);
 		if(CollectionUtils.isNotEmpty(chatProcessors)){
 			chatProcessors.forEach(chatProcessor -> chatProcessor.handler(packet,channelContext));
 		}

@@ -3,17 +3,8 @@
  */
 package org.jim.server.http;
 
-import java.nio.ByteBuffer;
-
-import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.Aio;
-import org.tio.core.ChannelContext;
-import org.tio.core.GroupContext;
-import org.tio.core.exception.AioDecodeException;
-import org.tio.core.intf.Packet;
+import org.jim.common.ImConst;
 import org.jim.common.http.GroupContextKey;
 import org.jim.common.http.HttpConfig;
 import org.jim.common.http.HttpProtocol;
@@ -25,16 +16,25 @@ import org.jim.common.http.handler.IHttpRequestHandler;
 import org.jim.common.protocol.IProtocol;
 import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
 import org.jim.server.ImServerStarter;
-import org.jim.server.handler.AbProtocolHandler;
+import org.jim.server.handler.AbstractProtocolHandler;
 import org.jim.server.http.mvc.Routes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.tio.core.Aio;
+import org.tio.core.ChannelContext;
+import org.tio.core.GroupContext;
+import org.tio.core.exception.AioDecodeException;
+import org.tio.core.intf.Packet;
 import org.tio.utils.SystemTimer;
 import org.tio.utils.cache.guava.GuavaCache;
+
+import java.nio.ByteBuffer;
 /**
  * 版本: [1.0]
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年8月3日 下午3:07:54
  */
-public class HttpProtocolHandler extends AbProtocolHandler{
+public class HttpProtocolHandler extends AbstractProtocolHandler {
 	
 	private Logger log = LoggerFactory.getLogger(HttpProtocolHandler.class);
 
@@ -62,7 +62,8 @@ public class HttpProtocolHandler extends AbProtocolHandler{
 			httpConfig.setSessionIdGenerator(UUIDSessionIdGenerator.instance);
 		}
 		if(httpConfig.getScanPackages() == null){
-			String[] scanPackages = new String[] { ImServerStarter.class.getPackage().getName() };//t-im mvc需要扫描的根目录包
+			//J-IM MVC需要扫描的根目录包
+			String[] scanPackages = new String[] { ImServerStarter.class.getPackage().getName() };
 			httpConfig.setScanPackages(scanPackages);
 		}else{
 			String[] scanPackages = new String[httpConfig.getScanPackages().length+1];
@@ -76,7 +77,7 @@ public class HttpProtocolHandler extends AbProtocolHandler{
 		imConfig.getGroupContext().setAttribute(GroupContextKey.HTTP_SERVER_CONFIG, httpConfig);
 		long end = SystemTimer.currentTimeMillis();
 		long iv = end - start;
-		log.info("j-im Http Server初始化完毕,耗时:{}ms", iv);
+		log.info("J-IM Http Server初始化完毕,耗时:{}ms", iv);
 	}
 	
 	@Override

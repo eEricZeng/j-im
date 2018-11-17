@@ -25,7 +25,7 @@ public class ProtocolHandlerManager{
 	
 	private static Logger logger = Logger.getLogger(ProtocolHandlerManager.class);
 	
-	private static Map<String,AbProtocolHandler> serverHandlers = new HashMap<String,AbProtocolHandler>();
+	private static Map<String,AbstractProtocolHandler> serverHandlers = new HashMap<String,AbstractProtocolHandler>();
 	
 	static{
 		 try {
@@ -38,28 +38,28 @@ public class ProtocolHandlerManager{
 	
 	private static void init(List<ProtocolHandlerConfiguration> configurations) throws Exception{
 		for(ProtocolHandlerConfiguration configuration : configurations){
-			Class<AbProtocolHandler> serverHandlerClazz = (Class<AbProtocolHandler>)Class.forName(configuration.getServerHandler());
-			AbProtocolHandler serverdHandler = serverHandlerClazz.newInstance();
+			Class<AbstractProtocolHandler> serverHandlerClazz = (Class<AbstractProtocolHandler>)Class.forName(configuration.getServerHandler());
+			AbstractProtocolHandler serverdHandler = serverHandlerClazz.newInstance();
 			addServerHandler(serverdHandler);
 		}
 	}
 	
-	public static AbProtocolHandler addServerHandler(AbProtocolHandler serverHandler){
+	public static AbstractProtocolHandler addServerHandler(AbstractProtocolHandler serverHandler){
 		if(serverHandler == null)
 			return null;
 		return serverHandlers.put(serverHandler.protocol().name(),serverHandler);
 	}
 	
-	public static AbProtocolHandler removeServerHandler(String name){
+	public static AbstractProtocolHandler removeServerHandler(String name){
 		if(name == null || "".equals(name))
 			return null;
 		return serverHandlers.remove(name);
 	}
 	
-	public static AbProtocolHandler initServerHandlerToChannelContext(ByteBuffer buffer,ChannelContext channelContext){
+	public static AbstractProtocolHandler initServerHandlerToChannelContext(ByteBuffer buffer, ChannelContext channelContext){
 		IProtocol protocol = ImKit.protocol(buffer, channelContext);
-		for(Entry<String,AbProtocolHandler> entry : serverHandlers.entrySet()){
-			AbProtocolHandler protocolHandler = entry.getValue();
+		for(Entry<String,AbstractProtocolHandler> entry : serverHandlers.entrySet()){
+			AbstractProtocolHandler protocolHandler = entry.getValue();
 			String protoc_name = protocolHandler.protocol().name();
 			try {
 				if(protocol != null && protocol.name().equals(protoc_name)){
@@ -76,14 +76,14 @@ public class ProtocolHandlerManager{
 	}
 	
 	public static <T> T getServerHandler(String name,Class<T> clazz){
-		AbProtocolHandler serverHandler = serverHandlers.get(name);
+		AbstractProtocolHandler serverHandler = serverHandlers.get(name);
 		if(serverHandler == null)
 			return null;
 		return (T)serverHandler;
 	}
 	
 	public static void init(ImConfig imConfig){
-		for(Entry<String,AbProtocolHandler> entry : serverHandlers.entrySet()){
+		for(Entry<String,AbstractProtocolHandler> entry : serverHandlers.entrySet()){
 			try {
 				entry.getValue().init(imConfig);
 			} catch (Exception e) {
