@@ -3,13 +3,13 @@
  */
 package org.jim.common.listener;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 /**
  * @author WChao
  * 2018/08/26
  */
-public abstract class AbstractImBindListener implements ImBindListener,Const{
+public abstract class AbstractImBindListener implements ImBindListener,ImConst {
 	
 	protected ImConfig imConfig;
 

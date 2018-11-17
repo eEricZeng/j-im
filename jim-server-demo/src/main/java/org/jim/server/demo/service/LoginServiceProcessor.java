@@ -3,40 +3,39 @@
  */
 package org.jim.server.demo.service;
 
+import cn.hutool.core.util.RandomUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.jim.common.ImConst;
+import org.jim.common.ImPacket;
+import org.jim.common.ImSessionContext;
+import org.jim.common.ImStatus;
+import org.jim.common.http.HttpConst;
+import org.jim.common.packets.Command;
+import org.jim.common.packets.Group;
+import org.jim.common.packets.LoginReqBody;
+import org.jim.common.packets.LoginRespBody;
+import org.jim.common.packets.User;
+import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
+import org.jim.common.utils.JsonKit;
+import org.jim.common.utils.Md5;
+import org.jim.server.command.CommandManager;
+import org.jim.server.command.handler.JoinGroupReqHandler;
+import org.jim.server.command.handler.processor.login.LoginCmdProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.tio.core.ChannelContext;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jim.common.Const;
-import org.jim.common.ImPacket;
-import org.jim.common.ImSessionContext;
-import org.jim.common.ImStatus;
-import org.jim.common.packets.Command;
-import org.jim.common.utils.JsonKit;
-import org.jim.server.command.CommandManager;
-import org.jim.server.command.handler.JoinGroupReqHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
-import org.jim.common.http.HttpConst;
-import org.jim.common.packets.Group;
-import org.jim.common.packets.LoginReqBody;
-import org.jim.common.packets.LoginRespBody;
-import org.jim.common.packets.User;
-import org.jim.common.session.id.impl.UUIDSessionIdGenerator;
-import org.jim.common.utils.Md5;
-import org.jim.server.command.handler.processor.login.LoginProcessorIntf;
-
-import cn.hutool.core.util.RandomUtil;
-
 /**
  * @author WChao
  *
  */
-public class LoginServiceProcessor implements LoginProcessorIntf{
+public class LoginServiceProcessor implements LoginCmdProcessor {
 
 	private Logger logger = LoggerFactory.getLogger(LoginServiceProcessor.class);
 
@@ -59,7 +58,7 @@ public class LoginServiceProcessor implements LoginProcessorIntf{
 	 */
 	public User getUser(String loginname, String password) {
 		String text = loginname+password;
-		String key = Const.authkey;
+		String key = ImConst.authkey;
 		String token = Md5.sign(text, key, HttpConst.CHARSET_NAME);
 		User user = getUser(token);
 		user.setId(loginname);

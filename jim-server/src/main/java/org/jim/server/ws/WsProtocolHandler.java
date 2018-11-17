@@ -33,7 +33,7 @@ import org.jim.common.ws.WsServerConfig;
 import org.jim.common.ws.WsServerDecoder;
 import org.jim.common.ws.WsServerEncoder;
 import org.jim.common.ws.WsSessionContext;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
 import org.jim.server.command.CommandManager;
 import org.jim.server.handler.AbProtocolHandler;
 /**
@@ -87,7 +87,7 @@ public class WsProtocolHandler extends AbProtocolHandler{
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
-		AbCmdHandler cmdHandler = CommandManager.getCommand(wsRequestPacket.getCommand());
+		AbstractCmdHandler cmdHandler = CommandManager.getCommand(wsRequestPacket.getCommand());
 		if(cmdHandler == null){
 			if(!wsRequestPacket.isWsEof())//是否ws分片发包尾帧包
 				return;

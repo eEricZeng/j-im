@@ -1,15 +1,18 @@
 package org.jim.server.command.handler.processor.chat;
 
-import java.util.concurrent.Executor;
-
+import org.jim.common.ImConst;
 import org.jim.common.ImPacket;
+import org.jim.common.packets.ChatBody;
+import org.jim.common.packets.Command;
+import org.jim.common.utils.ChatKit;
+import org.jim.server.command.CommandManager;
+import org.jim.server.command.handler.ChatReqHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.jim.common.packets.Command;
-import org.jim.server.command.CommandManager;
-import org.jim.server.command.handler.ChatReqHandler;
 import org.tio.utils.thread.pool.AbstractQueueRunnable;
+
+import java.util.concurrent.Executor;
 
 /**
  * @author WChao
@@ -21,7 +24,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 	
 	private ChannelContext channelContext = null;
 	
-	private AbstractChatProcessor chatProcessor;
+	private AsyncChatMessageProcessor chatMessageProcessor;
 	
 	@Override
 	public boolean addMsg(ImPacket msg) {
@@ -36,7 +39,7 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 		super(executor);
 		this.channelContext = channelContext;
 		ChatReqHandler chatReqHandler = CommandManager.getCommand(Command.COMMAND_CHAT_REQ,ChatReqHandler.class);
-		chatProcessor = (AbstractChatProcessor)chatReqHandler.getProcessor(channelContext);
+		chatMessageProcessor = chatReqHandler.getProcessor(ImConst.BASE_ASYNC_CHAT_MESSAGE_PROCESSOR,BaseAsyncChatMessageProcessor.class).get(0);
 	}
 
 	@Override
@@ -47,9 +50,10 @@ public class MsgQueueRunnable extends AbstractQueueRunnable<ImPacket> {
 		}
 		ImPacket packet = null;
 		while ((packet = msgQueue.poll()) != null) {
-			if(chatProcessor != null){
+			if(chatMessageProcessor != null){
 				try {
-					chatProcessor.handler(packet, channelContext);
+					ChatBody chatBody = ChatKit.toChatBody(packet.getBody(), channelContext);
+					chatMessageProcessor.handler(chatBody, channelContext);
 				} catch (Exception e) {
 					log.error(e.toString(),e);
 				}

@@ -3,7 +3,7 @@
  */
 package org.jim.server;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
 import org.jim.common.cache.redis.RedissonTemplate;
@@ -44,8 +44,8 @@ public class ImServerGroupContext extends ServerGroupContext{
 		this.imConfig = imConfig;
 		this.setHeartbeatTimeout(imConfig.getHeartbeatTimeout());
 		//是否开启集群
-		if(Const.ON.equals(imConfig.getIsCluster())){
-			imConfig.setIsStore(Const.ON);
+		if(ImConst.ON.equals(imConfig.getIsCluster())){
+			imConfig.setIsStore(ImConst.ON);
 			if(imConfig.getCluster() == null){
 				try{
 					RedisCluster redisCluster = new RedisCluster(RedisClusterConfig.newInstance("REDIS_", RedissonTemplate.me().getRedissonClient(), this));
@@ -59,7 +59,7 @@ public class ImServerGroupContext extends ServerGroupContext{
 		}
 		if (this.timExecutor == null) {
 			LinkedBlockingQueue<Runnable> timQueue = new LinkedBlockingQueue<>();
-			String timThreadName = Const.JIM;
+			String timThreadName = ImConst.JIM;
 			this.timExecutor = new SynThreadPoolExecutor(CORE_POOL_SIZE, CORE_POOL_SIZE, Threads.KEEP_ALIVE_TIME, timQueue,
 					DefaultThreadFactory.getInstance(timThreadName, Thread.NORM_PRIORITY), timThreadName);
 			this.timExecutor.prestartAllCoreThreads();

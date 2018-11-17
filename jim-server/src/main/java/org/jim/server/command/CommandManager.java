@@ -5,7 +5,7 @@ package org.jim.server.command;
 
 import org.jim.common.ImConfig;
 import org.jim.common.packets.Command;
-import org.jim.server.command.handler.processor.ProcessorIntf;
+import org.jim.server.command.handler.processor.CmdProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class CommandManager{
 	/**
 	 * 通用cmd处理命令
 	 */
-	private static  Map<Integer, AbCmdHandler> handlerMap = new HashMap<>();
+	private static  Map<Integer, AbstractCmdHandler> handlerMap = new HashMap<>();
 	private static Logger LOG = LoggerFactory.getLogger(CommandManager.class);
 	
 	private static ImConfig imConfig;
@@ -40,20 +40,20 @@ public class CommandManager{
 	
 	private static void init(List<CommandConfiguration> configurations) throws Exception{
 		for(CommandConfiguration configuration : configurations){
-			Class<AbCmdHandler> cmdHandlerClazz = (Class<AbCmdHandler>)Class.forName(configuration.getCmdHandler());
-			AbCmdHandler cmdHandler = cmdHandlerClazz.newInstance();
+			Class<AbstractCmdHandler> cmdHandlerClazz = (Class<AbstractCmdHandler>)Class.forName(configuration.getCmdHandler());
+			AbstractCmdHandler cmdHandler = cmdHandlerClazz.newInstance();
 			List<String> proCmdHandlerList = configuration.getProCmdhandlers();
 			if(!proCmdHandlerList.isEmpty()){
 				for(String proCmdHandlerClass : proCmdHandlerList){
-					Class<ProcessorIntf> proCmdHandlerClazz = (Class<ProcessorIntf>)Class.forName(proCmdHandlerClass);
-					ProcessorIntf proCmdHandler = proCmdHandlerClazz.newInstance();
+					Class<CmdProcessor> proCmdHandlerClazz = (Class<CmdProcessor>)Class.forName(proCmdHandlerClass);
+					CmdProcessor proCmdHandler = proCmdHandlerClazz.newInstance();
 					cmdHandler.addProcessor(proCmdHandler);
 				}
 			}
 			registerCommand(cmdHandler);
 		}
 	}
-	public static AbCmdHandler registerCommand(AbCmdHandler imCommandHandler) throws Exception{
+	public static AbstractCmdHandler registerCommand(AbstractCmdHandler imCommandHandler) throws Exception{
 		if(imCommandHandler == null || imCommandHandler.command() == null) {
 			return null;
 		}
@@ -69,7 +69,7 @@ public class CommandManager{
 		return null;
 	}
 	
-	public static AbCmdHandler removeCommand(Command command){
+	public static AbstractCmdHandler removeCommand(Command command){
 		if(command == null) {
 			return null;
 		}
@@ -82,14 +82,14 @@ public class CommandManager{
 	}
 	
 	public static <T> T getCommand(Command command,Class<T> clazz){
-		AbCmdHandler cmdHandler = getCommand(command);
+		AbstractCmdHandler cmdHandler = getCommand(command);
 		if(cmdHandler != null){
 			return (T)cmdHandler;
 		}
 		return null;
 	}
 	
-	public static AbCmdHandler getCommand(Command command){
+	public static AbstractCmdHandler getCommand(Command command){
 		if(command == null) {
 			return null;
 		}
@@ -98,7 +98,7 @@ public class CommandManager{
 	
 	public static void init(ImConfig config) {
 		imConfig = config;
-		for(Entry<Integer,AbCmdHandler> entry : handlerMap.entrySet()){
+		for(Entry<Integer,AbstractCmdHandler> entry : handlerMap.entrySet()){
 			try {
 				entry.getValue().setImConfig(imConfig);
 			} catch (Exception e) {

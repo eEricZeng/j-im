@@ -5,7 +5,7 @@ package org.jim.common;
  * @author wchao 
  *
  */
-public interface Const
+public interface ImConst
 {
 	public static final String authkey = "wchao";
 	
@@ -52,5 +52,7 @@ public interface Const
 	public static final String JIM = "JIM";
 	
 	public static final String CONVERTOR = "convertor";
+
+	public static final String BASE_ASYNC_CHAT_MESSAGE_PROCESSOR = "base_async_chat_message_processor";
 	
 }

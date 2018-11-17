@@ -2,7 +2,7 @@ package org.jim.server.handler;
 
 import java.nio.ByteBuffer;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 import org.jim.common.ImSessionContext;
 import org.tio.core.ChannelContext;
@@ -79,7 +79,7 @@ public class ImServerAioHandler implements ServerAioHandler {
 		if(imSessionContext == null){
 			handler = ProtocolHandlerManager.initServerHandlerToChannelContext(buffer, channelContext);
 			ImServerGroupContext imGroupContext = (ImServerGroupContext)imConfig.getGroupContext();
-			channelContext.setAttribute(Const.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
+			channelContext.setAttribute(ImConst.CHAT_QUEUE,new MsgQueueRunnable(channelContext,imGroupContext.getTimExecutor()));
 		}else{
 			handler = (AbProtocolHandler)imSessionContext.getProtocolHandler();
 		}

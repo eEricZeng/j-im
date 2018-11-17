@@ -1,38 +1,48 @@
 package org.jim.server.command.handler;
 
-import org.jim.common.Const;
+import com.google.common.collect.Sets;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jim.common.ImAio;
+import org.jim.common.ImConst;
 import org.jim.common.ImPacket;
-import org.tio.core.ChannelContext;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.ChatType;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.RespBody;
 import org.jim.common.utils.ChatKit;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
+import org.jim.server.command.handler.processor.chat.ChatCmdProcessor;
 import org.jim.server.command.handler.processor.chat.MsgQueueRunnable;
+import org.tio.core.ChannelContext;
+
+import java.util.List;
+
 /**
  * 版本: [1.0]
- * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月22日 下午2:58:59
+ * 功能说明: 聊天请求cmd消息命令处理器
+ * @author : WChao 创建时间: 2017年9月22日 下午2:58:59
  */
-public class ChatReqHandler extends AbCmdHandler {
-	
+public class ChatReqHandler extends AbstractCmdHandler {
+
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
 		if (packet.getBody() == null) {
 			throw new Exception("body is null");
 		}
 		ChatBody chatBody = ChatKit.toChatBody(packet.getBody(), channelContext);
+		packet.setBody(chatBody.toByte());
 		//聊天数据格式不正确
 		if(chatBody == null || chatBody.getChatType() == null){
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
+		List<ChatCmdProcessor> chatProcessors = this.getProcessorAndNotEqualName(Sets.newHashSet(ImConst.BASE_ASYNC_CHAT_MESSAGE_PROCESSOR),ChatCmdProcessor.class);
+		if(CollectionUtils.isNotEmpty(chatProcessors)){
+			chatProcessors.forEach(chatProcessor -> chatProcessor.handler(packet,channelContext));
+		}
 		//异步调用业务处理消息接口
 		if(ChatType.forNumber(chatBody.getChatType()) != null){
-			packet.setBody(chatBody.toByte());
-			MsgQueueRunnable msgQueueRunnable = (MsgQueueRunnable)channelContext.getAttribute(Const.CHAT_QUEUE);
+			MsgQueueRunnable msgQueueRunnable = (MsgQueueRunnable)channelContext.getAttribute(ImConst.CHAT_QUEUE);
 			msgQueueRunnable.addMsg(packet);
 			msgQueueRunnable.getExecutor().execute(msgQueueRunnable);
 		}

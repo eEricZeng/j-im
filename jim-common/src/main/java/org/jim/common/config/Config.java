@@ -4,7 +4,7 @@
 package org.jim.common.config;
 
 import org.jim.common.cluster.ImCluster;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.MessageHelper;
 import org.tio.core.GroupContext;
 import org.tio.core.intf.GroupListener;
 import org.tio.core.ssl.SslConfig;
@@ -38,7 +38,7 @@ public class Config {
 	/**
 	 * 用户消息持久化助手;
 	 */
-	protected IMesssageHelper messageHelper;
+	protected MessageHelper messageHelper;
 	/**
 	 * 是否开启持久化;
 	 */
@@ -105,11 +105,11 @@ public class Config {
 		this.imGroupListener = imGroupListener;
 	}
 
-	public IMesssageHelper getMessageHelper() {
+	public MessageHelper getMessageHelper() {
 		return messageHelper;
 	}
 
-	public void setMessageHelper(IMesssageHelper messageHelper) {
+	public void setMessageHelper(MessageHelper messageHelper) {
 		this.messageHelper = messageHelper;
 	}
 

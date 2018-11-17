@@ -11,7 +11,7 @@ import org.jim.common.packets.UserMessageData;
  * @author WChao
  * @date 2018年4月9日 下午4:31:51
  */
-public interface IMesssageHelper {
+public interface MessageHelper {
 	/**
 	 * 获取im群组、人员绑定监听器;
 	 * @return

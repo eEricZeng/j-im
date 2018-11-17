@@ -6,7 +6,7 @@ package org.jim.common.config;
 import org.jim.common.ImConfig;
 import org.jim.common.cluster.ImCluster;
 import org.jim.common.http.HttpConfig;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.MessageHelper;
 import org.jim.common.ws.WsServerConfig;
 import org.tio.core.GroupContext;
 import org.tio.core.intf.GroupListener;
@@ -52,7 +52,7 @@ public abstract class ImConfigBuilder implements Config.Builder {
 		return this;
 	}
 
-	public ImConfigBuilder setMessageHelper(IMesssageHelper messageHelper) {
+	public ImConfigBuilder setMessageHelper(MessageHelper messageHelper) {
 		this.conf.messageHelper = messageHelper;
 		return this;
 	}

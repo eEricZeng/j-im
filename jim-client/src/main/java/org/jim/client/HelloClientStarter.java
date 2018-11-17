@@ -1,6 +1,6 @@
 package org.jim.client;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImAio;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Command;
@@ -21,7 +21,7 @@ import org.tio.core.Node;
  */
 public class HelloClientStarter {
 	//服务器节点
-	public static Node serverNode = new Node("localhost", Const.SERVER_PORT);
+	public static Node serverNode = new Node("localhost", ImConst.SERVER_PORT);
 
 	//handler, 包括编码、解码、消息处理
 	public static ClientAioHandler aioClientHandler = new HelloClientAioHandler();

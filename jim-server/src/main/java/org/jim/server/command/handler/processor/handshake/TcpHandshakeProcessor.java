@@ -16,7 +16,7 @@ import org.jim.common.utils.ImKit;
  * 功能说明: 
  * 作者: WChao 创建时间: 2017年9月11日 下午8:11:34
  */
-public class TcpHandshakeProcessor implements HandshakeProcessorIntf {
+public class TcpHandshakeProcessor implements HandshakeCmdProcessor {
 
 	@Override
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {

@@ -1,25 +1,25 @@
 package org.jim.server.command.handler;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
 import org.tio.core.ChannelContext;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.MessageHelper;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.RespBody;
 import org.jim.common.packets.UserMessageData;
 import org.jim.common.packets.MessageReqBody;
 import org.jim.common.utils.ImKit;
 import org.jim.common.utils.JsonKit;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
 
 /**
  * 获取聊天消息命令处理器
  * @author WChao
  * @date 2018年4月10日 下午2:40:07
  */
-public class MessageReqHandler extends AbCmdHandler {
+public class MessageReqHandler extends AbstractCmdHandler {
 	
 	@Override
 	public Command command() {
@@ -33,20 +33,30 @@ public class MessageReqHandler extends AbCmdHandler {
 		MessageReqBody messageReqBody = null;
 		try{
 			messageReqBody = JsonKit.toBean(packet.getBody(),MessageReqBody.class);
-		}catch (Exception e) {//用户消息格式不正确
+		}catch (Exception e) {
+			//用户消息格式不正确
 			return getMessageFailedPacket(channelContext);
 		}
 		UserMessageData messageData = null;
-		IMesssageHelper messageHelper = imConfig.getMessageHelper();
-		String groupId = messageReqBody.getGroupId();//群组ID;
-		String userId = messageReqBody.getUserId();//当前用户ID;
-		String fromUserId = messageReqBody.getFromUserId();//消息来源用户ID;
-		Double beginTime = messageReqBody.getBeginTime();//消息区间开始时间;
-		Double endTime = messageReqBody.getEndTime();//消息区间结束时间;
-		Integer offset = messageReqBody.getOffset();//分页偏移量;
-		Integer count = messageReqBody.getCount();//分页数量;
-		int type = messageReqBody.getType();//消息类型;
-		if(StringUtils.isEmpty(userId) || (0 != type && 1 != type) || !Const.ON.equals(imConfig.getIsStore())){//如果用户ID为空或者type格式不正确，获取消息失败;
+		MessageHelper messageHelper = imConfig.getMessageHelper();
+		//群组ID;
+		String groupId = messageReqBody.getGroupId();
+		//当前用户ID;
+		String userId = messageReqBody.getUserId();
+		//消息来源用户ID;
+		String fromUserId = messageReqBody.getFromUserId();
+		//消息区间开始时间;
+		Double beginTime = messageReqBody.getBeginTime();
+		//消息区间结束时间;
+		Double endTime = messageReqBody.getEndTime();
+		//分页偏移量;
+		Integer offset = messageReqBody.getOffset();
+		//分页数量;
+		Integer count = messageReqBody.getCount();
+		//消息类型;
+		int type = messageReqBody.getType();
+		//如果用户ID为空或者type格式不正确，获取消息失败;
+		if(StringUtils.isEmpty(userId) || (0 != type && 1 != type) || !ImConst.ON.equals(imConfig.getIsStore())){
 			return getMessageFailedPacket(channelContext);
 		}
 		if(type == 0){
@@ -54,22 +64,28 @@ public class MessageReqHandler extends AbCmdHandler {
 		}else{
 			resPacket = new RespBody(Command.COMMAND_GET_MESSAGE_RESP,ImStatus.C10018);
 		}
-		if(!StringUtils.isEmpty(groupId)){//群组ID不为空获取用户该群组消息;
-			if(0 == type){//离线消息;
+		//群组ID不为空获取用户该群组消息;
+		if(!StringUtils.isEmpty(groupId)){
+			//离线消息;
+			if(0 == type){
 				messageData = messageHelper.getGroupOfflineMessage(userId,groupId);
-			}else if(1 == type){//历史消息;
+			//历史消息;
+			}else if(1 == type){
 				messageData = messageHelper.getGroupHistoryMessage(userId, groupId,beginTime,endTime,offset,count);
 			}
 		}else if(StringUtils.isEmpty(fromUserId)){
-			if(0 == type){//获取用户所有离线消息(好友+群组);
+			//获取用户所有离线消息(好友+群组);
+			if(0 == type){
 				messageData = messageHelper.getFriendsOfflineMessage(userId);
 			}else{
 				return getMessageFailedPacket(channelContext);
 			}
 		}else{
-			if(0 == type){//获取与指定用户离线消息;
+			//获取与指定用户离线消息;
+			if(0 == type){
 				messageData = messageHelper.getFriendsOfflineMessage(userId, fromUserId);
-			}else if(1 == type){//获取与指定用户历史消息;
+			//获取与指定用户历史消息;
+			}else if(1 == type){
 				messageData = messageHelper.getFriendHistoryMessage(userId, fromUserId,beginTime,endTime,offset,count);
 			}
 		}

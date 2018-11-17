@@ -4,7 +4,7 @@
 package org.jim.server.demo;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 import org.jim.common.config.PropertyImConfigBuilder;
 import org.jim.common.packets.Command;
@@ -48,7 +48,7 @@ public class ImServerDemoStart {
 	 */
 	private static void initSsl(ImConfig imConfig) throws Exception {
 		//开启SSL
-		if(Const.ON.equals(imConfig.getIsSSL())){
+		if(ImConst.ON.equals(imConfig.getIsSSL())){
 			String keyStorePath = PropKit.get("jim.key.store.path");
 			String keyStoreFile = keyStorePath;
 			String trustStoreFile = keyStorePath;

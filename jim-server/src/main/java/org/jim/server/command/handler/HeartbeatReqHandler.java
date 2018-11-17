@@ -2,20 +2,18 @@ package org.jim.server.command.handler;
 
 import org.jim.common.ImPacket;
 import org.jim.common.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.HeartbeatBody;
 import org.jim.common.packets.RespBody;
 import org.jim.common.utils.ImKit;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
+import org.tio.core.ChannelContext;
 
-public class HeartbeatReqHandler extends AbCmdHandler
+/**
+ *
+ */
+public class HeartbeatReqHandler extends AbstractCmdHandler
 {
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(HeartbeatReqHandler.class);
-
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception
 	{

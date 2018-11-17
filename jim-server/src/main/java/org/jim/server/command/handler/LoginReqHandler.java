@@ -1,9 +1,12 @@
 package org.jim.server.command.handler;
 
-import java.util.List;
-
-import org.jim.common.*;
-import org.jim.common.message.IMesssageHelper;
+import org.apache.commons.collections4.CollectionUtils;
+import org.jim.common.ImConst;
+import org.jim.common.ImAio;
+import org.jim.common.ImPacket;
+import org.jim.common.ImSessionContext;
+import org.jim.common.ImStatus;
+import org.jim.common.message.MessageHelper;
 import org.jim.common.packets.Command;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.LoginReqBody;
@@ -12,16 +15,22 @@ import org.jim.common.packets.User;
 import org.jim.common.protocol.IProtocol;
 import org.jim.common.utils.ImKit;
 import org.jim.common.utils.JsonKit;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
 import org.jim.server.command.CommandManager;
-import org.jim.server.command.handler.processor.ProcessorIntf;
-import org.jim.server.command.handler.processor.login.LoginProcessorIntf;
+import org.jim.server.command.handler.processor.login.LoginCmdProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 
-public class LoginReqHandler extends AbCmdHandler {
+import java.util.List;
+
+/**
+ * 登录消息命令处理器
+ * @author WChao
+ * @date 2018年4月10日 下午2:40:07
+ */
+public class LoginReqHandler extends AbstractCmdHandler {
 	private static Logger log = LoggerFactory.getLogger(LoginReqHandler.class);
 
 	@Override
@@ -30,26 +39,26 @@ public class LoginReqHandler extends AbCmdHandler {
 			Aio.remove(channelContext, "body is null");
 			return null;
 		}
-		ProcessorIntf loginProcessor = this.getProcessor(channelContext);
-		if(loginProcessor == null){
-			log.info("登录失败,没有业务处理器!");
+		List<LoginCmdProcessor> loginProcessors = this.getProcessor(channelContext, LoginCmdProcessor.class);
+		if(CollectionUtils.isEmpty(loginProcessors)){
+			log.info("登录失败,没有登录命令业务处理器!");
 			Aio.remove(channelContext, "no login serviceHandler processor!");
 			return null;
 		}
-		LoginProcessorIntf loginServiceHandler = (LoginProcessorIntf)loginProcessor;
+		LoginCmdProcessor loginServiceHandler = loginProcessors.get(0);
 		ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 		LoginReqBody loginReqBody = JsonKit.toBean(packet.getBody(),LoginReqBody.class);
 		
 		LoginRespBody loginRespBody = loginServiceHandler.doLogin(loginReqBody,channelContext);
 		if (loginRespBody == null || loginRespBody.getUser() == null) {
-			log.info("登录失败, loginname:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
+			log.info("登录失败, loginName:{}, password:{}", loginReqBody.getLoginname(), loginReqBody.getPassword());
 			if(loginRespBody == null){
 				loginRespBody = new LoginRespBody(Command.COMMAND_LOGIN_RESP, ImStatus.C10008);
 			}
 			loginRespBody.clear();
 			ImPacket loginRespPacket = new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte());
 			ImAio.bSend(channelContext,loginRespPacket);
-			ImAio.remove(channelContext, "loginname and token is incorrect");
+			ImAio.remove(channelContext, "loginName and token is incorrect");
 			return null;
 		}
 		User user = loginRespBody.getUser();
@@ -59,7 +68,8 @@ public class LoginReqHandler extends AbCmdHandler {
 		user.setTerminal(terminal);
 		imSessionContext.getClient().setUser(user);
 		ImAio.bindUser(channelContext,userId,imConfig.getMessageHelper().getBindListener());
-		bindUnbindGroup(channelContext, user);//初始化绑定或者解绑群组;
+		//初始化绑定或者解绑群组;
+		bindUnbindGroup(channelContext, user);
 		loginServiceHandler.onSuccess(channelContext);
 		loginRespBody.clear();
 		ImPacket loginRespPacket = new ImPacket(Command.COMMAND_LOGIN_RESP, loginRespBody.toByte());
@@ -69,17 +79,18 @@ public class LoginReqHandler extends AbCmdHandler {
 	 * 初始化绑定或者解绑群组;
 	 */
 	public void bindUnbindGroup(ChannelContext channelContext , User user)throws Exception{
-		String userid = user.getId();
+		String userId = user.getId();
 		List<Group> groups = user.getGroups();
 		if( groups != null){
-			boolean isStore = Const.ON.equals(imConfig.getIsStore());
-			IMesssageHelper messageHelper = null;
+			boolean isStore = ImConst.ON.equals(imConfig.getIsStore());
+			MessageHelper messageHelper = null;
 			List<String> groupIds = null;
 			if(isStore){
 				messageHelper = imConfig.getMessageHelper();
-				groupIds = messageHelper.getGroups(userid);
+				groupIds = messageHelper.getGroups(userId);
 			}
-			for(Group group : groups){//绑定群组
+			//绑定群组
+			for(Group group : groups){
 				if(isStore && groupIds != null){
 					groupIds.remove(group.getGroup_id());
 				}
@@ -92,8 +103,8 @@ public class LoginReqHandler extends AbCmdHandler {
 				}
 			}
 			if(isStore && groupIds != null){
-				for(String groupid : groupIds){
-					messageHelper.getBindListener().onAfterGroupUnbind(channelContext, groupid);
+				for(String groupId : groupIds){
+					messageHelper.getBindListener().onAfterGroupUnbind(channelContext, groupId);
 				}
 			}
 		}

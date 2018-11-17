@@ -1,18 +1,15 @@
 package org.jim.server.command.handler.processor.chat;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
 import org.jim.common.packets.ChatBody;
+import org.tio.core.ChannelContext;
 /**
  * @author WChao
  * @date 2018年4月3日 下午1:12:30
  */
-public class DefaultChatProcessor extends AbstractChatProcessor{
-	
-	Logger log = LoggerFactory.getLogger(DefaultChatProcessor.class);
+public class DefaultAsyncChatMessageProcessor extends BaseAsyncChatMessageProcessor {
 	
 	@Override
 	public void doHandler(ChatBody chatBody, ChannelContext channelContext){
+		System.out.println("走一个呗,"+chatBody.toJsonString());
 	}
 }

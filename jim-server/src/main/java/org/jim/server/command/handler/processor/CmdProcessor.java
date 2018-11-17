@@ -10,7 +10,7 @@ import org.tio.core.ChannelContext;
  * @author WChao
  *
  */
-public interface ProcessorIntf {
+public interface CmdProcessor {
 	/**
 	 * 不同协议判断方法
 	 * @param channelContext

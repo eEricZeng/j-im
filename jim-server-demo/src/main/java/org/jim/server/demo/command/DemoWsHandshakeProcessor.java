@@ -18,7 +18,7 @@ import org.tio.core.ChannelContext;
  * @author WChao
  *
  */
-public class DemoWsHandshakeProcessor extends WsHandshakeProcessor{
+public class DemoWsHandshakeProcessor extends WsHandshakeProcessor {
 
 	@Override
 	public void onAfterHandshaked(ImPacket packet, ChannelContext channelContext) throws Exception {

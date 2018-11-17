@@ -2,7 +2,7 @@ package org.jim.client;
 
 import java.nio.ByteBuffer;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.Protocol;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.ChannelContext;
@@ -32,7 +32,7 @@ public class HelloClientAioHandler  implements AioHandler,ClientAioHandler
 		byte[] body = helloPacket.getBody();
 		if (body != null)
 		{
-			String str = new String(body, Const.CHARSET);
+			String str = new String(body, ImConst.CHARSET);
 			System.out.println("收到消息：" + str);
 		}
 

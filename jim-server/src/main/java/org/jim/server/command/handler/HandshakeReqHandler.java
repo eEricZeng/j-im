@@ -1,26 +1,33 @@
 package org.jim.server.command.handler;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.jim.common.ImAio;
 import org.jim.common.ImPacket;
-import org.tio.core.Aio;
-import org.tio.core.ChannelContext;
 import org.jim.common.http.HttpRequest;
 import org.jim.common.packets.Command;
 import org.jim.common.ws.WsSessionContext;
-import org.jim.server.command.AbCmdHandler;
-import org.jim.server.command.handler.processor.ProcessorIntf;
-import org.jim.server.command.handler.processor.handshake.HandshakeProcessorIntf;
+import org.jim.server.command.AbstractCmdHandler;
+import org.jim.server.command.handler.processor.handshake.HandshakeCmdProcessor;
+import org.tio.core.Aio;
+import org.tio.core.ChannelContext;
 
-public class HandshakeReqHandler extends AbCmdHandler {
+import java.util.List;
+
+/**
+ * 版本: [1.0]
+ * 功能说明: 心跳cmd命令处理器
+ * @author : WChao 创建时间: 2017年9月21日 下午3:33:23
+ */
+public class HandshakeReqHandler extends AbstractCmdHandler {
 	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		ProcessorIntf proCmdHandler = this.getProcessor(channelContext);
-		if(proCmdHandler == null){
+		List<HandshakeCmdProcessor> handshakeProcessors = this.getProcessor(channelContext,HandshakeCmdProcessor.class);
+		if(CollectionUtils.isEmpty(handshakeProcessors)){
 			Aio.remove(channelContext, "没有对应的握手协议处理器HandshakeProCmd...");
 			return null;
 		}
-		HandshakeProcessorIntf handShakeProCmdHandler = (HandshakeProcessorIntf)proCmdHandler;
+		HandshakeCmdProcessor handShakeProCmdHandler = handshakeProcessors.get(0);
 		ImPacket handShakePacket = handShakeProCmdHandler.handshake(packet, channelContext);
 		if (handShakePacket == null) {
 			Aio.remove(channelContext, "业务层不同意握手");

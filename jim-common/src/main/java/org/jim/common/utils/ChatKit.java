@@ -5,7 +5,7 @@ package org.jim.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImAio;
 import org.jim.common.ImPacket;
 import org.jim.common.ImSessionContext;
@@ -142,7 +142,7 @@ public class ChatKit {
       * @return
       */
      public static boolean isOnline(String userId ,Config imConfig){
-    	 boolean isStore = Const.ON.equals(imConfig.getIsStore());
+    	 boolean isStore = ImConst.ON.equals(imConfig.getIsStore());
 		 if(isStore){
 			return imConfig.getMessageHelper().isOnline(userId);
 		 }
@@ -162,8 +162,8 @@ public class ChatKit {
      public static String sessionId(String from , String to){
     	 String sessionId = "";
     	 try{
-	    	 byte[] fBytes = from.getBytes(Const.CHARSET);
-	    	 byte[] tBytes = to.getBytes(Const.CHARSET);
+	    	 byte[] fBytes = from.getBytes(ImConst.CHARSET);
+	    	 byte[] tBytes = to.getBytes(ImConst.CHARSET);
 	    	 boolean isFromMax = fBytes.length > tBytes.length;
 	    	 boolean isEqual = fBytes.length == tBytes.length;
 	    	 if(isFromMax){

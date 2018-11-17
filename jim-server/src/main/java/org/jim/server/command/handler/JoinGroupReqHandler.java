@@ -18,23 +18,23 @@ import org.jim.common.packets.RespBody;
 import org.jim.common.packets.User;
 import org.jim.common.utils.ImKit;
 import org.jim.common.utils.JsonKit;
-import org.jim.server.command.AbCmdHandler;
+import org.jim.server.command.AbstractCmdHandler;
 /**
  * 
  * 版本: [1.0]
- * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月21日 下午3:33:23
+ * 功能说明: 加入群组消息cmd命令处理器
+ * @author : WChao 创建时间: 2017年9月21日 下午3:33:23
  */
-public class JoinGroupReqHandler extends AbCmdHandler {
+public class JoinGroupReqHandler extends AbstractCmdHandler {
 	
 	private static Logger log = LoggerFactory.getLogger(JoinGroupReqHandler.class);
 	
 	@Override
 	public ImPacket handler(ImPacket packet, ChannelContext channelContext) throws Exception {
-		
-		ImPacket joinGroupRespPacket = bindGroup(packet, channelContext);//绑定群组;
-		joinGroupNotify(packet,channelContext);//发送进房间通知;
-
+		//绑定群组;
+		ImPacket joinGroupRespPacket = bindGroup(packet, channelContext);
+		//发送进房间通知;
+		joinGroupNotify(packet,channelContext);
 		return joinGroupRespPacket;
 	}
 	/**
@@ -69,23 +69,20 @@ public class JoinGroupReqHandler extends AbCmdHandler {
 			throw new Exception("body is null");
 		}
 		Group joinGroup = JsonKit.toBean(packet.getBody(),Group.class);
-
 		String groupId = joinGroup.getGroup_id();
 		if (StringUtils.isBlank(groupId)) {
 			log.error("group is null,{}", channelContext);
 			Aio.close(channelContext, "group is null when join group");
 			return null;
 		}
-		
 		ImAio.bindGroup(channelContext, groupId,imConfig.getMessageHelper().getBindListener());
 
 		//回一条消息，告诉对方进群结果
 		JoinGroupResult joinGroupResult = JoinGroupResult.JOIN_GROUP_RESULT_OK;
-		
 		JoinGroupRespBody joinGroupRespBody = new JoinGroupRespBody();
 		joinGroupRespBody.setGroup(groupId);
 		joinGroupRespBody.setResult(joinGroupResult);
-		
+
 		RespBody joinRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_RESP,ImStatus.C10011).setData(joinGroupRespBody);
 		ImPacket respPacket = ImKit.ConvertRespPacket(joinRespBody, channelContext);
 		return respPacket;

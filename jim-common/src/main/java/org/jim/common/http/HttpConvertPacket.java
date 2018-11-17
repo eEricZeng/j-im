@@ -3,7 +3,7 @@
  */
 package org.jim.common.http;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImPacket;
 import org.jim.common.http.session.HttpSession;
 import org.jim.common.packets.Command;
@@ -24,7 +24,7 @@ public class HttpConvertPacket implements IConvertProtocolPacket {
 	public ImPacket RespPacket(byte[] body, Command command,ChannelContext channelContext) {
 		Object sessionContext = channelContext.getAttribute();
 		if(sessionContext instanceof HttpSession){
-			HttpRequest request = (HttpRequest)channelContext.getAttribute(Const.HTTP_REQUEST);
+			HttpRequest request = (HttpRequest)channelContext.getAttribute(ImConst.HTTP_REQUEST);
 			HttpResponse response = new HttpResponse(request,request.getHttpConfig());
 			response.setBody(body, request);
 			response.setCommand(command);

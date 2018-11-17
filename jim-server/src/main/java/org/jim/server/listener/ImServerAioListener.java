@@ -1,10 +1,10 @@
 package org.jim.server.listener;
 
 import org.apache.log4j.Logger;
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 import org.jim.common.ImSessionContext;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.MessageHelper;
 import org.jim.common.packets.Client;
 import org.jim.common.packets.User;
 import org.tio.core.ChannelContext;
@@ -67,7 +67,7 @@ public class ImServerAioListener implements ServerAioListener {
 	 */
 	@Override
 	public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) {
-		IMesssageHelper messageHelper = imConfig.getMessageHelper();
+		MessageHelper messageHelper = imConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 			if(imSessionContext == null)
@@ -78,7 +78,7 @@ public class ImServerAioListener implements ServerAioListener {
 			User onlineUser = client.getUser();
 			if(onlineUser == null)
 				return;
-			messageHelper.getBindListener().initUserTerminal(channelContext, onlineUser.getTerminal(), Const.OFFLINE);
+			messageHelper.getBindListener().initUserTerminal(channelContext, onlineUser.getTerminal(), ImConst.OFFLINE);
 		}
 	}
 	/**

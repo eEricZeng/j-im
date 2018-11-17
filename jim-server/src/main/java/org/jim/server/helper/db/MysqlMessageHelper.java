@@ -3,7 +3,7 @@ package org.jim.server.helper.db;
 import java.util.List;
 
 import org.jim.common.listener.ImBindListener;
-import org.jim.common.message.IMesssageHelper;
+import org.jim.common.message.MessageHelper;
 import org.jim.common.packets.ChatBody;
 import org.jim.common.packets.Group;
 import org.jim.common.packets.User;
@@ -14,7 +14,7 @@ import org.jim.common.packets.UserMessageData;
  * @author WChao
  * @date 2018年4月10日 下午4:06:26
  */
-public class MysqlMessageHelper implements IMesssageHelper {
+public class MysqlMessageHelper implements MessageHelper {
 
 	@Override
 	public ImBindListener getBindListener() {

@@ -3,7 +3,7 @@
  */
 package org.jim.server;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 import org.jim.server.handler.ImServerAioHandler;
 import org.jim.server.helper.redis.RedisMessageHelper;
@@ -56,7 +56,7 @@ public class ImServerStarter {
 			imConfig.setMessageHelper(new RedisMessageHelper(imConfig));
 		}
 		//开启SSL
-		if(Const.ON.equals(imConfig.getIsSSL())){
+		if(ImConst.ON.equals(imConfig.getIsSSL())){
 			SslConfig sslConfig = imConfig.getSslConfig();
 			if(sslConfig != null) {
 				imServerGroupContext.setSslConfig(sslConfig);

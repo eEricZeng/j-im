@@ -5,7 +5,7 @@ package org.jim.server.http;
 
 import java.nio.ByteBuffer;
 
-import org.jim.common.Const;
+import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +96,7 @@ public class HttpProtocolHandler extends AbProtocolHandler{
 	@Override
 	public Packet decode(ByteBuffer buffer, ChannelContext channelContext)throws AioDecodeException {
 		HttpRequest request = HttpRequestDecoder.decode(buffer, channelContext,true);
-		channelContext.setAttribute(Const.HTTP_REQUEST,request);
+		channelContext.setAttribute(ImConst.HTTP_REQUEST,request);
 		return request;
 	}
 	
