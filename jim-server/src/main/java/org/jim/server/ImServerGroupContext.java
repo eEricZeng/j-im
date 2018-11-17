@@ -3,8 +3,6 @@
  */
 package org.jim.server;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.jim.common.Const;
 import org.jim.common.ImAio;
 import org.jim.common.ImConfig;
@@ -22,7 +20,10 @@ import org.tio.utils.Threads;
 import org.tio.utils.thread.pool.DefaultThreadFactory;
 import org.tio.utils.thread.pool.SynThreadPoolExecutor;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
+ *
  * @author WChao
  *
  */
@@ -31,7 +32,9 @@ public class ImServerGroupContext extends ServerGroupContext{
 	private Logger log = LoggerFactory.getLogger(ImServerGroupContext.class);
 	
 	private static int CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2;
-	//IM配置加载类;
+	/**
+	 * IM配置加载类;
+	 */
 	private ImConfig imConfig;
 	
 	protected SynThreadPoolExecutor timExecutor = null;
@@ -40,7 +43,8 @@ public class ImServerGroupContext extends ServerGroupContext{
 		super(imServerAioHandler, imServerAioListener);
 		this.imConfig = imConfig;
 		this.setHeartbeatTimeout(imConfig.getHeartbeatTimeout());
-		if(Const.ON.equals(imConfig.getIsCluster())){//是否开启集群
+		//是否开启集群
+		if(Const.ON.equals(imConfig.getIsCluster())){
 			imConfig.setIsStore(Const.ON);
 			if(imConfig.getCluster() == null){
 				try{

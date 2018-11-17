@@ -3,6 +3,7 @@
  */
 package org.jim.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jim.common.Const;
 import org.jim.common.ImAio;
@@ -67,7 +68,9 @@ public class ChatKit {
 				if(chatReqBody.getCreateTime() == null) {
 					chatReqBody.setCreateTime(System.currentTimeMillis());
 				}
-				chatReqBody.setId(UUIDSessionIdGenerator.instance.sessionId(null));
+				if(StringUtils.isEmpty(chatReqBody.getId())){
+					chatReqBody.setId(UUIDSessionIdGenerator.instance.sessionId(null));
+				}
 				return chatReqBody;
 			}
 		}catch(Exception e){

@@ -3,10 +3,10 @@
  */
 package org.jim.common.packets;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.Serializable;
 import java.util.List;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * 版本: [1.0]
@@ -16,15 +16,42 @@ import com.alibaba.fastjson.JSONObject;
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	private String id;//用户id;
-	private String nick; //user nick
-	private String avatar; //用户头像
-	private String status;//在线状态(online、offline)
-	private String sign;//个性签名;
-	private String terminal;//用户所属终端;
-	private List<Group> friends;//好友列表;
-	private List<Group> groups;//群组列表;
-	private JSONObject extras;//扩展预留字段;
+	/**
+	 * 用户id;
+	 */
+	private String id;
+	/**
+	 * user nick
+	 */
+	private String nick;
+	/**
+	 * 用户头像
+	 */
+	private String avatar;
+	/**
+	 * 在线状态(online、offline)
+	 */
+	private String status;
+	/**
+	 * 个性签名;
+	 */
+	private String sign;
+	/**
+	 * 用户所属终端;
+	 */
+	private String terminal;
+	/**
+	 * 好友列表;
+	 */
+	private List<Group> friends;
+	/**
+	 * 群组列表;
+	 */
+	private List<Group> groups;
+	/**
+	 * 扩展预留字段;
+	 */
+	private JSONObject extras;
 	
 	public User(){}
 	public User(String id , String nick){

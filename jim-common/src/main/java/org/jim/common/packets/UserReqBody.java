@@ -11,10 +11,22 @@ package org.jim.common.packets;
 public class UserReqBody extends Message{
 	
 	private static final long serialVersionUID = 1861307516710578262L;
-	private String userid;//用户id;
-	private Integer type;//0:单个,1:所有在线用户,2:所有用户(在线+离线);
-	private String friend_group_id;//好友分组id;
-	private String group_id;//群组id;
+	/**
+	 * 用户id;
+	 */
+	private String userid;
+	/**
+	 * 0:单个,1:所有在线用户,2:所有用户(在线+离线);
+	 */
+	private Integer type;
+	/**
+	 * 好友分组id;
+	 */
+	private String friend_group_id;
+	/**
+	 * 群组id;
+	 */
+	private String group_id;
 	
 	public String getUserid() {
 		return userid;

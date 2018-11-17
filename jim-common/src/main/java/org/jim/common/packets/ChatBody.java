@@ -13,12 +13,30 @@ import com.alibaba.fastjson.JSONObject;
 public class ChatBody extends Message {
 	
 	private static final long serialVersionUID = 5731474214655476286L;
-	private String from;//来自channel id;
-	private String to;//目标channel id;
-	private Integer msgType;//消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)
-	private Integer chatType;//聊天类型;(如公聊、私聊)
-	private String content;//消息内容;
-	private String group_id;//消息发到哪个群组;
+	/**
+	 * 发送用户id;
+	 */
+	private String from;
+	/**
+	 * 目标用户id;
+	 */
+	private String to;
+	/**
+	 * 消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)
+	 */
+	private Integer msgType;
+	/**
+	 * 聊天类型;(如公聊、私聊)
+	 */
+	private Integer chatType;
+	/**
+	 * 消息内容;
+	 */
+	private String content;
+	/**
+	 * 消息发到哪个群组;
+	 */
+	private String group_id;
 	
 	private ChatBody(){}
 	
@@ -84,13 +102,30 @@ public class ChatBody extends Message {
 	}
 	
 	public static class Builder extends Message.Builder<ChatBody,ChatBody.Builder>{
-		
-		private String from;//来自channel id;
-		private String to;//目标channel id;
-		private Integer msgType;//消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)
-		private Integer chatType;//聊天类型;(如公聊、私聊)
-		private String content;//消息内容;
-		private String group_id;//消息发到哪个群组;
+		/**
+		 * 来自user_id;
+		 */
+		private String from;
+		/**
+		 * 目标user_id;
+		 */
+		private String to;
+		/**
+		 * 消息类型;(如：0:text、1:image、2:voice、3:vedio、4:music、5:news)
+		 */
+		private Integer msgType;
+		/**
+		 * 聊天类型;(如公聊、私聊)
+		 */
+		private Integer chatType;
+		/**
+		 * 消息内容;
+		 */
+		private String content;
+		/**
+		 * 消息发到哪个群组;
+		 */
+		private String group_id;
 		
 		public Builder(){};
 		

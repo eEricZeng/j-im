@@ -17,7 +17,7 @@ public class ImConfig extends Config{
 	 */
 	private HttpConfig httpConfig;
 	/**
-	 * websocket相关配置;
+	 * WebSocket相关配置;
 	 */
 	private WsServerConfig wsServerConfig;
 	

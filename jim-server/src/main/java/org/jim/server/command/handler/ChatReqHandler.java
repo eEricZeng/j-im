@@ -24,33 +24,41 @@ public class ChatReqHandler extends AbCmdHandler {
 			throw new Exception("body is null");
 		}
 		ChatBody chatBody = ChatKit.toChatBody(packet.getBody(), channelContext);
-		if(chatBody == null || chatBody.getChatType() == null){//聊天数据格式不正确
+		//聊天数据格式不正确
+		if(chatBody == null || chatBody.getChatType() == null){
 			ImPacket respChatPacket = ChatKit.dataInCorrectRespPacket(channelContext);
 			return respChatPacket;
 		}
-		if(ChatType.forNumber(chatBody.getChatType()) != null){//异步调用业务处理消息接口
+		//异步调用业务处理消息接口
+		if(ChatType.forNumber(chatBody.getChatType()) != null){
+			packet.setBody(chatBody.toByte());
 			MsgQueueRunnable msgQueueRunnable = (MsgQueueRunnable)channelContext.getAttribute(Const.CHAT_QUEUE);
 			msgQueueRunnable.addMsg(packet);
 			msgQueueRunnable.getExecutor().execute(msgQueueRunnable);
 		}
 		ImPacket chatPacket = new ImPacket(Command.COMMAND_CHAT_REQ,new RespBody(Command.COMMAND_CHAT_REQ,chatBody).toByte());
-		chatPacket.setSynSeq(packet.getSynSeq());//设置同步序列号;
-		if(ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){//私聊
+		//设置同步序列号;
+		chatPacket.setSynSeq(packet.getSynSeq());
+		//私聊
+		if(ChatType.CHAT_TYPE_PRIVATE.getNumber() == chatBody.getChatType()){
 			String toId = chatBody.getTo();
 			if(ChatKit.isOnline(toId,imConfig)){
 				ImAio.sendToUser(toId, chatPacket);
-				return ChatKit.sendSuccessRespPacket(channelContext);//发送成功响应包
+				//发送成功响应包
+				return ChatKit.sendSuccessRespPacket(channelContext);
 			}else{
-				return ChatKit.offlineRespPacket(channelContext);//用户不在线响应包
+				//用户不在线响应包
+				return ChatKit.offlineRespPacket(channelContext);
 			}
-		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){//群聊
+			//群聊
+		}else if(ChatType.CHAT_TYPE_PUBLIC.getNumber() == chatBody.getChatType()){
 			String group_id = chatBody.getGroup_id();
 			ImAio.sendToGroup(group_id, chatPacket);
-			return ChatKit.sendSuccessRespPacket(channelContext);//发送成功响应包
+			//发送成功响应包
+			return ChatKit.sendSuccessRespPacket(channelContext);
 		}
 		return null;
 	}
-	
 	@Override
 	public Command command() {
 		return Command.COMMAND_CHAT_REQ;

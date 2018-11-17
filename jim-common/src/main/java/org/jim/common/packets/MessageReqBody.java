@@ -7,15 +7,38 @@ package org.jim.common.packets;
 public class MessageReqBody extends Message {
 
 	private static final long serialVersionUID = -4748178964168947701L;
-	
-	private String fromUserId;//发送用户id;
-	private String userId;//接收用户id;
-	private String groupId;//群组id;
-	private Integer type;//0:离线消息,1:历史消息;
-	private Double beginTime;//消息开始时间;
-	private Double endTime;//消息结束时间
-	private Integer offset;//分页偏移量
-	private Integer count;//数量
+	/**
+	 * 发送用户id;
+	 */
+	private String fromUserId;
+	/**
+	 * 接收用户id;
+	 */
+	private String userId;
+	/**
+	 * 群组id;
+	 */
+	private String groupId;
+	/**
+	 * 0:离线消息,1:历史消息;
+	 */
+	private Integer type;
+	/**
+	 * 消息开始时间;
+	 */
+	private Double beginTime;
+	/**
+	 * 消息结束时间
+	 */
+	private Double endTime;
+	/**
+	 * 分页偏移量
+	 */
+	private Integer offset;
+	/**
+	 * 数量
+	 */
+	private Integer count;
 	
 	public String getFromUserId() {
 		return fromUserId;

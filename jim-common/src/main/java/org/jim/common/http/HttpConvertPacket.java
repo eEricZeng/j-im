@@ -23,7 +23,7 @@ public class HttpConvertPacket implements IConvertProtocolPacket {
 	@Override
 	public ImPacket RespPacket(byte[] body, Command command,ChannelContext channelContext) {
 		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext instanceof HttpSession){//
+		if(sessionContext instanceof HttpSession){
 			HttpRequest request = (HttpRequest)channelContext.getAttribute(Const.HTTP_REQUEST);
 			HttpResponse response = new HttpResponse(request,request.getHttpConfig());
 			response.setBody(body, request);

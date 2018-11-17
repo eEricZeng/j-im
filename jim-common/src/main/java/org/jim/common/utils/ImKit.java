@@ -3,13 +3,7 @@
  */
 package org.jim.common.utils;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import cn.hutool.core.bean.BeanUtil;
 import org.jim.common.Const;
 import org.jim.common.ImPacket;
 import org.jim.common.ImStatus;
@@ -28,7 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 
-import cn.hutool.core.bean.BeanUtil;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 /**
  * IM工具类;
  * @author WChao
@@ -51,7 +50,7 @@ public class ImKit {
 	/**
 	 * 功能描述：[转换不同协议响应包]
 	 * @author：WChao 创建时间: 2017年9月21日 下午3:21:54
-	 * @param body
+	 * @param respBody
 	 * @param channelContext
 	 * @return
 	 *
@@ -160,7 +159,6 @@ public class ImKit {
 	/**
      * 复制用户信息不包括friends、groups下的users信息;
      * @param source
-     * @param target
      * @return
      */
     public static User copyUserWithoutFriendsGroups(User source){
@@ -175,7 +173,6 @@ public class ImKit {
     /**
      * 复制用户信息不包括friends、groups下的users信息;
      * @param source
-     * @param target
      * @return
      */
     public static User copyUserWithoutUsers(User source){

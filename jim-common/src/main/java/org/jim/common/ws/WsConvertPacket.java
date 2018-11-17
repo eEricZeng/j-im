@@ -16,12 +16,13 @@ import org.tio.core.ChannelContext;
 public class WsConvertPacket implements IConvertProtocolPacket {
 
 	/**
-	 * Websocket响应包;
+	 * WebSocket响应包;
 	 */
 	@Override
 	public ImPacket RespPacket(byte[] body, Command command,ChannelContext channelContext) {
 		Object sessionContext = channelContext.getAttribute();
-		if(sessionContext instanceof WsSessionContext){//转ws协议响应包;
+		//转ws协议响应包;
+		if(sessionContext instanceof WsSessionContext){
 			WsResponsePacket wsResponsePacket = new WsResponsePacket();
 			wsResponsePacket.setBody(body);
 			wsResponsePacket.setWsOpcode(Opcode.TEXT);

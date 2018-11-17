@@ -3,25 +3,26 @@
  */
 package org.jim.server.command;
 
+import org.jim.common.ImConfig;
+import org.jim.common.packets.Command;
+import org.jim.server.command.handler.processor.ProcessorIntf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jim.common.ImConfig;
-import org.jim.common.packets.Command;
-import org.jim.server.command.handler.processor.ProcessorIntf;
 /**
  * 版本: [1.0]
  * 功能说明: 命令执行管理器;
- * 作者: WChao 创建时间: 2017年7月17日 下午2:23:41
+ * @author : WChao 创建时间: 2017年7月17日 下午2:23:41
  */
-@SuppressWarnings("unchecked")
 public class CommandManager{
-	
-	private static  Map<Integer, AbCmdHandler> handlerMap = new HashMap<>();//通用cmd处理命令
+	/**
+	 * 通用cmd处理命令
+	 */
+	private static  Map<Integer, AbCmdHandler> handlerMap = new HashMap<>();
 	private static Logger LOG = LoggerFactory.getLogger(CommandManager.class);
 	
 	private static ImConfig imConfig;
@@ -53,11 +54,13 @@ public class CommandManager{
 		}
 	}
 	public static AbCmdHandler registerCommand(AbCmdHandler imCommandHandler) throws Exception{
-		if(imCommandHandler == null || imCommandHandler.command() == null)
+		if(imCommandHandler == null || imCommandHandler.command() == null) {
 			return null;
+		}
 		int cmd_number = imCommandHandler.command().getNumber();
-		if(Command.forNumber(cmd_number) == null)
-			throw new Exception("注册cmd处理器失败,不合法的cmd命令码:"+cmd_number+",请在Command枚举类中添加!");
+		if(Command.forNumber(cmd_number) == null) {
+			throw new Exception("注册cmd处理器失败,不合法的cmd命令码:" + cmd_number + ",请在Command枚举类中添加!");
+		}
 		if(handlerMap.get(cmd_number) == null)
 		{
 			imCommandHandler.setImConfig(imConfig);
@@ -67,8 +70,9 @@ public class CommandManager{
 	}
 	
 	public static AbCmdHandler removeCommand(Command command){
-		if(command == null)
+		if(command == null) {
 			return null;
+		}
 		int cmd_value = command.getNumber();
 		if(handlerMap.get(cmd_value) != null)
 		{
@@ -86,8 +90,9 @@ public class CommandManager{
 	}
 	
 	public static AbCmdHandler getCommand(Command command){
-		if(command == null)
+		if(command == null) {
 			return null;
+		}
 		return handlerMap.get(command.getNumber());
 	}
 	

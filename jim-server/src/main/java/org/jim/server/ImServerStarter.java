@@ -3,8 +3,6 @@
  */
 package org.jim.server;
 
-import java.io.IOException;
-
 import org.jim.common.Const;
 import org.jim.common.ImConfig;
 import org.jim.server.handler.ImServerAioHandler;
@@ -14,6 +12,8 @@ import org.jim.server.listener.ImServerAioListener;
 import org.tio.core.intf.GroupListener;
 import org.tio.core.ssl.SslConfig;
 import org.tio.server.AioServer;
+
+import java.io.IOException;
 
 /**
  * 
@@ -55,7 +55,8 @@ public class ImServerStarter {
 		if(imConfig.getMessageHelper() == null){
 			imConfig.setMessageHelper(new RedisMessageHelper(imConfig));
 		}
-		if(Const.ON.equals(imConfig.getIsSSL())){//开启SSL
+		//开启SSL
+		if(Const.ON.equals(imConfig.getIsSSL())){
 			SslConfig sslConfig = imConfig.getSslConfig();
 			if(sslConfig != null) {
 				imServerGroupContext.setSslConfig(sslConfig);
