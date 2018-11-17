@@ -10,6 +10,6 @@ public class DefaultAsyncChatMessageProcessor extends BaseAsyncChatMessageProces
 	
 	@Override
 	public void doHandler(ChatBody chatBody, ChannelContext channelContext){
-		System.out.println("走一个呗,"+chatBody.toJsonString());
+
 	}
 }
