@@ -71,19 +71,6 @@
 	<pluginRepositories>
 
 	</pluginRepositories>
-	<!-- 发布位置配置 -->
-	<distributionManagement>
-		<repository>
-			<id>central</id>
-			<name>libs-release</name>
-			<url>https://mavenlib.izaodao.com/artifactory/libs-release</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>https://mavenlib.izaodao.com/artifactory/libs-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
