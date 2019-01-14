@@ -67,6 +67,9 @@ public class ImServerAioListener implements ServerAioListener {
 	 */
 	@Override
 	public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) {
+		if (imConfig == null) {
+			return;
+		}
 		MessageHelper messageHelper = imConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();

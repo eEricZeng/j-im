@@ -5,7 +5,7 @@
 	<artifactId>jim-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
-	<version>2.5.0.v20181115-RELEASE</version>
+	<version>2.6.0.v20190114-RELEASE</version>
 	<description>Jim-parent is the dependent parent project of J-IM communication establishment.</description>
 	<url>http://www.j-im.org/</url>
 	<licenses>
@@ -34,7 +34,7 @@
 		<module>../jim-server-demo</module>
 	</modules>
 	<properties>
-		<jim.version>2.5.0.v20181115-RELEASE</jim.version>
+		<jim.version>2.6.0.v20190114-RELEASE</jim.version>
 		<tio-core.version>2.4.0.v20180508-RELEASE</tio-core.version>
 		<tio-utils.version>2.4.0.v20180508-RELEASE</tio-utils.version>
 
@@ -71,7 +71,19 @@
 	<pluginRepositories>
 
 	</pluginRepositories>
-
+	<!-- 发布位置配置 -->
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>https://mavenlib.izaodao.com/artifactory/libs-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://mavenlib.izaodao.com/artifactory/libs-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -281,24 +293,7 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<!-- 生成的jar中，不要包含pom.xml和pom.properties这两个文件 -->
-						<addMavenDescriptor>true</addMavenDescriptor>
-					</archive>
 
-					<!-- 过滤掉不希望包含在jar中的文件 -->
-					<excludes>
-						<!-- <exclude>**/*.properties</exclude> -->
-						<exclude>**/*.conf</exclude>
-						<exclude>**/*.xml</exclude>
-					</excludes>
-				</configuration>
-				
-			</plugin>
 		</plugins>
 		<!-- 适配idea下生成不了配置文件问题 -->
 		<resources>  
