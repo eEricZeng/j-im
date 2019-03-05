@@ -369,7 +369,6 @@ public class ImAio {
 	 * @param bindListener(解绑定监听器回调)
 	 */
 	public static void unbindUser(String userId,ImBindListener bindListener){
-		Aio.unbindUser(imConfig.getGroupContext(), userId);
 		if(bindListener != null){
 			try {
 				SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);
@@ -381,7 +380,7 @@ public class ImAio {
 				try{
 					Set<ChannelContext> channels = userChannelContexts.getObj();
 					for(ChannelContext channelContext : channels){
-						bindListener.onAfterUserBind(channelContext, userId);
+						bindListener.onAfterUserUnbind(channelContext, userId);
 					}
 				}finally{
 					readLock.unlock();
@@ -390,6 +389,7 @@ public class ImAio {
 				log.error(e.toString(),e);
 			}
 		}
+		Aio.unbindUser(imConfig.getGroupContext(), userId);
 	}
 	/**
 	 * 绑定群组;
