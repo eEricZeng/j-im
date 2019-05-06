@@ -28,11 +28,13 @@ public class ImDemoGroupListener extends ImGroupListener{
 		ExitGroupNotifyRespBody exitGroupNotifyRespBody = new ExitGroupNotifyRespBody();
 		exitGroupNotifyRespBody.setGroup(group);
 		Client client = imSessionContext.getClient();
-		if(client == null)
+		if(client == null){
 			return;
+		}
 		User clientUser = client.getUser();
-		if(clientUser == null)
+		if(clientUser == null) {
 			return;
+		}
 		User notifyUser = new User(clientUser.getId(),clientUser.getNick());
 		exitGroupNotifyRespBody.setUser(notifyUser);
 		

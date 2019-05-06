@@ -73,14 +73,17 @@ public class ImServerAioListener implements ServerAioListener {
 		MessageHelper messageHelper = imConfig.getMessageHelper();
 		if(messageHelper != null){
 			ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
-			if(imSessionContext == null)
+			if(imSessionContext == null) {
 				return;
+			}
 			Client client = imSessionContext.getClient();
-			if(client == null)
+			if(client == null) {
 				return;
+			}
 			User onlineUser = client.getUser();
-			if(onlineUser == null)
+			if(onlineUser == null) {
 				return;
+			}
 			messageHelper.getBindListener().initUserTerminal(channelContext, onlineUser.getTerminal(), ImConst.OFFLINE);
 		}
 	}

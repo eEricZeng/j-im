@@ -59,8 +59,8 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
 		JoinGroupNotifyRespBody joinGroupNotifyRespBody = new JoinGroupNotifyRespBody().setGroup(groupId).setUser(notifyUser);
 		RespBody notifyRespBody = new RespBody(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,joinGroupNotifyRespBody);
 		
-		ImPacket joinGroupNotifyrespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
-		ImAio.sendToGroup(groupId, joinGroupNotifyrespPacket);
+		ImPacket joinGroupNotifyRespPacket = new ImPacket(Command.COMMAND_JOIN_GROUP_NOTIFY_RESP,notifyRespBody.toByte());
+		ImAio.sendToGroup(groupId, joinGroupNotifyRespPacket);
 	}
 	/**
 	 * 绑定群组

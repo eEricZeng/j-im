@@ -16,12 +16,7 @@ import org.tio.core.ChannelContextFilter;
 import org.tio.core.GroupContext;
 import org.tio.utils.lock.SetWithLock;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 /**
@@ -42,7 +37,7 @@ public class ImAio {
 	 */
 	public static User getUser(String userId){
 		SetWithLock<ChannelContext> userChannelContexts = ImAio.getChannelContextsByUserId(userId);
-		if(userChannelContexts == null) {
+		if(Objects.isNull(userChannelContexts)) {
 			return null;
 		}
 		ReadLock readLock = userChannelContexts.getLock().readLock();

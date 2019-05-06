@@ -154,7 +154,7 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 
 			Method method = routes.pathMethodMap.get(initPath);
 			if (method != null) {
-				String[] paramnames = routes.methodParamnameMap.get(method);
+				String[] paramNames = routes.methodParamnameMap.get(method);
 				Class<?>[] parameterTypes = method.getParameterTypes();
 
 				Object bean = routes.methodBeanMap.get(method);
@@ -179,8 +179,7 @@ public class DefaultHttpRequestHandler implements IHttpRequestHandler {
 							} else {
 								if (params != null) {
 									if (ClassUtils.isSimpleTypeOrArray(paramType)) {
-										//										paramValues[i] = Ognl.getValue(paramnames[i], (Object) params, paramType);
-										Object[] value = params.get(paramnames[i]);
+										Object[] value = params.get(paramNames[i]);
 										if (value != null && value.length > 0) {
 											if (paramType.isArray()) {
 												paramValues[i] = Convert.convert(paramType, value);
