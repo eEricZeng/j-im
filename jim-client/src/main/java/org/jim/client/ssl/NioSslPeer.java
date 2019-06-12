@@ -7,8 +7,7 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.security.KeyStore;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -80,7 +79,7 @@ public abstract class NioSslPeer {
     /**
      * Will be used to execute tasks that may emerge during handshake in parallel with the server's main thread.
      */
-    protected ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected ExecutorService executor = new ThreadPoolExecutor(1,1,0, TimeUnit.SECONDS,new LinkedBlockingQueue<>());
 
     protected abstract void read(SocketChannel socketChannel, SSLEngine engine) throws Exception;
 

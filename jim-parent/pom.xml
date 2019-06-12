@@ -46,7 +46,6 @@
 		<mysql.driver.version>5.1.40</mysql.driver.version>
 		<druid.version>1.1.2</druid.version>
 		<jfinal.version>3.2</jfinal.version>
-
 		<logback.version>1.2.3</logback.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<jdk.version>1.8</jdk.version>
@@ -99,18 +98,18 @@
 				<version>${jim.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>com.jfinal</groupId>
-				<artifactId>jfinal</artifactId>
-				<version>${jfinal.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.jfinal</groupId>
+                <artifactId>jfinal</artifactId>
+                <version>${jfinal.version}</version>
+            </dependency>
 
 			<dependency>
 				<groupId>redis.clients</groupId>
 				<artifactId>jedis</artifactId>
 				<version>${jedis.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.redisson</groupId>
 				<artifactId>redisson</artifactId>

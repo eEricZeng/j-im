@@ -7,7 +7,7 @@ package org.jim.common;
  */
 public interface ImConst
 {
-	public static final String authkey = "wchao";
+	public static final String AUTH_KEY = "authKey";
 	
 	public static final int SERVER_PORT = 8888;
 	
@@ -51,7 +51,7 @@ public interface ImConst
 	
 	public static final String JIM = "JIM";
 	
-	public static final String CONVERTOR = "convertor";
+	public static final String CONVERTER = "converter";
 
 	public static final String BASE_ASYNC_CHAT_MESSAGE_PROCESSOR = "base_async_chat_message_processor";
 	

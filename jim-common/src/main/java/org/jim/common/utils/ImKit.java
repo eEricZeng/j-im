@@ -80,7 +80,7 @@ public class ImKit {
 	 */
 	public static ImPacket ConvertRespPacket(byte[] body,Command command, ChannelContext channelContext){
 		ImPacket respPacket = null;
-		IConvertProtocolPacket converter = (IConvertProtocolPacket)channelContext.getAttribute(ImConst.CONVERTOR);
+		IConvertProtocolPacket converter = (IConvertProtocolPacket)channelContext.getAttribute(ImConst.CONVERTER);
 		if(converter != null){
 			return converter.RespPacket(body, command, channelContext);
 		}
@@ -89,7 +89,7 @@ public class ImKit {
 			IConvertProtocolPacket converterObj = protocol.getConverter();
 			respPacket = converterObj.RespPacket(body, command, channelContext);
 			if(respPacket != null){
-				channelContext.setAttribute(ImConst.CONVERTOR, converterObj);
+				channelContext.setAttribute(ImConst.CONVERTER, converterObj);
 				return respPacket;
 			}
 		}
@@ -107,7 +107,7 @@ public class ImKit {
 						IConvertProtocolPacket converterObj = protocol.getConverter();
 						respPacket = converterObj.RespPacket(imPacket.getBody(), command, channelContext);
 						if(respPacket != null){
-							channelContext.setAttribute(ImConst.CONVERTOR, converterObj);
+							channelContext.setAttribute(ImConst.CONVERTER, converterObj);
 							return respPacket;
 						}
 					}

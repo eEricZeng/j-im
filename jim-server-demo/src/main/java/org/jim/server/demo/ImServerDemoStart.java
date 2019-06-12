@@ -3,11 +3,13 @@
  */
 package org.jim.server.demo;
 
+import com.jfinal.kit.PropKit;
 import org.apache.commons.lang3.StringUtils;
-import org.jim.common.ImConst;
 import org.jim.common.ImConfig;
+import org.jim.common.ImConst;
 import org.jim.common.config.PropertyImConfigBuilder;
 import org.jim.common.packets.Command;
+import org.jim.common.utils.PropUtil;
 import org.jim.server.ImServerStarter;
 import org.jim.server.command.CommandManager;
 import org.jim.server.command.handler.HandshakeReqHandler;
@@ -16,7 +18,6 @@ import org.jim.server.demo.command.DemoWsHandshakeProcessor;
 import org.jim.server.demo.listener.ImDemoGroupListener;
 import org.jim.server.demo.service.LoginServiceProcessor;
 import org.tio.core.ssl.SslConfig;
-import com.jfinal.kit.PropKit;
 /**
  * IM服务端DEMO演示启动类;
  * @author WChao
@@ -49,10 +50,10 @@ public class ImServerDemoStart {
 	private static void initSsl(ImConfig imConfig) throws Exception {
 		//开启SSL
 		if(ImConst.ON.equals(imConfig.getIsSSL())){
-			String keyStorePath = PropKit.get("jim.key.store.path");
+			String keyStorePath = PropUtil.get("jim.key.store.path");
 			String keyStoreFile = keyStorePath;
 			String trustStoreFile = keyStorePath;
-			String keyStorePwd = PropKit.get("jim.key.store.pwd");
+			String keyStorePwd = PropUtil.get("jim.key.store.pwd");
 			if (StringUtils.isNotBlank(keyStoreFile) && StringUtils.isNotBlank(trustStoreFile)) {
 				SslConfig sslConfig = SslConfig.forServer(keyStoreFile, trustStoreFile, keyStorePwd);
 				imConfig.setSslConfig(sslConfig);
