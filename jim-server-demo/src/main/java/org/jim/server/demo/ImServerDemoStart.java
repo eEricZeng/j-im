@@ -42,6 +42,7 @@ public class ImServerDemoStart {
 		/*****************end *******************************************************************************************/
 		imServerStarter.start();
 	}
+
 	/**
 	 * 开启SSL之前，你要保证你有SSL证书哦！
 	 * @param imConfig
