@@ -42,7 +42,7 @@ public class CommandManager{
 		for(CommandConfiguration configuration : configurations){
 			Class<AbstractCmdHandler> cmdHandlerClazz = (Class<AbstractCmdHandler>)Class.forName(configuration.getCmdHandler());
 			AbstractCmdHandler cmdHandler = cmdHandlerClazz.newInstance();
-			List<String> proCmdHandlerList = configuration.getProCmdhandlers();
+			List<String> proCmdHandlerList = configuration.getProCmdHandlers();
 			if(!proCmdHandlerList.isEmpty()){
 				for(String proCmdHandlerClass : proCmdHandlerList){
 					Class<CmdProcessor> proCmdHandlerClazz = (Class<CmdProcessor>)Class.forName(proCmdHandlerClass);

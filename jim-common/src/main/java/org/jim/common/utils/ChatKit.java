@@ -38,7 +38,7 @@ public class ChatKit {
 	public static ChatBody toChatBody(byte[] body,ChannelContext channelContext){
 		ChatBody chatReqBody = parseChatBody(body);
 		if(chatReqBody != null){
-			if(chatReqBody.getFrom() == null || "".equals(chatReqBody.getFrom())){
+			if(StringUtils.isEmpty(chatReqBody.getFrom())){
 				ImSessionContext imSessionContext = (ImSessionContext)channelContext.getAttribute();
 				User user = imSessionContext.getClient().getUser();
 				if(user != null){
@@ -153,42 +153,18 @@ public class ChatKit {
     	 return false;
      }
 
-     /**
-      * 获取双方会话ID(算法,from与to相与的值通过MD5加密得出)
-      * @param from
-      * @param to
-      * @return
-      */
-     public static String sessionId(String from , String to){
-    	 String sessionId = "";
-    	 try{
-	    	 byte[] fBytes = from.getBytes(ImConst.CHARSET);
-	    	 byte[] tBytes = to.getBytes(ImConst.CHARSET);
-	    	 boolean isFromMax = fBytes.length > tBytes.length;
-	    	 boolean isEqual = fBytes.length == tBytes.length;
-	    	 if(isFromMax){
-	    		 for(int i = 0 ; i < fBytes.length ; i++){
-		    		 for(int j = 0 ; j < tBytes.length ; j++){
-						 fBytes[i] = (byte) (fBytes[i]^tBytes[j]);
-		    		 }
-		    	 }
-	    		 sessionId = new String(fBytes);
-	    	 }else if(isEqual){
-	    		 for(int i = 0 ; i < fBytes.length ; i++){
-					 fBytes[i] = (byte) (fBytes[i]^tBytes[i]);
-		    	 }
-	    		 sessionId = new String(fBytes);
-	    	 }else{
-	    		 for(int i = 0 ; i < tBytes.length ; i++){
-		    		 for(int j = 0 ; j < fBytes.length ; j++){
-						 tBytes[i] = (byte) (tBytes[i]^fBytes[j]);
-		    		 }
-		    	 }
-	    		 sessionId = new String(tBytes);
-	    	 }
-    	 }catch (Exception e) {
-			log.error(e.toString(),e);
-    	 }
-    	 return Md5.getMD5(sessionId);
-     }
+	/**
+	 * 获取双方会话ID
+	 *
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public static String sessionId(String from, String to) {
+		if (from.compareTo(to) <= 0) {
+			return from + "-" + to;
+		} else {
+			return to + "-" + from;
+		}
+	}
 }

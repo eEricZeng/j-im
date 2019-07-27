@@ -13,7 +13,7 @@ import org.jim.common.ws.WsSessionContext;
 /**
  * 版本: [1.0]
  * 功能说明: 
- * 作者: WChao 创建时间: 2017年9月11日 下午4:22:36
+ * @author : WChao 创建时间: 2017年9月11日 下午4:22:36
  */
 public class WsHandshakeProcessor implements HandshakeCmdProcessor {
 
@@ -23,8 +23,9 @@ public class WsHandshakeProcessor implements HandshakeCmdProcessor {
 	 * @param channelContext
 	 * @return
 	 * @throws Exception
-	 * @author: Wchao
+	 * @author: WChao
 	 */
+	@Override
 	public ImPacket handshake(ImPacket packet, ChannelContext channelContext) throws Exception {
 		WsRequestPacket wsRequestPacket = (WsRequestPacket) packet;
 		WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
@@ -37,6 +38,7 @@ public class WsHandshakeProcessor implements HandshakeCmdProcessor {
 		}
 		return null;
 	}
+
 	/**
 	 * 握手成功后
 	 * @param packet
@@ -48,7 +50,13 @@ public class WsHandshakeProcessor implements HandshakeCmdProcessor {
 	public void onAfterHandshaked(ImPacket packet, ChannelContext channelContext)throws Exception {
 		
 	}
-	
+
+	/**
+	 * @Author WChao
+	 * @Description 判断当前连接是否属于WS协议
+	 * @param [channelContext]
+	 * @return boolean
+	 **/
 	@Override
 	public boolean isProtocol(ChannelContext channelContext){
 		Object sessionContext = channelContext.getAttribute();
@@ -60,7 +68,12 @@ public class WsHandshakeProcessor implements HandshakeCmdProcessor {
 		return false;
 	}
 
-
+	/**
+	 * @Author WChao
+	 * @Description 协议名称
+	 * @param []
+	 * @return java.lang.String
+	 **/
 	@Override
 	public String name() {
 		

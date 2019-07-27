@@ -58,7 +58,7 @@ public class LoginServiceProcessor implements LoginCmdProcessor {
 	 */
 	public User getUser(String loginname, String password) {
 		String text = loginname+password;
-		String key = ImConst.authkey;
+		String key = ImConst.AUTH_KEY;
 		String token = Md5.sign(text, key, HttpConst.CHARSET_NAME);
 		User user = getUser(token);
 		user.setId(loginname);

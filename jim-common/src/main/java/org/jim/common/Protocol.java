@@ -1,6 +1,6 @@
 package org.jim.common;
 
-public interface Protocol{
+public interface Protocol {
 	/**
 	 * 心跳字节
 	 */

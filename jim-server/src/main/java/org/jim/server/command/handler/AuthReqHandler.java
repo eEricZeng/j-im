@@ -27,7 +27,7 @@ public class AuthReqHandler extends AbstractCmdHandler
 		}
 		AuthReqBody authReqBody = JsonKit.toBean(packet.getBody(), AuthReqBody.class);
 		String token = authReqBody.getToken() == null ? "" : authReqBody.getToken();
-		String data = token +  ImConst.authkey;
+		String data = token +  ImConst.AUTH_KEY;
 		authReqBody.setToken(data);
 		authReqBody.setCmd(null);
 		RespBody respBody = new RespBody(Command.COMMAND_AUTH_RESP,ImStatus.C10009).setData(authReqBody);
